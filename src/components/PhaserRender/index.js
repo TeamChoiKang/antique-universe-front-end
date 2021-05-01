@@ -1,23 +1,18 @@
 import { useEffect } from 'react';
 import Phaser from 'phaser';
 
+import sky from './../../assets/sky.png';
 import platform from './../../assets/platform.png';
+import dude from './../../assets/dude.png';
 
 class PhaserScene extends Phaser.Scene {
   preload() {
-    this.load.image(
-      'sky',
-      'https://phaser.io/content/tutorials/making-your-first-phaser-3-game/part3.png'
-    );
+    this.load.image('sky', sky);
     this.load.image('ground', platform);
-    this.load.spritesheet(
-      'dude',
-      'https://phaser.io/content/tutorials/making-your-first-phaser-3-game/dude.png',
-      {
-        frameWidth: 32,
-        frameHeight: 48,
-      }
-    );
+    this.load.spritesheet('dude', dude, {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
   }
 
   create() {
