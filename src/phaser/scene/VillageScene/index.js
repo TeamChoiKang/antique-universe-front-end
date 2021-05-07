@@ -1,5 +1,5 @@
 import Phaser from './../../../package/phaser';
-import io from 'socket.io-client';
+import io from './../../../package/socket';
 
 import createVillageMap from './../../map/createVillageMap';
 import createCharacter from './../../character/createCharacter';
