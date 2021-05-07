@@ -12,6 +12,11 @@ class CharacterFactory {
 
     character.socketId = socketId;
 
+    character.setAnimationStrategy = (newAnimationStrategy) => {
+      character.animationStrategy = newAnimationStrategy;
+      character.animationStrategy.setup();
+    };
+
     return character;
   }
 }
