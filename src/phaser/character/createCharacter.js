@@ -1,11 +1,19 @@
-import createCharacterAnimation from './animation/createCharacterAnimation';
+import CharacterFactory from './CharacterFactory';
+import DefaultAnimationStrategy from './animation/DefaultAnimationStrategy';
 
-const createCharacter = (scene, x, y, texture) => {
-  const character = scene.physics.add.sprite(x, y, texture);
+const createCharacter = (scene, x, y, texture, socketId) => {
+  const characterFactory = new CharacterFactory(scene);
+  const character = characterFactory.createNewCharacter(
+    x,
+    y,
+    texture,
+    socketId
+  );
+
   character.setBounce(0.2);
   character.setCollideWorldBounds(true);
 
-  createCharacterAnimation(scene.anims);
+  character.setAnimationStrategy(new DefaultAnimationStrategy(scene, texture));
 
   // Default animation
   character.anims.play('turn');

@@ -32,10 +32,9 @@ class VillageScene extends Phaser.Scene {
         this,
         characterInfo.xCoordinate,
         characterInfo.yCoordinate,
-        'dude'
+        'dude',
+        characterInfo.socketId
       );
-
-      anotherCharacter.socketId = characterInfo.socketId;
 
       anotherCharacterGroup.add(anotherCharacter);
     };
@@ -47,7 +46,8 @@ class VillageScene extends Phaser.Scene {
             this,
             characters[index].xCoordinate,
             characters[index].yCoordinate,
-            'dude'
+            'dude',
+            socket.id
           );
 
           createCharacterCursorEvent(
