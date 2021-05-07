@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser from './../../../package/phaser';
 import io from 'socket.io-client';
 
 import createVillageMap from './../../map/createVillageMap';

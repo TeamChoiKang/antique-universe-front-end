@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Phaser from 'phaser';
+import Phaser from './../../package/phaser';
 
 import VillageScene from './../../phaser/scene/VillageScene';
 
