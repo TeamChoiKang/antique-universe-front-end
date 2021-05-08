@@ -2,8 +2,10 @@ import Phaser from './../../../package/phaser';
 import io from './../../../package/socket';
 
 import createVillageMap from './../../map/createVillageMap';
-import createCharacter from './../../character/createCharacter';
-import createCharacterCursorEvent from './../../character/cursor/createCharacterCursorEvent';
+import {
+  createMyCharacterWithDefaultSetup,
+  createAnotherCharacterWithDefaultSetup,
+} from './../../character/createCharacter';
 
 import sky from './../../../assets/sky.png';
 import platform from './../../../assets/platform.png';
@@ -27,13 +29,14 @@ class VillageScene extends Phaser.Scene {
       allowGravity: false,
     });
 
-    const createAnotherCharacter = (characterInfo) => {
-      const anotherCharacter = createCharacter(
+    const createAnotherCharacterAndAppendToGroup = (characterInfo) => {
+      const anotherCharacter = createAnotherCharacterWithDefaultSetup(
         this,
         characterInfo.xCoordinate,
         characterInfo.yCoordinate,
         'dude',
-        characterInfo.socketId
+        characterInfo.socketId,
+        characterInfo.animation
       );
 
       anotherCharacterGroup.add(anotherCharacter);
@@ -42,35 +45,30 @@ class VillageScene extends Phaser.Scene {
     socket.on('currentCharacter', (characters) => {
       Object.keys(characters).forEach((index) => {
         if (characters[index].socketId === socket.id) {
-          const myCharacter = createCharacter(
+          const myCharacter = createMyCharacterWithDefaultSetup(
             this,
             characters[index].xCoordinate,
             characters[index].yCoordinate,
             'dude',
-            socket.id
-          );
-
-          createCharacterCursorEvent(
-            this,
-            myCharacter,
-            (character, animation) => {
+            socket.id,
+            (character) => {
               socket.emit('characterMovement', {
                 xCoordinate: character.x,
                 yCoordinate: character.y,
-                animation,
+                animation: character.anims.getName(),
               });
             }
           );
 
           this.physics.add.collider(myCharacter, villageMap);
         } else {
-          createAnotherCharacter(characters[index]);
+          createAnotherCharacterAndAppendToGroup(characters[index]);
         }
       });
     });
 
     socket.on('newCharacter', (characterInfo) => {
-      createAnotherCharacter(characterInfo);
+      createAnotherCharacterAndAppendToGroup(characterInfo);
     });
 
     socket.on('characterMoved', (characterInfo) => {
