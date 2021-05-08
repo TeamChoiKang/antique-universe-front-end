@@ -13,8 +13,13 @@ class CharacterFactory {
     character.socketId = socketId;
 
     character.setAnimationStrategy = (newAnimationStrategy) => {
-      character.animationStrategy = newAnimationStrategy;
-      character.animationStrategy.setup();
+      character._animationStrategy = newAnimationStrategy;
+      character._animationStrategy.setup();
+    };
+
+    character.setCursorStrategy = (newCursorStrategy) => {
+      character._cursorStrategy = newCursorStrategy;
+      character._cursorStrategy.setup();
     };
 
     return character;
