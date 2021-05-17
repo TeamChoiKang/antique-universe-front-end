@@ -14,6 +14,15 @@ class DefaultCursorStrategy extends CursorStrategy {
     );
   }
 
+  checkCursorUp() {
+    return (
+      this._cursor.down.isUp ||
+      this._cursor.left.isUp ||
+      this._cursor.right.isUp ||
+      this._cursor.up.isUp
+    );
+  }
+
   update() {
     if (this._cursor.left.isDown) {
       this._character.setVelocityX(-320);
@@ -30,7 +39,7 @@ class DefaultCursorStrategy extends CursorStrategy {
       this._character.setVelocityY(-300);
     }
 
-    if (this.checkCharacterMoved(this._character)) {
+    if (this.checkCursorUp() || this.checkCharacterMoved(this._character)) {
       this._emitMovement(this._character);
     }
 
