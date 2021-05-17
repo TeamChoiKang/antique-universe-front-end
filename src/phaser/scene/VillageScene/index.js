@@ -2,10 +2,7 @@ import Phaser from './../../../package/phaser';
 import io from './../../../package/socket';
 
 import createVillageMap from './../../map/createVillageMap';
-import {
-  createMyCharacterWithDefaultSetup,
-  createAnotherCharacterWithDefaultSetup,
-} from './../../character/createCharacter';
+import CharacterFactory from './../../character/CharacterFactory';
 
 import sky from './../../../assets/sky.png';
 import platform from './../../../assets/platform.png';
@@ -24,14 +21,14 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
+    const characterFactory = new CharacterFactory(this);
     const villageMap = createVillageMap(this);
     const anotherCharacterGroup = this.physics.add.group({
       allowGravity: false,
     });
 
     const createAnotherCharacterAndAppendToGroup = (characterInfo) => {
-      const anotherCharacter = createAnotherCharacterWithDefaultSetup(
-        this,
+      const anotherCharacter = characterFactory.anotherCharacter(
         characterInfo.xCoordinate,
         characterInfo.yCoordinate,
         'dude',
@@ -45,8 +42,7 @@ class VillageScene extends Phaser.Scene {
     socket.on('currentCharacter', (characters) => {
       Object.keys(characters).forEach((index) => {
         if (characters[index].socketId === socket.id) {
-          const myCharacter = createMyCharacterWithDefaultSetup(
-            this,
+          const myCharacter = characterFactory.myCharacter(
             characters[index].xCoordinate,
             characters[index].yCoordinate,
             'dude',

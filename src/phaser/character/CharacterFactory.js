@@ -1,3 +1,7 @@
+import Character from './Character';
+import DefaultAnimationStrategy from './animation/DefaultAnimationStrategy';
+import DefaultCursorStrategy from './cursor/DefaultCursorStrategy';
+
 class CharacterFactory {
   constructor(phaserScene) {
     this._phaserScene = phaserScene;
@@ -7,22 +11,45 @@ class CharacterFactory {
     this._phaserScene = newPhaserScene;
   }
 
-  createNewCharacter(x, y, texture, socketId = '') {
-    const character = this._phaserScene.physics.add.sprite(x, y, texture);
+  myCharacter(x, y, texture, socketId, emitMovement) {
+    const character = new Character(
+      this._phaserScene,
+      x,
+      y,
+      texture,
+      socketId
+    ).getCharacter();
 
-    character.socketId = socketId;
+    character.setBounce(0.2);
+    character.setCollideWorldBounds(true);
 
-    character.setAnimationStrategy = (newAnimationStrategy) => {
-      character._animationStrategy = newAnimationStrategy;
-      character._animationStrategy.setup();
-    };
+    character.setAnimationStrategy(
+      new DefaultAnimationStrategy(this._phaserScene, texture)
+    );
 
-    character.setCursorStrategy = (newCursorStrategy) => {
-      character._cursorStrategy = newCursorStrategy;
-      character._cursorStrategy.setup();
-    };
+    character.setCursorStrategy(
+      new DefaultCursorStrategy(this._phaserScene, character, emitMovement)
+    );
 
     return character;
+  }
+
+  anotherCharacter(x, y, texture, socketId, animationKey) {
+    const anotherCharacter = new Character(
+      this._phaserScene,
+      x,
+      y,
+      texture,
+      socketId
+    ).getCharacter();
+
+    anotherCharacter.setAnimationStrategy(
+      new DefaultAnimationStrategy(this._phaserScene, texture)
+    );
+
+    anotherCharacter.anims.play(animationKey);
+
+    return anotherCharacter;
   }
 }
 
