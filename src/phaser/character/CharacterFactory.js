@@ -31,6 +31,8 @@ class CharacterFactory {
       new DefaultCursorStrategy(this._phaserScene, character, emitMovement)
     );
 
+    character.setGravityY(300);
+
     return character;
   }
 
