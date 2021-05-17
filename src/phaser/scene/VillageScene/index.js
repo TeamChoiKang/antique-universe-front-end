@@ -3,6 +3,7 @@ import io from './../../../package/socket';
 
 import createVillageMap from './../../map/createVillageMap';
 import CharacterFactory from './../../character/CharacterFactory';
+import CharacterGroup from './../../character/CharacterGroup';
 
 import sky from './../../../assets/sky.png';
 import platform from './../../../assets/platform.png';
@@ -23,21 +24,7 @@ class VillageScene extends Phaser.Scene {
 
     const characterFactory = new CharacterFactory(this);
     const villageMap = createVillageMap(this);
-    const anotherCharacterGroup = this.physics.add.group({
-      allowGravity: false,
-    });
-
-    const createAnotherCharacterAndAppendToGroup = (characterInfo) => {
-      const anotherCharacter = characterFactory.anotherCharacter(
-        characterInfo.xCoordinate,
-        characterInfo.yCoordinate,
-        'dude',
-        characterInfo.socketId,
-        characterInfo.animation
-      );
-
-      anotherCharacterGroup.add(anotherCharacter);
-    };
+    const characterGroup = new CharacterGroup(this);
 
     socket.on('currentCharacter', (characters) => {
       Object.keys(characters).forEach((index) => {
@@ -58,34 +45,44 @@ class VillageScene extends Phaser.Scene {
 
           this.physics.add.collider(myCharacter, villageMap);
         } else {
-          createAnotherCharacterAndAppendToGroup(characters[index]);
+          characterGroup.add(
+            characterFactory.anotherCharacter(
+              characters[index].xCoordinate,
+              characters[index].yCoordinate,
+              'dude',
+              characters[index].socketId,
+              characters[index].animation
+            )
+          );
         }
       });
     });
 
     socket.on('newCharacter', (characterInfo) => {
-      createAnotherCharacterAndAppendToGroup(characterInfo);
+      characterGroup.add(
+        characterFactory.anotherCharacter(
+          characterInfo.xCoordinate,
+          characterInfo.yCoordinate,
+          'dude',
+          characterInfo.socketId,
+          characterInfo.animation
+        )
+      );
     });
 
     socket.on('characterMoved', (characterInfo) => {
-      anotherCharacterGroup.getChildren().forEach((anotherCharacter) => {
-        if (characterInfo.socketId === anotherCharacter.socketId) {
-          anotherCharacter.setPosition(
-            characterInfo.xCoordinate,
-            characterInfo.yCoordinate
-          );
+      const movedCharacter = characterGroup.find(characterInfo.socketId);
 
-          anotherCharacter.anims.play(characterInfo.animation, true);
-        }
-      });
+      movedCharacter.setPosition(
+        characterInfo.xCoordinate,
+        characterInfo.yCoordinate
+      );
+
+      movedCharacter.anims.play(characterInfo.animation, true);
     });
 
     socket.on('characterDisconnect', (socketId) => {
-      anotherCharacterGroup.getChildren().forEach((anotherCharacter) => {
-        if (socketId === anotherCharacter.socketId) {
-          anotherCharacter.destroy();
-        }
-      });
+      characterGroup.remove(socketId);
     });
   }
 }
