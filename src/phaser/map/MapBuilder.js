@@ -9,12 +9,12 @@ class MapBuilder {
     return this;
   }
 
-  setBackground(width, height) {
+  background(width, height) {
     this._scene.add.image(width, height, this._key);
     return this;
   }
 
-  create(x, y, scale = 0) {
+  ground(x, y, scale = 0) {
     if (scale) this._map.create(x, y, this._key).setScale(scale).refreshBody();
     else this._map.create(x, y, this._key);
     return this;
