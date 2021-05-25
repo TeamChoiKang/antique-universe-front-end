@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import ScrollToTop from './ScrollToTop';
+
 import Main from './pages/Main';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -8,6 +10,7 @@ import Game from './pages/Game';
 const AppRouter = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Switch>
         <Route path="/" exact>
           <Main />
