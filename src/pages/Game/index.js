@@ -1,5 +1,11 @@
+import PhaserRender from './../../components/PhaserRender';
+
 const Game = () => {
-  return <div>Game</div>;
+  return (
+    <div>
+      <PhaserRender />
+    </div>
+  );
 };
 
 export default Game;
