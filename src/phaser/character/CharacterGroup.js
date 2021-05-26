@@ -20,16 +20,16 @@ class CharacterGroup {
   }
 
   remove(socketId) {
-    let result = false;
+    let character = false;
 
     this._group.getChildren().forEach((groupCharacter) => {
       if (socketId === groupCharacter.socketId) {
+        character = groupCharacter;
         groupCharacter.destroy();
-        result = true;
       }
     });
 
-    return result;
+    return character;
   }
 }
 
