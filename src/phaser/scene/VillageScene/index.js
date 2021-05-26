@@ -1,7 +1,7 @@
 import Phaser from './../../../package/phaser';
 import io from './../../../package/socket';
 
-import createVillageMap from './../../map/createVillageMap';
+import MapFactory from './../../map/MapFactory';
 import CharacterFactory from './../../character/CharacterFactory';
 import CharacterGroup from './../../character/CharacterGroup';
 
@@ -22,8 +22,8 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
+    const villageMap = MapFactory.getVillage(this);
     const characterFactory = new CharacterFactory(this);
-    const villageMap = createVillageMap(this);
     const characterGroup = new CharacterGroup(this);
 
     socket.on('currentCharacter', (characters) => {
