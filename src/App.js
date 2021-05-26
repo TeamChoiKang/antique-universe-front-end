@@ -1,10 +1,9 @@
-import PhaserRender from './components/PhaserRender';
+import AppRouter from './AppRouter';
 
 const App = () => {
   return (
     <div className="App">
-      <div>Phaser test</div>
-      <PhaserRender />
+      <AppRouter />
     </div>
   );
 };
