@@ -1,7 +1,7 @@
 import MapBuilder from './MapBuilder';
 
 class MapFactory {
-  static village(scene) {
+  static getVillage(scene) {
     const map = new MapBuilder(scene)
       .setKey('sky')
       .buildBackground(400, 300)
