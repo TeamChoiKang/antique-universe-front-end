@@ -29,7 +29,7 @@ class VillageScene extends Phaser.Scene {
     socket.on('currentCharacter', (characters) => {
       Object.keys(characters).forEach((index) => {
         if (characters[index].socketId === socket.id) {
-          const myCharacter = characterFactory.myCharacter(
+          const myCharacter = characterFactory.getMyCharacter(
             characters[index].xCoordinate,
             characters[index].yCoordinate,
             'dude',
@@ -46,7 +46,7 @@ class VillageScene extends Phaser.Scene {
           this.physics.add.collider(myCharacter, villageMap);
         } else {
           characterGroup.add(
-            characterFactory.anotherCharacter(
+            characterFactory.getAnotherCharacter(
               characters[index].xCoordinate,
               characters[index].yCoordinate,
               'dude',
@@ -60,7 +60,7 @@ class VillageScene extends Phaser.Scene {
 
     socket.on('newCharacter', (characterInfo) => {
       characterGroup.add(
-        characterFactory.anotherCharacter(
+        characterFactory.getAnotherCharacter(
           characterInfo.xCoordinate,
           characterInfo.yCoordinate,
           'dude',

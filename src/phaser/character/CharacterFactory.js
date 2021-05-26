@@ -11,7 +11,7 @@ class CharacterFactory {
     this._phaserScene = newPhaserScene;
   }
 
-  myCharacter(x, y, texture, socketId, emitMovement) {
+  getMyCharacter(x, y, texture, socketId, emitMovement) {
     const character = new Character(
       this._phaserScene,
       x,
@@ -36,7 +36,7 @@ class CharacterFactory {
     return character;
   }
 
-  anotherCharacter(x, y, texture, socketId, animationKey) {
+  getAnotherCharacter(x, y, texture, socketId, animationKey) {
     const anotherCharacter = new Character(
       this._phaserScene,
       x,
