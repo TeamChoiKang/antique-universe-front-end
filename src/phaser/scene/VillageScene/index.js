@@ -2,8 +2,8 @@ import Phaser from './../../../package/phaser';
 import io from './../../../package/socket';
 
 import createVillageMap from './../../map/createVillageMap';
-import createCharacter from './../../character/createCharacter';
-import createCharacterCursorEvent from './../../character/cursor/createCharacterCursorEvent';
+import CharacterFactory from './../../character/CharacterFactory';
+import CharacterGroup from './../../character/CharacterGroup';
 
 import sky from './../../../assets/sky.png';
 import platform from './../../../assets/platform.png';
@@ -22,76 +22,67 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
+    const characterFactory = new CharacterFactory(this);
     const villageMap = createVillageMap(this);
-    const anotherCharacterGroup = this.physics.add.group({
-      allowGravity: false,
-    });
-
-    const createAnotherCharacter = (characterInfo) => {
-      const anotherCharacter = createCharacter(
-        this,
-        characterInfo.xCoordinate,
-        characterInfo.yCoordinate,
-        'dude'
-      );
-
-      anotherCharacter.socketId = characterInfo.socketId;
-
-      anotherCharacterGroup.add(anotherCharacter);
-    };
+    const characterGroup = new CharacterGroup(this);
 
     socket.on('currentCharacter', (characters) => {
       Object.keys(characters).forEach((index) => {
         if (characters[index].socketId === socket.id) {
-          const myCharacter = createCharacter(
-            this,
+          const myCharacter = characterFactory.getMyCharacter(
             characters[index].xCoordinate,
             characters[index].yCoordinate,
-            'dude'
-          );
-
-          createCharacterCursorEvent(
-            this,
-            myCharacter,
-            (character, animation) => {
+            'dude',
+            socket.id,
+            (character) => {
               socket.emit('characterMovement', {
                 xCoordinate: character.x,
                 yCoordinate: character.y,
-                animation,
+                animation: character.anims.getName(),
               });
             }
           );
 
           this.physics.add.collider(myCharacter, villageMap);
         } else {
-          createAnotherCharacter(characters[index]);
+          characterGroup.add(
+            characterFactory.getAnotherCharacter(
+              characters[index].xCoordinate,
+              characters[index].yCoordinate,
+              'dude',
+              characters[index].socketId,
+              characters[index].animation
+            )
+          );
         }
       });
     });
 
     socket.on('newCharacter', (characterInfo) => {
-      createAnotherCharacter(characterInfo);
+      characterGroup.add(
+        characterFactory.getAnotherCharacter(
+          characterInfo.xCoordinate,
+          characterInfo.yCoordinate,
+          'dude',
+          characterInfo.socketId,
+          characterInfo.animation
+        )
+      );
     });
 
     socket.on('characterMoved', (characterInfo) => {
-      anotherCharacterGroup.getChildren().forEach((anotherCharacter) => {
-        if (characterInfo.socketId === anotherCharacter.socketId) {
-          anotherCharacter.setPosition(
-            characterInfo.xCoordinate,
-            characterInfo.yCoordinate
-          );
+      const movedCharacter = characterGroup.find(characterInfo.socketId);
 
-          anotherCharacter.anims.play(characterInfo.animation, true);
-        }
-      });
+      movedCharacter.setPosition(
+        characterInfo.xCoordinate,
+        characterInfo.yCoordinate
+      );
+
+      movedCharacter.anims.play(characterInfo.animation, true);
     });
 
     socket.on('characterDisconnect', (socketId) => {
-      anotherCharacterGroup.getChildren().forEach((anotherCharacter) => {
-        if (socketId === anotherCharacter.socketId) {
-          anotherCharacter.destroy();
-        }
-      });
+      characterGroup.remove(socketId);
     });
   }
 }
