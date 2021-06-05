@@ -1,11 +1,12 @@
+import React from 'react';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import ScrollToTop from './ScrollToTop';
-
+import Game from './pages/Game';
 import Main from './pages/Main';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import Game from './pages/Game';
+import ScrollToTop from './ScrollToTop';
 
 const AppRouter = () => {
   return (

@@ -6,7 +6,7 @@ class CharacterGroup {
   find(socketId) {
     let character;
 
-    this._group.getChildren().forEach((groupCharacter) => {
+    this._group.getChildren().forEach(groupCharacter => {
       if (socketId === groupCharacter.socketId) {
         character = groupCharacter;
       }
@@ -22,7 +22,7 @@ class CharacterGroup {
   remove(socketId) {
     let character = false;
 
-    this._group.getChildren().forEach((groupCharacter) => {
+    this._group.getChildren().forEach(groupCharacter => {
       if (socketId === groupCharacter.socketId) {
         character = groupCharacter;
         groupCharacter.destroy();
