@@ -4,6 +4,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import antiqueUniverseLogo from './../../assets/antique-universe-logo.png';
 
+import './signin.css';
+
 const SignIn = () => {
   return (
     <div className="signin">
@@ -12,12 +14,12 @@ const SignIn = () => {
           <img src={antiqueUniverseLogo} alt="antique-universe-logo" />
         </div>
         <div className="signin__signin-btn kakao-signin-btn">
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" fullWidth>
             카카오로 로그인하기
           </Button>
         </div>
         <div className="signin__signin-btn naver-signin-btn">
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" fullWidth>
             네이버로 로그인하기
           </Button>
         </div>
