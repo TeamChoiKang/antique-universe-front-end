@@ -1,6 +1,8 @@
 import Button from '@material-ui/core/Button';
 import antiqueUniverseLogo from './../../assets/antique-universe-logo.png';
 
+import './main.css';
+
 const Main = () => {
   return (
     <div className="main">
