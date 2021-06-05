@@ -10,6 +10,9 @@ import './signin.css';
 const SignIn = () => {
   const [staySigninState, setStaySigninState] = useState(false);
 
+  const handleKakaoSigninBtnClick = () => alert('Kakao signin');
+  const handleNaverSigninBtnClick = () => alert('Kakao signin');
+
   const handleStaySigninCheckboxChange = () =>
     setStaySigninState(!staySigninState);
 
@@ -20,12 +23,22 @@ const SignIn = () => {
           <img src={antiqueUniverseLogo} alt="antique-universe-logo" />
         </div>
         <div className="signin__signin-btn kakao-signin-btn">
-          <Button variant="contained" color="primary" fullWidth>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleKakaoSigninBtnClick}
+            fullWidth
+          >
             카카오로 로그인하기
           </Button>
         </div>
         <div className="signin__signin-btn naver-signin-btn">
-          <Button variant="contained" color="primary" fullWidth>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleNaverSigninBtnClick}
+            fullWidth
+          >
             네이버로 로그인하기
           </Button>
         </div>
