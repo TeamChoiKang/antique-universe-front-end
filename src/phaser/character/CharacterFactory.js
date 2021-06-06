@@ -1,5 +1,5 @@
-import Character from './Character';
 import DefaultAnimationStrategy from './animation/DefaultAnimationStrategy';
+import Character from './Character';
 import DefaultCursorStrategy from './cursor/DefaultCursorStrategy';
 
 class CharacterFactory {
@@ -12,23 +12,15 @@ class CharacterFactory {
   }
 
   getMyCharacter(x, y, texture, socketId, emitMovement) {
-    const character = new Character(
-      this._phaserScene,
-      x,
-      y,
-      texture,
-      socketId
-    ).getCharacter();
+    const character = new Character(this._phaserScene, x, y, texture, socketId).getCharacter();
 
     character.setBounce(0.2);
     character.setCollideWorldBounds(true);
 
-    character.setAnimationStrategy(
-      new DefaultAnimationStrategy(this._phaserScene, texture)
-    );
+    character.setAnimationStrategy(new DefaultAnimationStrategy(this._phaserScene, texture));
 
     character.setCursorStrategy(
-      new DefaultCursorStrategy(this._phaserScene, character, emitMovement)
+      new DefaultCursorStrategy(this._phaserScene, character, emitMovement),
     );
 
     character.setGravityY(300);
@@ -42,12 +34,10 @@ class CharacterFactory {
       x,
       y,
       texture,
-      socketId
+      socketId,
     ).getCharacter();
 
-    anotherCharacter.setAnimationStrategy(
-      new DefaultAnimationStrategy(this._phaserScene, texture)
-    );
+    anotherCharacter.setAnimationStrategy(new DefaultAnimationStrategy(this._phaserScene, texture));
 
     anotherCharacter.anims.play(animationKey);
 

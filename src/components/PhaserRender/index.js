@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import Phaser from './../../package/phaser';
+import React, { useEffect } from 'react';
 
-import VillageScene from './../../phaser/scene/VillageScene';
+import Phaser from '@/package/phaser';
+import VillageScene from '@/phaser/scene/VillageScene';
 
 const PHASER_CONFIG = {
   type: Phaser.AUTO,
@@ -23,7 +23,7 @@ const PhaserRender = () => {
     const game = new Phaser.Game(PHASER_CONFIG);
   }, []);
 
-  return <div id="phaser__parent"></div>;
+  return <div id="phaser__parent" />;
 };
 
 export default PhaserRender;
