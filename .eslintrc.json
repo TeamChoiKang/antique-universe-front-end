@@ -6,11 +6,13 @@
     },
     "extends": ["airbnb", "react-app", "eslint:recommended", "plugin:prettier/recommended"],
     "plugins": ["import"],
+    "ignorePatterns": ["/config/**"],
     "rules": {
         "no-underscore-dangle": 0,
         "react/jsx-filename-extension": 0,
         "class-methods-use-this": 0,
         "func-names": 0,
+        "import/no-unresolved": 0,
         "import/order": [
             1,
             {
@@ -24,6 +26,11 @@
                 {
                   "pattern": "react",
                   "group": "external",
+                  "position": "before"
+                },
+                {
+                  "pattern": "@/**",
+                  "group": "parent",
                   "position": "before"
                 }
               ],

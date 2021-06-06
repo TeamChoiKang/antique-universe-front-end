@@ -1,11 +1,11 @@
-import dude from '../../../assets/dude.png';
-import platform from '../../../assets/platform.png';
-import sky from '../../../assets/sky.png';
-import Phaser from '../../../package/phaser';
-import io from '../../../package/socket';
-import CharacterFactory from '../../character/CharacterFactory';
-import CharacterGroup from '../../character/CharacterGroup';
-import MapFactory from '../../map/MapFactory';
+import dude from '@/assets/dude.png';
+import platform from '@/assets/platform.png';
+import sky from '@/assets/sky.png';
+import Phaser from '@/package/phaser';
+import io from '@/package/socket';
+import CharacterFactory from '@/phaser/character/CharacterFactory';
+import CharacterGroup from '@/phaser/character/CharacterGroup';
+import MapFactory from '@/phaser/map/MapFactory';
 
 class VillageScene extends Phaser.Scene {
   preload() {
