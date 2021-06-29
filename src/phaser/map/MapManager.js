@@ -1,9 +1,7 @@
-import MapBuilder from './MapBuilder';
-
-class MapFactory {
-  static getVillage(scene) {
-    const map = new MapBuilder(scene)
-      .setKey('sky')
+class MapManager {
+  static createVillageMap(mapBuilder) {
+    return mapBuilder
+      .setKey('background')
       .buildBackground(400, 300)
       .setKey('ground')
       .buildGround(400, 568, 2)
@@ -11,9 +9,7 @@ class MapFactory {
       .buildGround(50, 250)
       .buildGround(750, 220)
       .build();
-
-    return map;
   }
 }
 
-export default MapFactory;
+export default MapManager;

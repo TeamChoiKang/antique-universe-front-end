@@ -5,11 +5,12 @@ import Phaser from '@/package/phaser';
 import io from '@/package/socket';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
-import MapFactory from '@/phaser/map/MapFactory';
+import MapBuilder from '@/phaser/map/builder/MapBuilder';
+import MapManager from '@/phaser/map/MapManager';
 
 class VillageScene extends Phaser.Scene {
   preload() {
-    this.load.image('sky', sky);
+    this.load.image('background', sky);
     this.load.image('ground', platform);
     this.load.spritesheet('dude', dude, {
       frameWidth: 32,
@@ -20,7 +21,7 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
-    const villageMap = MapFactory.getVillage(this);
+    const villageMap = MapManager.createVillageMap(new MapBuilder(this));
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
