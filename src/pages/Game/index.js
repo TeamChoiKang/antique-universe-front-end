@@ -1,4 +1,6 @@
-import PhaserRender from './../../components/PhaserRender';
+import React from 'react';
+
+import PhaserRender from '../../components/PhaserRender';
 
 const Game = () => {
   return (
