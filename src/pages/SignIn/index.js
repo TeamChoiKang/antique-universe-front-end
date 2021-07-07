@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { useState } from 'react';
 
-import antiqueUniverseLogo from './../../assets/antique-universe-logo.png';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import antiqueUniverseLogo from '../../assets/antique-universe-logo.png';
 
 import './signin.css';
 
@@ -13,8 +14,7 @@ const SignIn = () => {
   const handleKakaoSigninBtnClick = () => alert('Kakao signin');
   const handleNaverSigninBtnClick = () => alert('Kakao signin');
 
-  const handleStaySigninCheckboxChange = () =>
-    setStaySigninState(!staySigninState);
+  const handleStaySigninCheckboxChange = () => setStaySigninState(!staySigninState);
 
   return (
     <div className="signin">
@@ -23,22 +23,12 @@ const SignIn = () => {
           <img src={antiqueUniverseLogo} alt="antique-universe-logo" />
         </div>
         <div className="signin__signin-btn kakao-signin-btn">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleKakaoSigninBtnClick}
-            fullWidth
-          >
+          <Button variant="contained" color="primary" onClick={handleKakaoSigninBtnClick} fullWidth>
             카카오로 로그인하기
           </Button>
         </div>
         <div className="signin__signin-btn naver-signin-btn">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNaverSigninBtnClick}
-            fullWidth
-          >
+          <Button variant="contained" color="primary" onClick={handleNaverSigninBtnClick} fullWidth>
             네이버로 로그인하기
           </Button>
         </div>
