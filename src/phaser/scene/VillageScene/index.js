@@ -25,18 +25,18 @@ class VillageScene extends Phaser.Scene {
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
-    socket.on('currentCharacter', characters => {
+    socket.on('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
         if (characters[index].socketId === socket.id) {
           const myCharacter = characterFactory.getMyCharacter(
-            characters[index].xCoordinate,
-            characters[index].yCoordinate,
+            characters[index].x,
+            characters[index].y,
             'dude',
             socket.id,
             character => {
-              socket.emit('characterMovement', {
-                xCoordinate: character.x,
-                yCoordinate: character.y,
+              socket.emit('character:move', {
+                x: character.x,
+                y: character.y,
                 animation: character.anims.getName(),
               });
             },
@@ -46,8 +46,8 @@ class VillageScene extends Phaser.Scene {
         } else {
           characterGroup.add(
             characterFactory.getAnotherCharacter(
-              characters[index].xCoordinate,
-              characters[index].yCoordinate,
+              characters[index].x,
+              characters[index].y,
               'dude',
               characters[index].socketId,
               characters[index].animation,
@@ -57,11 +57,11 @@ class VillageScene extends Phaser.Scene {
       });
     });
 
-    socket.on('newCharacter', characterInfo => {
+    socket.on('character:newCharacter', characterInfo => {
       characterGroup.add(
         characterFactory.getAnotherCharacter(
-          characterInfo.xCoordinate,
-          characterInfo.yCoordinate,
+          characterInfo.x,
+          characterInfo.y,
           'dude',
           characterInfo.socketId,
           characterInfo.animation,
@@ -69,15 +69,15 @@ class VillageScene extends Phaser.Scene {
       );
     });
 
-    socket.on('characterMoved', characterInfo => {
+    socket.on('character:moved', characterInfo => {
       const movedCharacter = characterGroup.find(characterInfo.socketId);
 
-      movedCharacter.setPosition(characterInfo.xCoordinate, characterInfo.yCoordinate);
+      movedCharacter.setPosition(characterInfo.x, characterInfo.y);
 
       movedCharacter.anims.play(characterInfo.animation, true);
     });
 
-    socket.on('characterDisconnect', socketId => {
+    socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);
     });
   }
