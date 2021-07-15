@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import Phaser from '@/package/phaser';
 import VillageScene from '@/phaser/scene/VillageScene';
 
+import './phaserRender.css';
+
 const PHASER_CONFIG = {
   type: Phaser.AUTO,
   width: 800,
