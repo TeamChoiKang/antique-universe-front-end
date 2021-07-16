@@ -1,6 +1,6 @@
 import dude from '@/assets/dude.png';
 import platform from '@/assets/platform.png';
-import sky from '@/assets/sky.png';
+import sky from '@/assets/real-sky.png';
 import Phaser from '@/package/phaser';
 import io from '@/package/socket';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
