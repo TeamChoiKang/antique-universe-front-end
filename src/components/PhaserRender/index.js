@@ -7,8 +7,6 @@ import './phaserRender.css';
 
 const PHASER_CONFIG = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
   scale: {
     mode: Phaser.Scale.RESIZE,
   },
