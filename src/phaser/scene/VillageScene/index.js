@@ -7,8 +7,8 @@ import Phaser from '@/package/phaser';
 import io from '@/package/socket';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
-import DefaultMapBuilder from '@/phaser/map/builder/DefaultMapBuilder';
-import MapManager from '@/phaser/map/MapManager';
+// import DefaultMapBuilder from '@/phaser/map/builder/DefaultMapBuilder';
+// import MapManager from '@/phaser/map/MapManager';
 
 class VillageScene extends Phaser.Scene {
   preload() {
@@ -25,7 +25,12 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
-    const villageMap = MapManager.createVillageMap(new DefaultMapBuilder(this));
+    this.add.image(0, 0, 'defaultBackground').setOrigin(0, 0);
+    const villageTileMap = this.make.tilemap({ key: 'villageMap' });
+    const viilageTileSet = villageTileMap.addTilesetImage('au_tile_set', 'tileSet');
+    const villageMap = villageTileMap.createLayer('World', viilageTileSet);
+    villageMap.setCollisionByExclusion(-1, true);
+
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
