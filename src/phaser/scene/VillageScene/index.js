@@ -28,10 +28,7 @@ class VillageScene extends Phaser.Scene {
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
-    const MAP_WIDTH = 3840;
-    const MAP_HEIGHT = 2160;
-
-    this.cameras.main.setBounds(0, 0, MAP_WIDTH, MAP_HEIGHT);
+    this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
     this.cameras.main.setZoom(1.5);
 
     socket.on('character:currentCharacter', characters => {
