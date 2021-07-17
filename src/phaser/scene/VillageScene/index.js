@@ -31,7 +31,6 @@ class VillageScene extends Phaser.Scene {
     const MAP_WIDTH = 3840;
     const MAP_HEIGHT = 2160;
 
-    this.physics.world.setBounds(0, 0, MAP_WIDTH, MAP_HEIGHT);
     this.cameras.main.setBounds(0, 0, MAP_WIDTH, MAP_HEIGHT);
     this.cameras.main.setZoom(1.5);
 

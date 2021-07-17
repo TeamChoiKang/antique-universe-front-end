@@ -5,6 +5,7 @@ class MapManager {
     const tileSet = tileMap.addTilesetImage('au_tile_set', tileSetKey);
     const map = tileMap.createLayer('World', tileSet);
     map.setCollisionByExclusion(-1, true);
+    scene.physics.world.setBounds(0, 0, map.width, map.height);
 
     return map;
   }
