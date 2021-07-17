@@ -1,6 +1,8 @@
 import dude from '@/assets/dude.png';
+import VillageMap from '@/assets/map/village/village-map.json';
 import platform from '@/assets/platform.png';
 import sky from '@/assets/real-sky.png';
+import TileSet from '@/assets/tile-set.png';
 import Phaser from '@/package/phaser';
 import io from '@/package/socket';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
@@ -10,6 +12,8 @@ import MapManager from '@/phaser/map/MapManager';
 
 class VillageScene extends Phaser.Scene {
   preload() {
+    this.load.image('tileSet', TileSet);
+    this.load.tilemapTiledJSON('villageMap', VillageMap);
     this.load.image('defaultBackground', sky);
     this.load.image('defaultGround', platform);
     this.load.spritesheet('dude', dude, {
