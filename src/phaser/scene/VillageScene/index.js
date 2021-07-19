@@ -1,6 +1,6 @@
 import dude from '@/assets/dude.png';
 import platform from '@/assets/platform.png';
-import sky from '@/assets/sky.png';
+import sky from '@/assets/real-sky.png';
 import Phaser from '@/package/phaser';
 import io from '@/package/socket';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
@@ -25,6 +25,13 @@ class VillageScene extends Phaser.Scene {
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
+    const MAP_WIDTH = 3840;
+    const MAP_HEIGHT = 2160;
+
+    this.physics.world.setBounds(0, 0, MAP_WIDTH, MAP_HEIGHT);
+    this.cameras.main.setBounds(0, 0, MAP_WIDTH, MAP_HEIGHT);
+    this.cameras.main.setZoom(1.5);
+
     socket.on('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
         if (characters[index].socketId === socket.id) {
@@ -43,6 +50,7 @@ class VillageScene extends Phaser.Scene {
           );
 
           this.physics.add.collider(myCharacter, villageMap);
+          this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
         } else {
           characterGroup.add(
             characterFactory.getAnotherCharacter(
