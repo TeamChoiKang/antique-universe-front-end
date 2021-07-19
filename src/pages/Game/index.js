@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PhaserRender from '../../components/PhaserRender';
+import PhaserRender from '@/components/PhaserRender';
 
 import './game.css';
 
