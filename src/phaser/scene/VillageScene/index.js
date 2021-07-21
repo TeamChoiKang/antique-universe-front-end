@@ -1,6 +1,5 @@
 import dude from '@/assets/dude.png';
 import VillageMap from '@/assets/map/village/village-map.json';
-import platform from '@/assets/platform.png';
 import sky from '@/assets/real-sky.png';
 import TileSet from '@/assets/tile-set.png';
 import Phaser from '@/package/phaser';
@@ -9,13 +8,17 @@ import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
 import MapManager from '@/phaser/map/MapManager';
 
+const BACKGROUND_KEY = 'backgroud';
+const VILLAGE_MAP_KEY = 'villageMap';
+const TILE_SET_KEY = 'tileSet';
+const SPRITE_SHEET_KEY = 'dude';
+
 class VillageScene extends Phaser.Scene {
   preload() {
-    this.load.image('tileSet', TileSet);
-    this.load.tilemapTiledJSON('villageMap', VillageMap);
-    this.load.image('defaultBackground', sky);
-    this.load.image('defaultGround', platform);
-    this.load.spritesheet('dude', dude, {
+    this.load.image(TILE_SET_KEY, TileSet);
+    this.load.tilemapTiledJSON(VILLAGE_MAP_KEY, VillageMap);
+    this.load.image(BACKGROUND_KEY, sky);
+    this.load.spritesheet(SPRITE_SHEET_KEY, dude, {
       frameWidth: 32,
       frameHeight: 48,
     });
@@ -24,7 +27,7 @@ class VillageScene extends Phaser.Scene {
   create() {
     const socket = io('http://localhost:3001/');
 
-    const villageMap = MapManager.createMap(this, 'defaultBackground', 'villageMap', 'tileSet');
+    const villageMap = MapManager.createMap(this, BACKGROUND_KEY, VILLAGE_MAP_KEY, TILE_SET_KEY);
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
@@ -37,7 +40,7 @@ class VillageScene extends Phaser.Scene {
           const myCharacter = characterFactory.getMyCharacter(
             characters[index].x,
             characters[index].y,
-            'dude',
+            SPRITE_SHEET_KEY,
             socket.id,
             character => {
               socket.emit('character:move', {
@@ -55,7 +58,7 @@ class VillageScene extends Phaser.Scene {
             characterFactory.getAnotherCharacter(
               characters[index].x,
               characters[index].y,
-              'dude',
+              SPRITE_SHEET_KEY,
               characters[index].socketId,
               characters[index].animation,
             ),
@@ -69,7 +72,7 @@ class VillageScene extends Phaser.Scene {
         characterFactory.getAnotherCharacter(
           characterInfo.x,
           characterInfo.y,
-          'dude',
+          SPRITE_SHEET_KEY,
           characterInfo.socketId,
           characterInfo.animation,
         ),
