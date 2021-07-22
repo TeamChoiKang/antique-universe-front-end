@@ -5,26 +5,22 @@ const http = {
     });
   },
 
-  post(url, body, headers) {
-    const defaultHeaders = {
-      'Content-Type': 'application/json;charset=utf-8',
-    };
-
+  post(url, body) {
     return fetch(url, {
       method: 'POST',
-      headers: headers || defaultHeaders,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
       body: JSON.stringify(body),
     });
   },
 
-  put(url, body, headers) {
-    const defaultHeaders = {
-      'Content-Type': 'application/json;charset=utf-8',
-    };
-
+  put(url, body) {
     return fetch(url, {
       method: 'PUT',
-      headers: headers || defaultHeaders,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
       body: JSON.stringify(body),
     });
   },
