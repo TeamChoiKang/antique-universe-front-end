@@ -35,7 +35,7 @@ class DefaultCursorStrategy extends CursorStrategy {
       this._character.anims.play('turn');
     }
 
-    if (this._cursor.up.isDown && this._character.body.touching.down) {
+    if (this._cursor.up.isDown && this._character.body.onFloor()) {
       this._character.setVelocityY(-300);
     }
 
