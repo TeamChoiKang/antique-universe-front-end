@@ -5,6 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { useLocation } from 'react-router-dom';
 
+import { KAKAO_VENDOR } from '@/constants';
 import queryString from '@/package/queryString';
 
 import antiqueUniverseLogo from '../../assets/antique-universe-logo.png';
@@ -12,8 +13,6 @@ import antiqueUniverseLogo from '../../assets/antique-universe-logo.png';
 import KaKaoOauthStrategy from './KaKaoOauthStrategy';
 
 import './signin.css';
-
-const KAKAO_VENDOR = 'KAKAO';
 
 const SignIn = () => {
   const location = useLocation();
