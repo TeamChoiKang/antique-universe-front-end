@@ -4,7 +4,6 @@ class AuthService extends ApiService {
   /**
    * oauth 서비스에게 token 값을 요청하는 api
    * @param url token 값을 요청하는 url
-   * @param query grant_type, client_id, REDIRECT_URI, oauthCode
    * @returns accessToken을 담은 Promise
    */
   async requestOauthToken(url) {
