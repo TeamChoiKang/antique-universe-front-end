@@ -5,10 +5,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { useLocation } from 'react-router-dom';
 
+import antiqueUniverseLogo from '@/assets/antique-universe-logo.png';
 import { KAKAO_VENDOR } from '@/constants';
 import queryString from '@/package/queryString';
-
-import antiqueUniverseLogo from '../../assets/antique-universe-logo.png';
 
 import KaKaoOauthStrategy from './KaKaoOauthStrategy';
 
@@ -18,7 +17,7 @@ const SignIn = () => {
   const location = useLocation();
   const [staySigninState, setStaySigninState] = useState(false);
   const oauthStrategy = useRef(null);
-  const { code } = queryString.parse(location.search);
+  const { code: oauthCode } = queryString.parse(location.search);
   const vendor = window.localStorage.getItem('vendor');
 
   useEffect(() => {
@@ -28,17 +27,18 @@ const SignIn = () => {
   }, [vendor]);
 
   useEffect(() => {
-    if (code) {
+    if (oauthCode) {
       (async () => {
-        const token = await oauthStrategy.current.requestToken(code);
+        const token = await oauthStrategy.current.requestToken(oauthCode);
         console.log(token);
       })();
     }
-  }, [code]);
+  }, [oauthCode]);
 
   const clickSigninBtn = newVendor => {
+    // oauth callback 이슈로 인하여 vendor를 통해서 oauth 전략을 주입하도록 작업
     window.localStorage.setItem('vendor', newVendor);
-    oauthStrategy.current.requestCode();
+    oauthStrategy.current.requestOauthCode();
   };
 
   const clickStaySigninCheckbox = () => {

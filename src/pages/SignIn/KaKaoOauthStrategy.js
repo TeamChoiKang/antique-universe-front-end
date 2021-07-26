@@ -5,7 +5,7 @@ import queryString from '@/package/queryString';
 import OauthStrategy from './OauthStrategy';
 
 class KaKaoOauthStrategy extends OauthStrategy {
-  requestCode() {
+  requestOauthCode() {
     const codeRequestUri = `${KAKAO_OAUTH_URI}/authorize`;
     const codeRequest = {
       client_id: KAKAO_REST_API_KEY,
@@ -17,13 +17,13 @@ class KaKaoOauthStrategy extends OauthStrategy {
     window.open(`${codeRequestUri}?${query}`, '_self');
   }
 
-  async requestToken(code) {
+  async requestToken(oauthCode) {
     const tokenRequestUri = `${KAKAO_OAUTH_URI}/token`;
     const tokenReqeust = {
       grant_type: 'authorization_code',
       client_id: KAKAO_REST_API_KEY,
       redirect_uri: REDIRECT_URI,
-      code,
+      code: oauthCode,
     };
     const query = queryString.stringify(tokenReqeust);
     const resp = await http.post(`${tokenRequestUri}?${query}`);
