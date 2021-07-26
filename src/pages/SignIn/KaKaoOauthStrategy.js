@@ -1,5 +1,5 @@
+import AuthService from '@/api/AuthService';
 import { REDIRECT_URI, KAKAO_OAUTH_URI, KAKAO_REST_API_KEY } from '@/constants';
-import http from '@/package/http';
 import queryString from '@/package/queryString';
 
 import OauthStrategy from './OauthStrategy';
@@ -17,7 +17,7 @@ class KaKaoOauthStrategy extends OauthStrategy {
     window.open(`${codeRequestUri}?${query}`, '_self');
   }
 
-  async requestToken(oauthCode) {
+  async requestOauthToken(oauthCode) {
     const tokenRequestUri = `${KAKAO_OAUTH_URI}/token`;
     const tokenReqeust = {
       grant_type: 'authorization_code',
@@ -26,10 +26,9 @@ class KaKaoOauthStrategy extends OauthStrategy {
       code: oauthCode,
     };
     const query = queryString.stringify(tokenReqeust);
-    const resp = await http.post(`${tokenRequestUri}?${query}`);
-    const { access_token: accessToken } = await resp.json();
 
-    return accessToken;
+    const token = await AuthService.requestOauthToken(`${tokenRequestUri}?${query}`);
+    return token;
   }
 }
 

@@ -29,7 +29,7 @@ const SignIn = () => {
   useEffect(() => {
     if (oauthCode) {
       (async () => {
-        const token = await oauthStrategy.current.requestToken(oauthCode);
+        const token = await oauthStrategy.current.requestOauthToken(oauthCode);
         console.log(token);
       })();
     }
