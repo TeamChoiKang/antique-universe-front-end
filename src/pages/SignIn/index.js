@@ -10,7 +10,6 @@ import queryString from '@/package/queryString';
 import antiqueUniverseLogo from '../../assets/antique-universe-logo.png';
 
 import KaKaoOauthStrategy from './KaKaoOauthStrategy';
-import OauthStrategy from './OauthStrategy';
 
 import './signin.css';
 
@@ -19,15 +18,13 @@ const KAKAO_VENDOR = 'KAKAO';
 const SignIn = () => {
   const location = useLocation();
   const [staySigninState, setStaySigninState] = useState(false);
-  const oauthStrategy = useRef(new OauthStrategy());
+  const oauthStrategy = useRef(null);
   const { code } = queryString.parse(location.search);
   const vendor = window.localStorage.getItem('vendor');
 
   useEffect(() => {
     if (vendor === KAKAO_VENDOR) {
       oauthStrategy.current = new KaKaoOauthStrategy();
-    } else {
-      oauthStrategy.current = new OauthStrategy();
     }
   }, [vendor]);
 
@@ -40,13 +37,11 @@ const SignIn = () => {
     }
   }, [code]);
 
-  const clickSigninBtn = () => {
+  const clickSigninBtn = newVendor => {
+    window.localStorage.setItem('vendor', newVendor);
     oauthStrategy.current.requestCode();
   };
-  const clickKakaoSigninBtn = () => {
-    window.localStorage.setItem('vendor', KAKAO_VENDOR);
-    clickSigninBtn();
-  };
+
   const clickStaySigninCheckbox = () => {
     setStaySigninState(!staySigninState);
   };
@@ -58,7 +53,12 @@ const SignIn = () => {
           <img src={antiqueUniverseLogo} alt="antique-universe-logo" />
         </div>
         <div className="signin__signin-btn kakao-signin-btn">
-          <Button variant="contained" color="primary" onClick={clickKakaoSigninBtn} fullWidth>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => clickSigninBtn(KAKAO_VENDOR)}
+            fullWidth
+          >
             카카오로 로그인하기
           </Button>
         </div>
