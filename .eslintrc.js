@@ -16,7 +16,6 @@ module.exports = {
     'global-require': 0,
     'react-hooks/exhaustive-deps': 0,
     'import/prefer-default-export': 0,
-    'no-alert': 0,
     'linebreak-style': ['error', require('os').EOL === '\r\n' ? 'windows' : 'unix'],
     'import/order': [
       1,
