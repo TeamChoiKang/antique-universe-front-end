@@ -34,6 +34,8 @@ class VillageScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
     this.cameras.main.setZoom(1.5);
 
+    socket.emit('character:start', 'start');
+
     socket.on('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
         if (characters[index].socketId === socket.id) {
