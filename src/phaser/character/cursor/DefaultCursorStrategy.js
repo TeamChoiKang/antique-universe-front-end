@@ -9,8 +9,8 @@ class DefaultCursorStrategy extends CursorStrategy {
   checkCharacterStateChanged(character) {
     return (
       character.oldState &&
-      (character.x !== character.oldState.xCoordinate ||
-        character.y !== character.oldState.yCoordinate ||
+      (character.x !== character.oldState.x ||
+        character.y !== character.oldState.y ||
         character.animation !== character.oldState.animation)
     );
   }
@@ -36,8 +36,8 @@ class DefaultCursorStrategy extends CursorStrategy {
     }
 
     this._character.oldState = {
-      xCoordinate: this._character.x,
-      yCoordinate: this._character.y,
+      x: this._character.x,
+      y: this._character.y,
       animation: this._character.animation,
     };
   }
