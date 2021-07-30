@@ -1,5 +1,5 @@
 // oauth
-export const REDIRECT_URI = 'http://localhost:3000/signin';
+export const REDIRECT_URI = `${document.location.origin}/signin`;
 
 export const KAKAO_VENDOR = 'KAKAO';
 export const KAKAO_OAUTH_URI = 'https://kauth.kakao.com/oauth';
