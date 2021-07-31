@@ -14,6 +14,10 @@ const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
 
 class VillageScene extends Phaser.Scene {
+  constructor() {
+    super('VillageScene');
+  }
+
   preload() {
     this.load.image(TILE_SET_KEY, TileSet);
     this.load.tilemapTiledJSON(VILLAGE_MAP_KEY, VillageMap);
