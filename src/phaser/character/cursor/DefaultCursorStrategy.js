@@ -6,20 +6,12 @@ class DefaultCursorStrategy extends CursorStrategy {
     this._emitMovement = emitMovement;
   }
 
-  checkCharacterMoved(character) {
+  checkCharacterStateChanged(character) {
     return (
-      character.oldPosition &&
-      (character.x !== character.oldPosition.xCoordinate ||
-        character.y !== character.oldPosition.yCoordinate)
-    );
-  }
-
-  checkCursorUp() {
-    return (
-      this._cursor.down.isUp ||
-      this._cursor.left.isUp ||
-      this._cursor.right.isUp ||
-      this._cursor.up.isUp
+      character.oldState &&
+      (character.x !== character.oldState.x ||
+        character.y !== character.oldState.y ||
+        character.anims.getName() !== character.oldState.animation)
     );
   }
 
@@ -39,13 +31,14 @@ class DefaultCursorStrategy extends CursorStrategy {
       this._character.setVelocityY(-300);
     }
 
-    if (this.checkCursorUp() || this.checkCharacterMoved(this._character)) {
+    if (this.checkCharacterStateChanged(this._character)) {
       this._emitMovement(this._character);
     }
 
-    this._character.oldPosition = {
-      xCoordinate: this._character.x,
-      yCoordinate: this._character.y,
+    this._character.oldState = {
+      x: this._character.x,
+      y: this._character.y,
+      animation: this._character.anims.getName(),
     };
   }
 }
