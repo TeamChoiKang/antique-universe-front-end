@@ -8,6 +8,7 @@ module.exports = {
   plugins: ['import'],
   ignorePatterns: ['/config/**'],
   rules: {
+    'no-unused-vars': 1,
     'no-underscore-dangle': 0,
     'react/jsx-filename-extension': 0,
     'class-methods-use-this': 0,

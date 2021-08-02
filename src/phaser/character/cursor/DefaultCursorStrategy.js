@@ -11,7 +11,7 @@ class DefaultCursorStrategy extends CursorStrategy {
       character.oldState &&
       (character.x !== character.oldState.x ||
         character.y !== character.oldState.y ||
-        character.animation !== character.oldState.animation)
+        character.anims.getName() !== character.oldState.animation)
     );
   }
 
@@ -38,7 +38,7 @@ class DefaultCursorStrategy extends CursorStrategy {
     this._character.oldState = {
       x: this._character.x,
       y: this._character.y,
-      animation: this._character.animation,
+      animation: this._character.anims.getName(),
     };
   }
 }
