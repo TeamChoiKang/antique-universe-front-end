@@ -39,36 +39,36 @@ class VillageScene extends Phaser.Scene {
 
     socket.emit('character:start', 'start');
 
+    socket.on('character:myCharacter', myCharacterInfo => {
+      const myCharacter = characterFactory.getMyCharacter(
+        myCharacterInfo.x,
+        myCharacterInfo.y,
+        SPRITE_SHEET_KEY,
+        socket.id,
+        character => {
+          socket.emit('character:move', {
+            x: character.x,
+            y: character.y,
+            animation: character.anims.getName(),
+          });
+        },
+      );
+
+      this.physics.add.collider(myCharacter, villageMap);
+      this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
+    });
+
     socket.on('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
-        if (characters[index].socketId === socket.id) {
-          const myCharacter = characterFactory.getMyCharacter(
+        characterGroup.add(
+          characterFactory.getAnotherCharacter(
             characters[index].x,
             characters[index].y,
             SPRITE_SHEET_KEY,
-            socket.id,
-            character => {
-              socket.emit('character:move', {
-                x: character.x,
-                y: character.y,
-                animation: character.anims.getName(),
-              });
-            },
-          );
-
-          this.physics.add.collider(myCharacter, villageMap);
-          this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
-        } else {
-          characterGroup.add(
-            characterFactory.getAnotherCharacter(
-              characters[index].x,
-              characters[index].y,
-              SPRITE_SHEET_KEY,
-              characters[index].socketId,
-              characters[index].animation,
-            ),
-          );
-        }
+            characters[index].socketId,
+            characters[index].animation,
+          ),
+        );
       });
     });
 
