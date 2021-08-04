@@ -39,7 +39,7 @@ class VillageScene extends Phaser.Scene {
 
     socket.emit('character:start', 'start');
 
-    socket.on('character:myCharacter', myCharacterInfo => {
+    socket.once('character:myCharacter', myCharacterInfo => {
       const myCharacter = characterFactory.getMyCharacter(
         myCharacterInfo.x,
         myCharacterInfo.y,
@@ -58,7 +58,7 @@ class VillageScene extends Phaser.Scene {
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
-    socket.on('character:currentCharacter', characters => {
+    socket.once('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
         characterGroup.add(
           characterFactory.getAnotherCharacter(
