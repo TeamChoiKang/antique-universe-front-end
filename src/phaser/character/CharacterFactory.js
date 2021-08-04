@@ -12,7 +12,7 @@ class CharacterFactory {
   }
 
   getMyCharacter(x, y, texture, socketId, emitMovement) {
-    const character = new Character(this._phaserScene, x, y, texture, socketId).getCharacter();
+    const character = new Character(this._phaserScene, x, y, texture, socketId);
 
     character.setBounce(0.2);
     character.setCollideWorldBounds(true);
@@ -29,13 +29,7 @@ class CharacterFactory {
   }
 
   getAnotherCharacter(x, y, texture, socketId, animationKey) {
-    const anotherCharacter = new Character(
-      this._phaserScene,
-      x,
-      y,
-      texture,
-      socketId,
-    ).getCharacter();
+    const anotherCharacter = new Character(this._phaserScene, x, y, texture, socketId);
 
     anotherCharacter.setAnimationStrategy(new DefaultAnimationStrategy(this._phaserScene, texture));
 
