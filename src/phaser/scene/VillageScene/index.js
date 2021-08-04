@@ -6,6 +6,7 @@ import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
 import MapManager from '@/phaser/map/MapManager';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'backgroud';
@@ -15,7 +16,7 @@ const SPRITE_SHEET_KEY = 'dude';
 
 class VillageScene extends Phaser.Scene {
   constructor() {
-    super('VillageScene');
+    super(sceneKeys.VILLAGE_SCENE_KEY);
   }
 
   preload() {

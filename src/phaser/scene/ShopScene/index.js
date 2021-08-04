@@ -5,6 +5,7 @@ import TileSet from '@/assets/tile-set.png';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import MapManager from '@/phaser/map/MapManager';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'backgroud';
@@ -14,7 +15,7 @@ const SPRITE_SHEET_KEY = 'dude';
 
 class ShopScene extends Phaser.Scene {
   constructor() {
-    super('ShopScene');
+    super(sceneKeys.SHOP_SCENE_KEY);
   }
 
   preload() {
