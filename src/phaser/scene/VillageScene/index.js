@@ -52,7 +52,7 @@ class VillageScene extends Phaser.Scene {
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
       socket.removeAllListeners();
-      this.scene.start('ShopScene');
+      MapManager.changeMap(this, 'ShopScene');
     });
 
     socket.emit('map:join', 'village');

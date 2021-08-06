@@ -9,6 +9,10 @@ class MapManager {
 
     return map;
   }
+
+  static changeMap(scene, sceneKey) {
+    scene.scene.start(sceneKey);
+  }
 }
 
 export default MapManager;
