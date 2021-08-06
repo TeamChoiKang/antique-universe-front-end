@@ -48,6 +48,14 @@ class VillageScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
     this.cameras.main.setZoom(1.5);
 
+    const sceneChangeKey = this.input.keyboard.addKey('c');
+    sceneChangeKey.on('down', () => {
+      socket.removeAllListeners();
+      this.scene.start('ShopScene');
+    });
+
+    socket.emit('map:join', 'village');
+
     socket.emit('character:start', 'start');
 
     socket.once('character:myCharacter', myCharacterInfo => {
