@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import Phaser from '@/package/phaser';
+import ShopScene from '@/phaser/scene/ShopScene';
 import VillageScene from '@/phaser/scene/VillageScene';
 
 import './phaserRender.css';
@@ -17,7 +18,7 @@ const PHASER_CONFIG = {
       debug: false,
     },
   },
-  scene: VillageScene,
+  scene: [VillageScene, ShopScene],
 };
 
 const PhaserRender = () => {

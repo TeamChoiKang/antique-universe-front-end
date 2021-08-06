@@ -6,6 +6,7 @@ import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
 import MapManager from '@/phaser/map/MapManager';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'backgroud';
@@ -14,6 +15,10 @@ const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
 
 class VillageScene extends Phaser.Scene {
+  constructor() {
+    super(sceneKeys.VILLAGE_SCENE_KEY);
+  }
+
   preload() {
     this.load.image(TILE_SET_KEY, TileSet);
     this.load.tilemapTiledJSON(VILLAGE_MAP_KEY, VillageMap);
