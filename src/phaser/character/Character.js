@@ -23,9 +23,7 @@ class Character {
     };
 
     this._character.socketId = socketId;
-  }
 
-  getCharacter() {
     return this._character;
   }
 }
