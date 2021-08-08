@@ -33,6 +33,17 @@ class VillageScene extends Phaser.Scene {
     const villageMap = MapManager.createMap(this, BACKGROUND_KEY, VILLAGE_MAP_KEY, TILE_SET_KEY);
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
+    const createAnotherCharacterAndAppendToCharacterGroup = characterInfo => {
+      const anotherCharacter = characterFactory.getAnotherCharacter(
+        characterInfo.x,
+        characterInfo.y,
+        SPRITE_SHEET_KEY,
+        characterInfo.socketId,
+        characterInfo.animation,
+      );
+
+      characterGroup.add(anotherCharacter);
+    };
 
     this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
     this.cameras.main.setZoom(1.5);
@@ -60,28 +71,12 @@ class VillageScene extends Phaser.Scene {
 
     socket.once('character:currentCharacter', characters => {
       Object.keys(characters).forEach(index => {
-        characterGroup.add(
-          characterFactory.getAnotherCharacter(
-            characters[index].x,
-            characters[index].y,
-            SPRITE_SHEET_KEY,
-            characters[index].socketId,
-            characters[index].animation,
-          ),
-        );
+        createAnotherCharacterAndAppendToCharacterGroup(characters[index]);
       });
     });
 
     socket.on('character:newCharacter', characterInfo => {
-      characterGroup.add(
-        characterFactory.getAnotherCharacter(
-          characterInfo.x,
-          characterInfo.y,
-          SPRITE_SHEET_KEY,
-          characterInfo.socketId,
-          characterInfo.animation,
-        ),
-      );
+      createAnotherCharacterAndAppendToCharacterGroup(characterInfo);
     });
 
     socket.on('character:moved', characterInfo => {
