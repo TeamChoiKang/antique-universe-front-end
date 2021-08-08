@@ -33,55 +33,50 @@ class VillageScene extends Phaser.Scene {
     const villageMap = MapManager.createMap(this, BACKGROUND_KEY, VILLAGE_MAP_KEY, TILE_SET_KEY);
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
+    const createAnotherCharacterAndAppendToCharacterGroup = characterInfo => {
+      const anotherCharacter = characterFactory.getAnotherCharacter(
+        characterInfo.x,
+        characterInfo.y,
+        SPRITE_SHEET_KEY,
+        characterInfo.socketId,
+        characterInfo.animation,
+      );
+
+      characterGroup.add(anotherCharacter);
+    };
 
     this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
     this.cameras.main.setZoom(1.5);
 
     socket.emit('character:start', 'start');
 
-    socket.on('character:currentCharacter', characters => {
-      Object.keys(characters).forEach(index => {
-        if (characters[index].socketId === socket.id) {
-          const myCharacter = characterFactory.getMyCharacter(
-            characters[index].x,
-            characters[index].y,
-            SPRITE_SHEET_KEY,
-            socket.id,
-            character => {
-              socket.emit('character:move', {
-                x: character.x,
-                y: character.y,
-                animation: character.anims.getName(),
-              });
-            },
-          );
+    socket.once('character:myCharacter', myCharacterInfo => {
+      const myCharacter = characterFactory.getMyCharacter(
+        myCharacterInfo.x,
+        myCharacterInfo.y,
+        SPRITE_SHEET_KEY,
+        socket.id,
+        character => {
+          socket.emit('character:move', {
+            x: character.x,
+            y: character.y,
+            animation: character.anims.getName(),
+          });
+        },
+      );
 
-          this.physics.add.collider(myCharacter, villageMap);
-          this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
-        } else {
-          characterGroup.add(
-            characterFactory.getAnotherCharacter(
-              characters[index].x,
-              characters[index].y,
-              SPRITE_SHEET_KEY,
-              characters[index].socketId,
-              characters[index].animation,
-            ),
-          );
-        }
+      this.physics.add.collider(myCharacter, villageMap);
+      this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
+    });
+
+    socket.once('character:currentCharacter', characters => {
+      Object.keys(characters).forEach(index => {
+        createAnotherCharacterAndAppendToCharacterGroup(characters[index]);
       });
     });
 
     socket.on('character:newCharacter', characterInfo => {
-      characterGroup.add(
-        characterFactory.getAnotherCharacter(
-          characterInfo.x,
-          characterInfo.y,
-          SPRITE_SHEET_KEY,
-          characterInfo.socketId,
-          characterInfo.animation,
-        ),
-      );
+      createAnotherCharacterAndAppendToCharacterGroup(characterInfo);
     });
 
     socket.on('character:moved', characterInfo => {
