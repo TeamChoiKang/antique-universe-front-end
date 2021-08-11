@@ -1,16 +1,16 @@
 import http from '@/package/http';
 
 // TODO: localstorage의 token값을 Authorization로 설정하기
-const header = {
+const defaultHeader = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
 };
 
 class HttpClient {
-  async get(url) {
+  async get(url, header) {
     const response = await http(url, {
       method: 'GET',
-      headers: header,
+      headers: header || defaultHeader,
     });
     const result = await response.json();
     return result;
@@ -19,7 +19,7 @@ class HttpClient {
   async post(url, body) {
     const response = await http(url, {
       method: 'POST',
-      headers: header,
+      headers: defaultHeader,
       body,
     });
     const result = await response.json();
@@ -29,7 +29,7 @@ class HttpClient {
   async put(url, body) {
     const response = await http(url, {
       method: 'PUT',
-      headers: header,
+      headers: defaultHeader,
       body,
     });
     const result = await response.json();
@@ -39,7 +39,7 @@ class HttpClient {
   async delete(url) {
     const response = await http(url, {
       method: 'DELETE',
-      headers: header,
+      headers: defaultHeader,
     });
     const result = await response.json();
     return result;
