@@ -11,6 +11,9 @@ class CursorStrategy {
 
   setup() {
     this._phaserScene.events.on('update', this.update, this);
+    this._phaserScene.events.once('shutdown', () => {
+      this._phaserScene.events.off('update', this.update);
+    });
   }
 }
 
