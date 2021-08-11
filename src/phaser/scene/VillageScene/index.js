@@ -96,6 +96,7 @@ class VillageScene extends Phaser.Scene {
     socket.on('character:moved', characterInfo => {
       const movedCharacter = characterGroup.find(characterInfo.socketId);
 
+      if (!movedCharacter) return;
       movedCharacter.setPosition(characterInfo.x, characterInfo.y);
       movedCharacter.anims.play(characterInfo.animation, true);
     });
