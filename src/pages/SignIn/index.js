@@ -9,36 +9,29 @@ import antiqueUniverseLogo from '@/assets/antique-universe-logo.png';
 import { KAKAO_VENDOR } from '@/constants';
 import queryString from '@/package/queryString';
 
-import KaKaoOauthStrategy from './KaKaoOauthStrategy';
-
+import AuthFactory from './AuthFactory';
 import './signin.css';
 
 const SignIn = () => {
   const location = useLocation();
   const [staySigninState, setStaySigninState] = useState(false);
-  const oauthStrategy = useRef(null);
   const { code: oauthCode } = queryString.parse(location.search);
   const vendor = window.localStorage.getItem('vendor');
-
-  useEffect(() => {
-    if (vendor === KAKAO_VENDOR) {
-      oauthStrategy.current = new KaKaoOauthStrategy();
-    }
-  }, [vendor]);
+  const auth = useRef(AuthFactory(vendor));
 
   useEffect(() => {
     if (oauthCode) {
       (async () => {
-        const token = await oauthStrategy.current.requestOauthToken(oauthCode);
-        console.log(token);
+        const oauthToken = await auth.current.requestOAuthToken(oauthCode);
+        console.log(oauthToken);
       })();
     }
   }, [oauthCode]);
 
   const clickSigninBtn = newVendor => {
-    // oauth callback 이슈로 인하여 vendor를 통해서 oauth 전략을 주입하도록 작업
     window.localStorage.setItem('vendor', newVendor);
-    oauthStrategy.current.requestOauthCode();
+    auth.current = AuthFactory(newVendor);
+    auth.current.requestOAuthCode();
   };
 
   const clickStaySigninCheckbox = () => {
