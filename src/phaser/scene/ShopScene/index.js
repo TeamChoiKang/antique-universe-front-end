@@ -1,16 +1,16 @@
 import dude from '@/assets/dude.png';
-import ShopMap from '@/assets/map/shop/shop-map.json';
 import sky from '@/assets/real-sky.png';
 import TileSet from '@/assets/tile-set.png';
+import ShopTileMap from '@/assets/tileMap/shop/shop-tile-map.json';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
-import MapManager from '@/phaser/map/MapManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
+import SceneManager from '@/phaser/scene/SceneManager';
 import Socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'backgroud';
-const SHOP_MAP_KEY = 'shopMap';
+const SHOP_TILE_MAP_KEY = 'shopTileMap';
 const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
 
@@ -21,7 +21,7 @@ class ShopScene extends Phaser.Scene {
 
   preload() {
     this.load.image(TILE_SET_KEY, TileSet);
-    this.load.tilemapTiledJSON(SHOP_MAP_KEY, ShopMap);
+    this.load.tilemapTiledJSON(SHOP_TILE_MAP_KEY, ShopTileMap);
     this.load.image(BACKGROUND_KEY, sky);
     this.load.spritesheet(SPRITE_SHEET_KEY, dude, {
       frameWidth: 32,
@@ -31,7 +31,12 @@ class ShopScene extends Phaser.Scene {
 
   create() {
     const socket = Socket.getInstance();
-    const shopMap = MapManager.createMap(this, BACKGROUND_KEY, SHOP_MAP_KEY, TILE_SET_KEY);
+    const sceneWithTileMap = SceneManager.setTileMap(
+      this,
+      BACKGROUND_KEY,
+      SHOP_TILE_MAP_KEY,
+      TILE_SET_KEY,
+    );
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
 
@@ -47,13 +52,13 @@ class ShopScene extends Phaser.Scene {
       characterGroup.add(anotherCharacter);
     };
 
-    this.cameras.main.setBounds(0, 0, shopMap.width, shopMap.height);
+    this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
       socket.removeAllListeners();
-      MapManager.changeMap(this, sceneKeys.VILLAGE_SCENE_KEY);
+      SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
     });
 
     socket.emit('map:join', 'shop');
@@ -75,7 +80,7 @@ class ShopScene extends Phaser.Scene {
         },
       );
 
-      this.physics.add.collider(myCharacter, shopMap);
+      this.physics.add.collider(myCharacter, sceneWithTileMap);
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
@@ -91,6 +96,7 @@ class ShopScene extends Phaser.Scene {
 
     socket.on('character:moved', characterInfo => {
       const movedCharacter = characterGroup.find(characterInfo.socketId);
+
       movedCharacter.setPosition(characterInfo.x, characterInfo.y);
       movedCharacter.anims.play(characterInfo.animation, true);
     });

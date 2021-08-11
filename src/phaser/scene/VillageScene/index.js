@@ -1,16 +1,16 @@
 import dude from '@/assets/dude.png';
-import VillageMap from '@/assets/map/village/village-map.json';
 import sky from '@/assets/real-sky.png';
 import TileSet from '@/assets/tile-set.png';
+import VillageTileMap from '@/assets/tileMap/village/village-tile-map.json';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
-import MapManager from '@/phaser/map/MapManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
+import SceneManager from '@/phaser/scene/SceneManager';
 import Socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'backgroud';
-const VILLAGE_MAP_KEY = 'villageMap';
+const VILLAGE_TILE_MAP_KEY = 'villageTileMap';
 const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
 
@@ -21,7 +21,7 @@ class VillageScene extends Phaser.Scene {
 
   preload() {
     this.load.image(TILE_SET_KEY, TileSet);
-    this.load.tilemapTiledJSON(VILLAGE_MAP_KEY, VillageMap);
+    this.load.tilemapTiledJSON(VILLAGE_TILE_MAP_KEY, VillageTileMap);
     this.load.image(BACKGROUND_KEY, sky);
     this.load.spritesheet(SPRITE_SHEET_KEY, dude, {
       frameWidth: 32,
@@ -31,7 +31,12 @@ class VillageScene extends Phaser.Scene {
 
   create() {
     const socket = Socket.getInstance();
-    const villageMap = MapManager.createMap(this, BACKGROUND_KEY, VILLAGE_MAP_KEY, TILE_SET_KEY);
+    const sceneWithTileMap = SceneManager.setTileMap(
+      this,
+      BACKGROUND_KEY,
+      VILLAGE_TILE_MAP_KEY,
+      TILE_SET_KEY,
+    );
     const characterFactory = new CharacterFactory(this);
     const characterGroup = new CharacterGroup(this);
     const createAnotherCharacterAndAppendToCharacterGroup = characterInfo => {
@@ -46,13 +51,13 @@ class VillageScene extends Phaser.Scene {
       characterGroup.add(anotherCharacter);
     };
 
-    this.cameras.main.setBounds(0, 0, villageMap.width, villageMap.height);
+    this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
       socket.removeAllListeners();
-      MapManager.changeMap(this, sceneKeys.SHOP_SCENE_KEY);
+      SceneManager.changeScene(this, sceneKeys.SHOP_SCENE_KEY);
     });
 
     socket.emit('map:join', 'village');
@@ -74,7 +79,7 @@ class VillageScene extends Phaser.Scene {
         },
       );
 
-      this.physics.add.collider(myCharacter, villageMap);
+      this.physics.add.collider(myCharacter, sceneWithTileMap);
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
@@ -92,7 +97,6 @@ class VillageScene extends Phaser.Scene {
       const movedCharacter = characterGroup.find(characterInfo.socketId);
 
       movedCharacter.setPosition(characterInfo.x, characterInfo.y);
-
       movedCharacter.anims.play(characterInfo.animation, true);
     });
 
