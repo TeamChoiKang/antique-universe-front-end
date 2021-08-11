@@ -23,7 +23,8 @@ const SignIn = () => {
     if (oauthCode) {
       (async () => {
         const oauthToken = await auth.current.requestOAuthToken(oauthCode);
-        console.log(oauthToken);
+        const token = await auth.current.signin(vendor, oauthToken);
+        console.log(token);
       })();
     }
   }, [oauthCode]);
