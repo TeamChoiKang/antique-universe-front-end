@@ -15,6 +15,7 @@ module.exports = {
     'func-names': 0,
     'import/no-unresolved': 0,
     'global-require': 0,
+    'react/prop-types': 0,
     'react-hooks/exhaustive-deps': 0,
     'import/prefer-default-export': 0,
     'linebreak-style': ['error', require('os').EOL === '\r\n' ? 'windows' : 'unix'],
