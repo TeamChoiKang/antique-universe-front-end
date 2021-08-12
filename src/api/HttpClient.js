@@ -1,25 +1,44 @@
+import { LOCAL_SERVER } from '@/constants';
 import http from '@/package/http';
 
-// TODO: localstorage의 token값을 Authorization로 설정하기
-const header = {
-  'Content-Type': 'application/json',
-  Accept: 'application/json',
+const getHeader = newHeader => {
+  const header = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+
+  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  if (token) {
+    header.Authorization = `Bearer ${token}`;
+  }
+
+  return {
+    ...header,
+    ...newHeader,
+  };
+};
+
+const getUrl = url => {
+  if (url.startsWith('http')) {
+    return url;
+  }
+  return LOCAL_SERVER.concat(url);
 };
 
 class HttpClient {
-  async get(url) {
-    const response = await http(url, {
+  async get(url, header) {
+    const response = await http(getUrl(url), {
       method: 'GET',
-      headers: header,
+      headers: getHeader(header),
     });
     const result = await response.json();
     return result;
   }
 
   async post(url, body) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'POST',
-      headers: header,
+      headers: getHeader(),
       body,
     });
     const result = await response.json();
@@ -27,9 +46,9 @@ class HttpClient {
   }
 
   async put(url, body) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'PUT',
-      headers: header,
+      headers: getHeader(),
       body,
     });
     const result = await response.json();
@@ -37,9 +56,9 @@ class HttpClient {
   }
 
   async delete(url) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'DELETE',
-      headers: header,
+      headers: getHeader(),
     });
     const result = await response.json();
     return result;

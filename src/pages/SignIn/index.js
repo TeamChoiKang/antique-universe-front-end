@@ -3,45 +3,52 @@ import React, { useState, useEffect, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import antiqueUniverseLogo from '@/assets/antique-universe-logo.png';
 import { KAKAO_VENDOR } from '@/constants';
 import queryString from '@/package/queryString';
 
-import KaKaoOauthStrategy from './KaKaoOauthStrategy';
-
+import AuthFactory from './AuthFactory';
 import './signin.css';
 
 const SignIn = () => {
   const location = useLocation();
-  const [staySigninState, setStaySigninState] = useState(false);
-  const oauthStrategy = useRef(null);
-  const { code: oauthCode } = queryString.parse(location.search);
-  const vendor = window.localStorage.getItem('vendor');
+  const history = useHistory();
+  const [staySigninState, setStaySigninState] = useState(
+    !!sessionStorage.getItem('staySigninState'),
+  );
+  const vendor = sessionStorage.getItem('vendor');
+  const { code: oAuthCode } = queryString.parse(location.search);
+  const auth = useRef(AuthFactory(vendor));
 
   useEffect(() => {
-    if (vendor === KAKAO_VENDOR) {
-      oauthStrategy.current = new KaKaoOauthStrategy();
-    }
-  }, [vendor]);
-
-  useEffect(() => {
-    if (oauthCode) {
+    if (oAuthCode) {
       (async () => {
-        const token = await oauthStrategy.current.requestOauthToken(oauthCode);
-        console.log(token);
+        const oAuthToken = await auth.current.requestOAuthToken(oAuthCode);
+        const token = await auth.current.signin(vendor, oAuthToken);
+        setTokenIntoStorage(token);
+        history.push('/game');
       })();
     }
-  }, [oauthCode]);
+  }, [oAuthCode, staySigninState]);
+
+  const setTokenIntoStorage = token => {
+    if (staySigninState) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
+  };
 
   const clickSigninBtn = newVendor => {
-    // oauth callback 이슈로 인하여 vendor를 통해서 oauth 전략을 주입하도록 작업
-    window.localStorage.setItem('vendor', newVendor);
-    oauthStrategy.current.requestOauthCode();
+    sessionStorage.setItem('vendor', newVendor);
+    auth.current = AuthFactory(newVendor);
+    auth.current.requestOAuthCode();
   };
 
   const clickStaySigninCheckbox = () => {
+    sessionStorage.setItem('staySigninState', !staySigninState);
     setStaySigninState(!staySigninState);
   };
 

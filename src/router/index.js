@@ -8,6 +8,8 @@ import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import ScrollToTop from '@/ScrollToTop';
 
+import PrivateRoute from './PrivateRoute';
+
 const AppRouter = () => {
   return (
     <Router>
@@ -22,9 +24,11 @@ const AppRouter = () => {
         <Route path="/signup">
           <SignUp />
         </Route>
-        <Route path="/game">
-          <Game />
-        </Route>
+        <PrivateRoute>
+          <Route path="/game">
+            <Game />
+          </Route>
+        </PrivateRoute>
         <Route path="*">
           <div>404</div>
         </Route>
