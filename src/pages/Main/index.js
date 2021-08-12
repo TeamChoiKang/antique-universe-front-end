@@ -10,7 +10,7 @@ import './main.css';
 const Main = () => {
   const history = useHistory();
 
-  const clickStartBtn = () => history.push('/signin');
+  const clickStartBtn = () => history.push('/game');
 
   return (
     <div className="main">
