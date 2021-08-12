@@ -26,7 +26,7 @@ class AuthService extends ApiService {
    */
   async signin(vendor, oauthToken) {
     try {
-      const url = 'http://localhost:3001/signin';
+      const url = '/signin';
       const query = queryString.stringify({ vendor });
       const header = { Authorization: `Bearer ${oauthToken}` };
       const { token } = await this._instance.get(`${url}?${query}`, header);

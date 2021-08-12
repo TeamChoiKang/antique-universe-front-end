@@ -1,3 +1,4 @@
+import { LOCAL_SERVER } from '@/constants';
 import http from '@/package/http';
 
 const getHeader = newHeader => {
@@ -17,9 +18,16 @@ const getHeader = newHeader => {
   };
 };
 
+const getUrl = url => {
+  if (url.startsWith('http')) {
+    return url;
+  }
+  return LOCAL_SERVER.concat(url);
+};
+
 class HttpClient {
   async get(url, header) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'GET',
       headers: getHeader(header),
     });
@@ -28,7 +36,7 @@ class HttpClient {
   }
 
   async post(url, body) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'POST',
       headers: getHeader(),
       body,
@@ -38,7 +46,7 @@ class HttpClient {
   }
 
   async put(url, body) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'PUT',
       headers: getHeader(),
       body,
@@ -48,7 +56,7 @@ class HttpClient {
   }
 
   async delete(url) {
-    const response = await http(url, {
+    const response = await http(getUrl(url), {
       method: 'DELETE',
       headers: getHeader(),
     });
