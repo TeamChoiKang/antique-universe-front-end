@@ -1,0 +1,19 @@
+.signup {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup .signup__main-component {
+  min-width: 300px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex;
+}
+
+.signup .signup__input {
+  margin-bottom: 20px;
+}

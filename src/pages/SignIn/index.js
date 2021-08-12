@@ -26,9 +26,16 @@ const SignIn = () => {
     if (oAuthCode) {
       (async () => {
         const oAuthToken = await auth.current.requestOAuthToken(oAuthCode);
-        const token = await auth.current.signin(vendor, oAuthToken);
-        setTokenIntoStorage(token);
-        history.push('/game');
+        try {
+          const token = await auth.current.signin(vendor, oAuthToken);
+          setTokenIntoStorage(token);
+          history.push('/game');
+        } catch (error) {
+          history.push('/signup', {
+            vendor,
+            oAuthToken,
+          });
+        }
       })();
     }
   }, [oAuthCode, staySigninState]);
