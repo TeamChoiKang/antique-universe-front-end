@@ -19,19 +19,19 @@ const SignIn = () => {
     !!sessionStorage.getItem('staySigninState'),
   );
   const vendor = sessionStorage.getItem('vendor');
-  const { code: oauthCode } = queryString.parse(location.search);
+  const { code: oAuthCode } = queryString.parse(location.search);
   const auth = useRef(AuthFactory(vendor));
 
   useEffect(() => {
-    if (oauthCode) {
+    if (oAuthCode) {
       (async () => {
-        const oauthToken = await auth.current.requestOAuthToken(oauthCode);
-        const token = await auth.current.signin(vendor, oauthToken);
+        const oAuthToken = await auth.current.requestOAuthToken(oAuthCode);
+        const token = await auth.current.signin(vendor, oAuthToken);
         setTokenIntoStorage(token);
         history.push('/game');
       })();
     }
-  }, [oauthCode, staySigninState]);
+  }, [oAuthCode, staySigninState]);
 
   const setTokenIntoStorage = token => {
     if (staySigninState) {

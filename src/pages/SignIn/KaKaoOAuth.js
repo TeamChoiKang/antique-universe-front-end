@@ -17,17 +17,17 @@ class KaKaoOAuth extends OAuth {
     window.open(`${codeRequestUri}?${query}`, '_self');
   }
 
-  async requestOAuthToken(oauthCode) {
+  async requestOAuthToken(oAuthCode) {
     const tokenRequestUri = `${KAKAO_OAUTH_URI}/token`;
     const tokenReqeust = {
       grant_type: 'authorization_code',
       client_id: KAKAO_REST_API_KEY,
       redirect_uri: REDIRECT_URI,
-      code: oauthCode,
+      code: oAuthCode,
     };
     const query = queryString.stringify(tokenReqeust);
 
-    const token = await AuthService.requestOauthToken(`${tokenRequestUri}?${query}`);
+    const token = await AuthService.requestOAuthToken(`${tokenRequestUri}?${query}`);
     return token;
   }
 }
