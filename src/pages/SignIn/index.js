@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import antiqueUniverseLogo from '@/assets/antique-universe-logo.png';
 import { KAKAO_VENDOR } from '@/constants';
@@ -14,9 +14,12 @@ import './signin.css';
 
 const SignIn = () => {
   const location = useLocation();
-  const [staySigninState, setStaySigninState] = useState(false);
+  const history = useHistory();
+  const [staySigninState, setStaySigninState] = useState(
+    !!sessionStorage.getItem('staySigninState'),
+  );
+  const vendor = sessionStorage.getItem('vendor');
   const { code: oauthCode } = queryString.parse(location.search);
-  const vendor = window.localStorage.getItem('vendor');
   const auth = useRef(AuthFactory(vendor));
 
   useEffect(() => {
@@ -24,18 +27,28 @@ const SignIn = () => {
       (async () => {
         const oauthToken = await auth.current.requestOAuthToken(oauthCode);
         const token = await auth.current.signin(vendor, oauthToken);
-        console.log(token);
+        setTokenIntoStorage(token);
+        history.push('/game');
       })();
     }
-  }, [oauthCode]);
+  }, [oauthCode, staySigninState]);
+
+  const setTokenIntoStorage = token => {
+    if (staySigninState) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
+  };
 
   const clickSigninBtn = newVendor => {
-    window.localStorage.setItem('vendor', newVendor);
+    sessionStorage.setItem('vendor', newVendor);
     auth.current = AuthFactory(newVendor);
     auth.current.requestOAuthCode();
   };
 
   const clickStaySigninCheckbox = () => {
+    sessionStorage.setItem('staySigninState', !staySigninState);
     setStaySigninState(!staySigninState);
   };
 
