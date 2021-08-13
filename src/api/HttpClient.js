@@ -39,7 +39,7 @@ class HttpClient {
     const response = await http(getUrl(url), {
       method: 'POST',
       headers: getHeader(),
-      body,
+      body: JSON.stringify(body),
     });
     const result = await response.json();
     return result;
@@ -49,7 +49,7 @@ class HttpClient {
     const response = await http(getUrl(url), {
       method: 'PUT',
       headers: getHeader(),
-      body,
+      body: JSON.stringify(body),
     });
     const result = await response.json();
     return result;
