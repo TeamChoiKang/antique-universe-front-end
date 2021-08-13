@@ -26,7 +26,8 @@ const SignIn = () => {
     if (oAuthCode) {
       (async () => {
         const oAuthToken = await auth.current.requestOAuthToken(oAuthCode);
-        const token = await auth.current.signin(vendor, oAuthToken);
+        const body = { vendor, oAuthToken };
+        const token = await auth.current.signin(body);
         setTokenIntoStorage(token);
         history.push('/game');
       })();
