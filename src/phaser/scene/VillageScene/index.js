@@ -65,7 +65,7 @@ class VillageScene extends Phaser.Scene {
     socket.emit('character:start', 'start');
 
     socket.once('character:myCharacter', myCharacterInfo => {
-      const myCharacter = characterFactory.getMyCharacter(
+      const myCharacter = characterFactory.getGmCharacter(
         myCharacterInfo.x,
         myCharacterInfo.y,
         SPRITE_SHEET_KEY,
