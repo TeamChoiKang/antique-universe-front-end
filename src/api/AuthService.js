@@ -23,12 +23,10 @@ class AuthService extends ApiService {
    * @param oAuthToken 발급한 oauth의 token
    * @returns 서버 자체 token
    */
-  async signin(vendor, oAuthToken) {
+  async signin(body) {
     try {
       const url = '/signin';
-      const query = queryString.stringify({ vendor });
-      const header = { Authorization: `Bearer ${oAuthToken}` };
-      const { token } = await this._instance.get(`${url}?${query}`, header);
+      const { token } = await this._instance.post(url, body);
       return token;
     } catch (error) {
       alert('토큰 발급이 성공적으로 이뤄지지 않았습니다. 관리자에게 문의해주세요.');
