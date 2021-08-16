@@ -27,7 +27,12 @@ const SignUp = () => {
 
   const onSubmit = async () => {
     const token = await AuthService.signup(vendor, oAuthToken, signUpInfo);
-    sessionStorage.setItem('token', token);
+    const staySigninState = sessionStorage.getItem('staySigninState');
+    if (staySigninState) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
     history.push('/game');
   };
 
