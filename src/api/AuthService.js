@@ -13,7 +13,7 @@ class AuthService extends ApiService {
       return oAuthToken;
     } catch (error) {
       alert('oauth service가 불안정합니다. 관리자에게 문의해주세요.');
-      return error;
+      throw error;
     }
   }
 
@@ -29,7 +29,7 @@ class AuthService extends ApiService {
       const { token } = await this._instance.post(url, body);
       return token;
     } catch (error) {
-      alert('토큰 발급이 성공적으로 이뤄지지 않았습니다. 관리자에게 문의해주세요.');
+      alert('유효한 회원이 아닙니다. 회원가입을 진행해주세요.');
       throw error;
     }
   }
