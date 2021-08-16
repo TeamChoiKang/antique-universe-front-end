@@ -29,10 +29,20 @@ class GMCursorStrategy extends CursorStrategy {
       this._character.setVelocityX(700);
     }
 
+    if (this._cursor.left.isDown && this._cursor.right.isDown) {
+      this._character.setVelocityX(0);
+      this._character.anims.play('turn');
+    }
+
     if (this._cursor.up.isDown) {
       this._character.setVelocityY(-700);
     } else if (this._cursor.down.isDown) {
       this._character.setVelocityY(700);
+    }
+
+    if (this._cursor.up.isDown && this._cursor.down.isDown) {
+      this._character.setVelocityX(0);
+      this._character.anims.play('turn');
     }
   }
 
@@ -44,6 +54,11 @@ class GMCursorStrategy extends CursorStrategy {
       this._character.setVelocityX(500);
       this._character.anims.play('right', true);
     } else {
+      this._character.setVelocityX(0);
+      this._character.anims.play('turn');
+    }
+
+    if (this._cursor.left.isDown && this._cursor.right.isDown) {
       this._character.setVelocityX(0);
       this._character.anims.play('turn');
     }
