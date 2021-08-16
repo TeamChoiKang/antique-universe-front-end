@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import './signup.css';
+import AuthService from '@/api/AuthService';
 
 const SignUp = () => {
   const location = useLocation();
+  const history = useHistory();
   const { vendor, oAuthToken } = location.state;
   const [signUpInfo, setSignUpInfo] = useState({
     name: '',
@@ -18,12 +20,16 @@ const SignUp = () => {
 
   const onChange = e => {
     setSignUpInfo({
-      ...setSignUpInfo,
+      ...signUpInfo,
       [e.target.name]: e.target.value,
     });
   };
 
-  const onSubmit = () => {};
+  const onSubmit = async () => {
+    const token = await AuthService.signup(vendor, oAuthToken, signUpInfo);
+    sessionStorage.setItem('token', token);
+    history.push('/game');
+  };
 
   return (
     <div className="signup">
