@@ -31,6 +31,9 @@ class HttpClient {
       method: 'GET',
       headers: getHeader(header),
     });
+    if (!response.ok) {
+      throw new Error(`Http Error: status ${response.status}`);
+    }
     const result = await response.json();
     return result;
   }
@@ -41,6 +44,9 @@ class HttpClient {
       headers: getHeader(),
       body: JSON.stringify(body),
     });
+    if (!response.ok) {
+      throw new Error(`Http Error: status ${response.status}`);
+    }
     const result = await response.json();
     return result;
   }
@@ -51,6 +57,9 @@ class HttpClient {
       headers: getHeader(),
       body: JSON.stringify(body),
     });
+    if (!response.ok) {
+      throw new Error(`Http Error: status ${response.status}`);
+    }
     const result = await response.json();
     return result;
   }
@@ -60,6 +69,9 @@ class HttpClient {
       method: 'DELETE',
       headers: getHeader(),
     });
+    if (!response.ok) {
+      throw new Error(`Http Error: status ${response.status}`);
+    }
     const result = await response.json();
     return result;
   }
