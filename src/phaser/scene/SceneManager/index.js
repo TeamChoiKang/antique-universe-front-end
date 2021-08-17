@@ -9,6 +9,9 @@ class SceneManager {
     sceneWithTileMap.setCollisionByExclusion(-1, true);
     scene.physics.world.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
 
+    tileMap.createLayer('WorldBack', tileSet);
+    tileMap.createLayer('WorldFront', tileSet).setDepth(10000);
+
     return sceneWithTileMap;
   }
 
