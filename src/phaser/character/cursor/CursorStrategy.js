@@ -15,6 +15,10 @@ class CursorStrategy {
       this._phaserScene.events.off('update', this.update);
     });
   }
+
+  destroy() {
+    this._phaserScene.events.off('update', this.update);
+  }
 }
 
 export default CursorStrategy;

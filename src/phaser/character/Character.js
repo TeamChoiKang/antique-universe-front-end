@@ -14,6 +14,7 @@ class Character {
     };
 
     this._character.setCursorStrategy = function (newCursorStrategy) {
+      if (this._cursorStrategy) this._cursorStrategy.destroy();
       this._cursorStrategy = newCursorStrategy;
       this._cursorStrategy.setup();
     };

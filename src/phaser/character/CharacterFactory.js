@@ -1,3 +1,5 @@
+import GmCursorStrategy from '@/phaser/character/cursor/GmCursorStrategy';
+
 import DefaultAnimationStrategy from './animation/DefaultAnimationStrategy';
 import Character from './Character';
 import DefaultCursorStrategy from './cursor/DefaultCursorStrategy';
@@ -24,6 +26,13 @@ class CharacterFactory {
     );
 
     character.setGravityY(300);
+
+    return character;
+  }
+
+  getGmCharacter(x, y, texture, socketId, emitMovement) {
+    const character = this.getMyCharacter(x, y, texture, socketId, emitMovement);
+    character.setCursorStrategy(new GmCursorStrategy(this._phaserScene, character, emitMovement));
 
     return character;
   }
