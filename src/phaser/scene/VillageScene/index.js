@@ -104,6 +104,11 @@ class VillageScene extends Phaser.Scene {
     socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);
     });
+
+    const popupKey = this.input.keyboard.addKey('m');
+    popupKey.on('down', () => {
+      SceneManager.createModalScene(this);
+    });
   }
 }
 
