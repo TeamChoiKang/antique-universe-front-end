@@ -12,6 +12,9 @@ const PHASER_CONFIG = {
     mode: Phaser.Scale.RESIZE,
   },
   parent: 'phaser__parent',
+  dom: {
+    createContainer: true,
+  },
   physics: {
     default: 'arcade',
     arcade: {
