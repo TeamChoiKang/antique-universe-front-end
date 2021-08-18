@@ -6,14 +6,15 @@
   align-items: center;
 }
 
-.signup .signup__main-component {
+.signup__main-component {
   min-width: 300px;
-  width: 30%;
+  width: 20%;
   display: flex;
   flex-direction: column;
-  justify-content: flex;
+  justify-content: center;
+  align-content: center;
 }
 
-.signup .signup__input {
-  margin-bottom: 20px;
+.signup__input {
+  height: 100px;
 }
