@@ -24,6 +24,11 @@ class SceneManager {
   static createModalScene(scene) {
     const modalSceneInstance = new ModalScene();
     scene.scene.add('MODAL_SCENE_KEY', modalSceneInstance, true);
+    return modalSceneInstance;
+  }
+
+  static removeModalScene(modalScene) {
+    modalScene.scene.remove(modalScene);
   }
 }
 

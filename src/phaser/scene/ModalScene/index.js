@@ -1,6 +1,8 @@
 import closeIcon from '@/assets/icon/close-icon.png';
 import Phaser from '@/package/phaser';
 
+import SceneManager from '../SceneManager';
+
 const CLOSE_ICON_KEY = 'closeIcon';
 const PADDING = 50;
 const BACKGROUND_COLOR = 0xf2f2f2;
@@ -58,7 +60,7 @@ class ModalScene extends Phaser.Scene {
   }
 
   _registerCloseBtnEventHandler(closeBtn) {
-    const closeModal = () => this.scene.remove(this);
+    const closeModal = () => SceneManager.removeModalScene(this);
 
     closeBtn.on('pointerup', closeModal);
 
