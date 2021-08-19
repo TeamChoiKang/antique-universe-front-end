@@ -16,7 +16,7 @@ const SignUp = () => {
   const location = useLocation();
   const history = useHistory();
   const { vendor, oAuthToken } = location.state;
-  const [signUpInfo, setSignUpInfo] = useState({
+  const [form, setForm] = useState({
     name: {
       value: '',
       placeholder: '이름을 입력해주세요',
@@ -73,7 +73,7 @@ const SignUp = () => {
   };
 
   const changeInput = (name, value, error, errorReason) => {
-    setSignUpInfo(
+    setForm(
       produce(draft => {
         draft[name].value = value;
         draft[name].error = error;
@@ -84,7 +84,7 @@ const SignUp = () => {
 
   const validateAllInput = () => {
     let isAllValid = true;
-    for (const [name, { value, validations }] of Object.entries(signUpInfo)) {
+    for (const [name, { value, validations }] of Object.entries(form)) {
       const { error, errorReason } = validateInput(validations, value);
       if (error) {
         isAllValid = false;
@@ -94,22 +94,37 @@ const SignUp = () => {
     return isAllValid;
   };
 
+  const requestSignup = async () => {
+    const signUpInfo = {
+      name: form.name.value,
+      nickname: form.nickname.value,
+      phone: form.phone.value,
+      age: form.age.value,
+    };
+    const token = await AuthService.signup(vendor, oAuthToken, signUpInfo);
+    return token;
+  };
+
+  const setTokenIntoStorage = token => {
+    const staySigninState = sessionStorage.getItem('staySigninState');
+    if (staySigninState) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
+  };
+
   const onChange = e => {
     const { name, value } = e.target;
-    const { error, errorReason } = validateInput(signUpInfo[name].validations, value);
+    const { error, errorReason } = validateInput(form[name].validations, value);
     changeInput(name, value, error, errorReason);
   };
 
   const onSubmit = async () => {
     const isAllValid = validateAllInput();
     if (isAllValid) {
-      const token = await AuthService.signup(vendor, oAuthToken, signUpInfo);
-      const staySigninState = sessionStorage.getItem('staySigninState');
-      if (staySigninState) {
-        localStorage.setItem('token', token);
-      } else {
-        sessionStorage.setItem('token', token);
-      }
+      const token = await requestSignup();
+      setTokenIntoStorage(token);
       history.push('/game');
     }
   };
@@ -123,10 +138,10 @@ const SignUp = () => {
           label="이름"
           name="name"
           variant="outlined"
-          value={signUpInfo.name.value}
-          error={signUpInfo.name.error}
-          placeholder={signUpInfo.name.placeholder}
-          helperText={signUpInfo.name.errorReason}
+          value={form.name.value}
+          error={form.name.error}
+          placeholder={form.name.placeholder}
+          helperText={form.name.errorReason}
           onChange={onChange}
         />
         <TextField
@@ -135,10 +150,10 @@ const SignUp = () => {
           label="닉네임"
           name="nickname"
           variant="outlined"
-          value={signUpInfo.nickname.value}
-          error={signUpInfo.nickname.error}
-          placeholder={signUpInfo.nickname.placeholder}
-          helperText={signUpInfo.nickname.errorReason}
+          value={form.nickname.value}
+          error={form.nickname.error}
+          placeholder={form.nickname.placeholder}
+          helperText={form.nickname.errorReason}
           onChange={onChange}
         />
         <TextField
@@ -147,10 +162,10 @@ const SignUp = () => {
           label="휴대전화"
           name="phone"
           variant="outlined"
-          value={signUpInfo.phone.value}
-          error={signUpInfo.phone.error}
-          placeholder={signUpInfo.phone.placeholder}
-          helperText={signUpInfo.phone.errorReason}
+          value={form.phone.value}
+          error={form.phone.error}
+          placeholder={form.phone.placeholder}
+          helperText={form.phone.errorReason}
           onChange={onChange}
         />
         <TextField
@@ -159,10 +174,10 @@ const SignUp = () => {
           label="나이"
           name="age"
           variant="outlined"
-          value={signUpInfo.age.value}
-          error={signUpInfo.age.error}
-          placeholder={signUpInfo.age.placeholder}
-          helperText={signUpInfo.age.errorReason}
+          value={form.age.value}
+          error={form.age.error}
+          placeholder={form.age.placeholder}
+          helperText={form.age.errorReason}
           onChange={onChange}
         />
         <Button
