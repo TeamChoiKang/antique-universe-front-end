@@ -45,6 +45,7 @@ class ModalScene extends Phaser.Scene {
       .setOrigin(0);
 
     const closeBtn = this._createCloseBtn();
+    this._registerCloseBtnEventHandler(closeBtn);
 
     Phaser.Display.Align.In.TopLeft(closeBtn, modal);
 
@@ -53,7 +54,10 @@ class ModalScene extends Phaser.Scene {
 
   _createCloseBtn() {
     const closeBtn = this.add.image(0, 0, CLOSE_ICON_KEY).setOrigin(0).setInteractive();
+    return closeBtn;
+  }
 
+  _registerCloseBtnEventHandler(closeBtn) {
     const closeModal = () => this.scene.remove(this);
 
     closeBtn.on('pointerup', closeModal);
@@ -61,8 +65,6 @@ class ModalScene extends Phaser.Scene {
     this.events.once('destroy', () => {
       closeBtn.off('pointerup', closeModal);
     });
-
-    return closeBtn;
   }
 
   _registerResizeEventHandler(gameObject, padding = 0) {
