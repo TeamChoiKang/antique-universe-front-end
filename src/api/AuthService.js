@@ -41,13 +41,13 @@ class AuthService extends ApiService {
    * @param signupInfo 회원가입에서 필요한 추가 정보
    * @returns 서버 자체 token
    */
-  async signup(vendor, oAuthToken, signupInfo) {
+  async signup(vendor, oAuthToken, signUpInfo) {
     try {
       const url = '/signup';
       const body = {
         vendor,
         oAuthToken,
-        signupInfo,
+        signUpInfo,
       };
       const { token } = await this._instance.post(url, body);
       return token;
