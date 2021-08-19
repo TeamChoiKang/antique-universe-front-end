@@ -1,3 +1,5 @@
+import ModalScene from '@/phaser/scene/ModalScene';
+
 class SceneManager {
   static setTileMap(scene, backgroundKey, jsonTileMapKey, tileSetKey) {
     scene.add.image(0, 0, backgroundKey).setOrigin(0, 0);
@@ -17,6 +19,16 @@ class SceneManager {
 
   static changeScene(scene, sceneKey) {
     scene.scene.start(sceneKey);
+  }
+
+  static createModalScene(scene) {
+    const modalSceneInstance = new ModalScene();
+    scene.scene.add('MODAL_SCENE_KEY', modalSceneInstance, true);
+    return modalSceneInstance;
+  }
+
+  static removeModalScene(modalScene) {
+    modalScene.scene.remove(modalScene);
   }
 }
 
