@@ -133,7 +133,6 @@ const SignUp = () => {
     <div className="signup">
       <div className="signup__main-component">
         <TextField
-          id="outlined-error-helper-text"
           className="signup__name-input signup__input"
           label="이름"
           name="name"
@@ -145,7 +144,6 @@ const SignUp = () => {
           onChange={onChange}
         />
         <TextField
-          id="outlined-error-helper-text"
           className="signup__nickname-input signup__input"
           label="닉네임"
           name="nickname"
@@ -157,7 +155,6 @@ const SignUp = () => {
           onChange={onChange}
         />
         <TextField
-          id="outlined-error-helper-text"
           className="signup__phone-input signup__input"
           label="휴대전화"
           name="phone"
@@ -169,7 +166,6 @@ const SignUp = () => {
           onChange={onChange}
         />
         <TextField
-          id="outlined-error-helper-text"
           className="signup__age-input signup__input"
           label="나이"
           name="age"
