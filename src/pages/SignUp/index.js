@@ -7,10 +7,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 import './signup.css';
 import AuthService from '@/api/AuthService';
 import produce from '@/package/immutable';
-import KoreanValidationStrategy from '@/utils/validation/KoreanValidationStrategy';
-import LengthValidationStrategy from '@/utils/validation/LengthValidatoinStrategy';
-import NumberValidationStrategy from '@/utils/validation/NumberValidationStrategy';
-import RequiredValidationStrategy from '@/utils/validation/RequiredValidationStrategy';
+import KoreanValidator from '@/utils/validation/KoreanValidator';
+import LengthValidator from '@/utils/validation/LengthValidator';
+import NumberValidator from '@/utils/validation/NumberValidator';
+import RequiredValidator from '@/utils/validation/RequiredValidator';
+import ValidatorChainBuilder from '@/utils/validation/ValidatorChainBuilder';
 
 const SignUp = () => {
   const location = useLocation();
@@ -20,56 +21,50 @@ const SignUp = () => {
     name: {
       value: '',
       placeholder: '이름을 입력해주세요',
-      validations: [
-        new RequiredValidationStrategy(),
-        new KoreanValidationStrategy(),
-        new LengthValidationStrategy(1, 20),
-      ],
+      validators: new ValidatorChainBuilder()
+        .add(new RequiredValidator())
+        .add(new KoreanValidator())
+        .add(new LengthValidator(1, 20))
+        .getFirst(),
       error: false,
       errorReason: '',
     },
     nickname: {
       value: '',
       placeholder: '20자 이내의 닉네임을 입력해주세요',
-      validations: [new RequiredValidationStrategy(), new LengthValidationStrategy(1, 20)],
+      validators: new ValidatorChainBuilder()
+        .add(new RequiredValidator())
+        .add(new LengthValidator(1, 20))
+        .getFirst(),
       error: false,
       errorReason: '',
     },
     phone: {
       value: '',
       placeholder: '-를 제외한 휴대폰 번호를 입력해주세요',
-      validations: [
-        new RequiredValidationStrategy(),
-        new NumberValidationStrategy(),
-        new LengthValidationStrategy(1, 11),
-      ],
+      validators: new ValidatorChainBuilder()
+        .add(new RequiredValidator())
+        .add(new NumberValidator())
+        .add(new LengthValidator(1, 11))
+        .getFirst(),
       error: false,
       errorReason: '',
     },
     age: {
       value: '',
       placeholder: '나이를 입력해주세요',
-      validations: [
-        new RequiredValidationStrategy(),
-        new NumberValidationStrategy(),
-        new LengthValidationStrategy(1, 2),
-      ],
+      validators: new ValidatorChainBuilder()
+        .add(new RequiredValidator())
+        .add(new NumberValidator())
+        .add(new LengthValidator(1, 2))
+        .getFirst(),
       error: false,
       errorReason: '',
     },
   });
 
-  const validateInput = (validations, value) => {
-    for (const validation of validations) {
-      const { error, errorReason } = validation.validate(value);
-      if (error) {
-        return { error, errorReason };
-      }
-    }
-    return {
-      error: false,
-      errorReason: '',
-    };
+  const validateInput = (validators, value) => {
+    return validators.isValid(value);
   };
 
   const changeInput = (name, value, error, errorReason) => {
@@ -84,8 +79,8 @@ const SignUp = () => {
 
   const validateAllInput = () => {
     let isAllValid = true;
-    for (const [name, { value, validations }] of Object.entries(form)) {
-      const { error, errorReason } = validateInput(validations, value);
+    for (const [name, { value, validators }] of Object.entries(form)) {
+      const { error, errorReason } = validateInput(validators, value);
       if (error) {
         isAllValid = false;
       }
@@ -116,7 +111,7 @@ const SignUp = () => {
 
   const onChange = e => {
     const { name, value } = e.target;
-    const { error, errorReason } = validateInput(form[name].validations, value);
+    const { error, errorReason } = validateInput(form[name].validators, value);
     changeInput(name, value, error, errorReason);
   };
 
