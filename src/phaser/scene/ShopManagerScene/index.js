@@ -44,9 +44,116 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _createRightSection(parents) {
-    const rightSectionObject = this.add
-      .rectangle(0, 0, RIGHT_SECTION_WIDTH, MANAGER_HEIGHT, 0x00ff00, 0.5)
-      .setInteractive();
+    const html = `<div class="stuff-list__main">
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img
+                          src="https://www.costco.co.kr/medias/sys_master/images/h34/h1c/26735613542430.jpg"
+                        />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">닌텐도 스위치</div>
+                        <div class="stuff-list__stuff-price">200,000</div>
+                      </div>
+                    </div>
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img
+                          src="https://img.hani.co.kr/imgdb/resize/2019/0112/00501076_20190112.JPG"
+                        />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">스타십</div>
+                        <div class="stuff-list__stuff-price">700,000,000</div>
+                      </div>
+                    </div>
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img src="https://newsimg.sedaily.com/2020/10/01/1Z8YNMADIC_1.jpg" />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">사과폰</div>
+                        <div class="stuff-list__stuff-price">666,000</div>
+                      </div>
+                    </div>
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img
+                          src="https://cdn.news.unn.net/news/photo/202012/501682_301771_4513.jpg"
+                        />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">큐브관</div>
+                        <div class="stuff-list__stuff-price">8,000,000,000</div>
+                      </div>
+                    </div>
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img
+                          src="https://dailytrend.storage.googleapis.com/wp-content/uploads/2021/07/22102048/OatlyOatMilk_Lead.jpg"
+                        />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">Oatly</div>
+                        <div class="stuff-list__stuff-price">4,700</div>
+                      </div>
+                    </div>
+                    <div class="stuff-list__stuff">
+                      <div class="stuff-list__stuff-img">
+                        <img
+                          src="https://image.imnews.imbc.com/news/2021/world/article/__icsFiles/afieldfile/2021/05/17/p20210517_23.jpg"
+                        />
+                      </div>
+                      <div class="stuff-list__stuff-info">
+                        <div class="stuff-list__stuff-name">머스크</div>
+                        <div class="stuff-list__stuff-price">200 DOGE</div>
+                      </div>
+                    </div>
+                  </div>
+                  <style type="text/css">
+                    .stuff-list__main {
+                      width: ${RIGHT_SECTION_WIDTH}px;
+                      height: ${MANAGER_HEIGHT}px;
+                      display: flex;
+                      flex-wrap: wrap;
+                      overflow-y: scroll;
+                    }
+                    
+                    .stuff-list__stuff {
+                      width: 480px;
+                      height: 340px;
+                    }
+
+                    .stuff-list__stuff-img {
+                      width: 100%;
+                      height: 300px;
+                      padding-top: 10px;
+                      padding-bottom: 10px;
+                      text-align: center;
+                    }
+                    
+                    .stuff-list__stuff-img > img {
+                      width: 450px;
+                      height: 300px;
+                    }
+
+                    .stuff-list__stuff-info {
+                      width: 100%;
+                      display: flex;
+                      justify-content: space-between;
+                    }
+
+                    .stuff-list__stuff-name {
+                      padding-left: 22px;
+                    }
+                    
+                    .stuff-list__stuff-price {
+                      padding-right: 22px;
+                    }
+                  </style>
+                  `;
+
+    const rightSectionObject = this.add.dom().createFromHTML(html);
 
     Phaser.Display.Align.In.RightCenter(rightSectionObject, parents);
 
