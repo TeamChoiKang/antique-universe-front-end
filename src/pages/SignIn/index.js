@@ -30,7 +30,7 @@ const SignIn = () => {
           const body = { vendor, oAuthToken };
           const token = await auth.current.signin(body);
           setTokenIntoStorage(token);
-          history.push('/');
+          history.push('/game');
         } catch (error) {
           history.push('/signup', {
             vendor,
