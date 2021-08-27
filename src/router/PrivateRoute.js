@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 
+import { useHistory, useLocation } from 'react-router-dom';
 import { Route, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
+import AuthService from '@/api/AuthService';
+import UserContext from '@/contexts/user';
+
 const PrivateRoute = ({ children }) => {
-  const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+  const location = useLocation();
+  const history = useHistory();
+  const { state, actions } = useContext(UserContext);
+  const { isLoggedin } = state;
+  const { setIsLoggedin, setUser } = actions;
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+
+    if (token) {
+      AuthService.validateToke(token).then(user => {
+        setUser(user);
+        setIsLoggedin(true);
+        history.push(location.pathname);
+      });
+    }
+  }, []);
+
   return (
     <Route
-      render={({ location }) =>
-        token ? (
+      render={() =>
+        isLoggedin ? (
           children
         ) : (
           <Redirect
