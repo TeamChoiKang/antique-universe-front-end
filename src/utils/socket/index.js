@@ -3,9 +3,16 @@ import io from '@/package/socket';
 
 const Socket = {
   socketInstance: undefined,
+  initInstance(userId) {
+    this.socketInstance = io(LOCAL_SERVER, {
+      query: {
+        userId,
+      },
+    });
+  },
+
   getInstance() {
-    if (!this.socketInstance) this.socketInstance = io(LOCAL_SERVER);
-    return this.socketInstance;
+    return this.socketInstance; // initInstance가 수행되지 않으면 undefined가 반환된다
   },
 };
 
