@@ -56,6 +56,25 @@ class AuthService extends ApiService {
       throw error;
     }
   }
+
+  /**
+   * token을 검증하는 api
+   * @param token 로그인 혹은 회원가입을 통해서 얻은 서버 고유 token
+   * @returns token에 해당되는 user 정보
+   */
+  async validateToke(token) {
+    try {
+      const url = '/token';
+      const header = {
+        Authorization: `Bearer ${token}`,
+      };
+      const user = await this._instance.get(url, header);
+      return user;
+    } catch (error) {
+      alert('토큰이 유효하지 않습니다. 관리자에게 문의해주세요.');
+      throw error;
+    }
+  }
 }
 
 export default new AuthService();
