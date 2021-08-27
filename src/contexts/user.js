@@ -10,10 +10,11 @@ const UserProvider = ({ children }) => {
     phone: 0,
     age: 0,
   });
+  const [isLoggedin, setIsLoggedin] = useState(false);
 
   const value = {
-    state: { user },
-    actions: { setUser },
+    state: { user, isLoggedin },
+    actions: { setUser, setIsLoggedin },
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
