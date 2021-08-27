@@ -3,16 +3,16 @@ import io from '@/package/socket';
 
 const Socket = {
   socketInstance: undefined,
-  initInstance(socketId) {
+  initInstance(userId) {
     this.socketInstance = io(LOCAL_SERVER, {
       query: {
-        socketId,
+        userId,
       },
     });
   },
-  getInstance(socketId) {
-    if (socketId && !this.socketInstance) {
-      this.initInstance(socketId);
+  getInstance(userId) {
+    if (userId && !this.socketInstance) {
+      this.initInstance(userId);
     }
     return this.socketInstance;
   },
