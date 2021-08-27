@@ -10,11 +10,9 @@ const Socket = {
       },
     });
   },
-  getInstance(userId) {
-    if (userId && !this.socketInstance) {
-      this.initInstance(userId);
-    }
-    return this.socketInstance;
+
+  getInstance() {
+    return this.socketInstance; // initInstance가 수행되지 않으면 undefined가 반환된다
   },
 };
 
