@@ -3,8 +3,17 @@ import io from '@/package/socket';
 
 const Socket = {
   socketInstance: undefined,
-  getInstance() {
-    if (!this.socketInstance) this.socketInstance = io(LOCAL_SERVER);
+  initInstance(socketId) {
+    this.socketInstance = io(LOCAL_SERVER, {
+      query: {
+        socketId,
+      },
+    });
+  },
+  getInstance(socketId) {
+    if (socketId && !this.socketInstance) {
+      this.initInstance(socketId);
+    }
     return this.socketInstance;
   },
 };

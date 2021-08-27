@@ -5,6 +5,7 @@ import { Route, Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 import AuthService from '@/api/AuthService';
 import UserContext from '@/contexts/user';
+import Socket from '@/utils/socket';
 
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const PrivateRoute = ({ children }) => {
       AuthService.validateToke(token).then(user => {
         setUser(user);
         setIsLoggedin(true);
+        Socket.initInstance(user.userId);
         history.push(location.pathname);
       });
     }
