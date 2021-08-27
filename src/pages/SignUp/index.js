@@ -120,7 +120,7 @@ const SignUp = () => {
     if (isAllValid) {
       const token = await requestSignup();
       setTokenIntoStorage(token);
-      history.push('/game');
+      history.push('/');
     }
   };
 
