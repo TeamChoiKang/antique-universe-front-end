@@ -11,6 +11,10 @@ const VIDEO_KEY = 'camVideo';
 const VIDEO_WIDTH = 660;
 const VIDEO_HEIGHT = 371;
 
+const TEXT_BOX_WIDTH = 660;
+const TEXT_BOX_HEIGHT = 309;
+const TEXT_BOX_COLOR = 0x3498db;
+
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
     super();
@@ -27,10 +31,20 @@ class ShopManagerScene extends Phaser.Scene {
 
     const background = this._createBackground();
     const video = this._createVideo();
+    const shopInfoTextBox = this._createShopInfoTextBox();
     const stuffListDom = this._createStuffListDom();
 
-    Phaser.Display.Align.In.RightCenter(stuffListDom, background);
     Phaser.Display.Align.In.TopLeft(video, background);
+    Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, background);
+    Phaser.Display.Align.In.RightCenter(stuffListDom, background);
+
+    const text = this.add.text(
+      0,
+      0,
+      '어서오세요 KangJi 상점입니다.\n\n택배, 직거래 가능합니다.\n\n직거래는 공릉역에서 가능합니다.',
+    );
+
+    Phaser.Display.Align.In.Center(text, shopInfoTextBox);
   }
 
   _createBackground() {
@@ -51,6 +65,14 @@ class ShopManagerScene extends Phaser.Scene {
     vidoeSection.play(true);
 
     return vidoeSection;
+  }
+
+  _createShopInfoTextBox() {
+    const textBox = this.add
+      .rectangle(0, 0, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT, TEXT_BOX_COLOR)
+      .setOrigin(0);
+
+    return textBox;
   }
 
   _createStuffListDom() {
