@@ -7,8 +7,9 @@ const MANAGER_WIDTH = 1650;
 const MANAGER_HEIGHT = 680;
 const MANAGER_BACKGROUND_COLOR = 0xffffff;
 
-const LEFT_SECTION_WIDTH = 660;
-const RIGHT_SECTION_WIDTH = 990;
+const VIDEO_KEY = 'camVideo';
+const VIDEO_WIDTH = 660;
+const VIDEO_HEIGHT = 371;
 
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
@@ -16,13 +17,20 @@ class ShopManagerScene extends Phaser.Scene {
     this.shopScene = shopScene;
   }
 
-  preload() {}
+  preload() {
+    this.load.setCORS('*');
+    this.load.video(VIDEO_KEY, 'https://labs.phaser.io/assets/video/wormhole.mp4');
+  }
 
   create() {
     this._registerShutdownEventHandler();
+
     const background = this._createBackground();
-    const leftSection = this._createLeftSection(background);
-    const rightSection = this._createRightSection(background);
+    const video = this._createVideo();
+    const stuffListDom = this._createStuffListDom();
+
+    Phaser.Display.Align.In.RightCenter(stuffListDom, background);
+    Phaser.Display.Align.In.TopLeft(video, background);
   }
 
   _createBackground() {
@@ -36,17 +44,16 @@ class ShopManagerScene extends Phaser.Scene {
     return background;
   }
 
-  _createLeftSection(parents) {
-    const leftSectionObject = this.add
-      .rectangle(0, 0, LEFT_SECTION_WIDTH, MANAGER_HEIGHT, 0xff0000, 0.5)
-      .setInteractive();
+  _createVideo() {
+    const vidoeSection = this.add.video(0, 0, VIDEO_KEY);
+    vidoeSection.setDisplaySize(VIDEO_WIDTH, VIDEO_HEIGHT).setOrigin(0);
 
-    Phaser.Display.Align.In.LeftCenter(leftSectionObject, parents);
+    vidoeSection.play(true);
 
-    return leftSectionObject;
+    return vidoeSection;
   }
 
-  _createRightSection(parents) {
+  _createStuffListDom() {
     const stuffList = [];
 
     stuffList.push(
@@ -80,11 +87,9 @@ class ShopManagerScene extends Phaser.Scene {
 
     const html = htmlHelper.createStuffListHtml(stuffList);
 
-    const rightSectionObject = this.add.dom().createFromHTML(html);
+    const stuffListDom = this.add.dom().createFromHTML(html);
 
-    Phaser.Display.Align.In.RightCenter(rightSectionObject, parents);
-
-    return rightSectionObject;
+    return stuffListDom;
   }
 
   _registerShutdownEventHandler() {
