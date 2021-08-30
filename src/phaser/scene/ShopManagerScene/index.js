@@ -1,5 +1,6 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
+import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
 import * as htmlHelper from './htmlHelper';
@@ -15,6 +16,8 @@ const VIDEO_HEIGHT = 371;
 const TEXT_BOX_WIDTH = 660;
 const TEXT_BOX_HEIGHT = 309;
 const TEXT_BOX_COLOR = 0x3498db;
+const TEXT_BOX_CONTENTS =
+  '어서오세요 KangJi 상점입니다.\n\n택배, 직거래 가능합니다.\n\n직거래는 공릉역에서 가능합니다.';
 
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
@@ -35,20 +38,19 @@ class ShopManagerScene extends Phaser.Scene {
     const video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
     video.play(true);
 
-    const shopInfoTextBox = this._createShopInfoTextBox();
+    const shopInfoTextBox = new TextBox(
+      this,
+      TEXT_BOX_WIDTH,
+      TEXT_BOX_HEIGHT,
+      TEXT_BOX_COLOR,
+      TEXT_BOX_CONTENTS,
+    );
+
     const stuffListDom = this._createStuffListDom();
 
     Phaser.Display.Align.In.TopLeft(video, background);
     Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, background);
     Phaser.Display.Align.In.RightCenter(stuffListDom, background);
-
-    const text = this.add.text(
-      0,
-      0,
-      '어서오세요 KangJi 상점입니다.\n\n택배, 직거래 가능합니다.\n\n직거래는 공릉역에서 가능합니다.',
-    );
-
-    Phaser.Display.Align.In.Center(text, shopInfoTextBox);
   }
 
   _createBackground() {
@@ -60,14 +62,6 @@ class ShopManagerScene extends Phaser.Scene {
       .rectangle(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT, MANAGER_BACKGROUND_COLOR)
       .setOrigin(0);
     return background;
-  }
-
-  _createShopInfoTextBox() {
-    const textBox = this.add
-      .rectangle(0, 0, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT, TEXT_BOX_COLOR)
-      .setOrigin(0);
-
-    return textBox;
   }
 
   _createStuffListDom() {
