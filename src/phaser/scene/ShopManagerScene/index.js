@@ -6,7 +6,6 @@ import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
 const MANAGER_WIDTH = 1650;
 const MANAGER_HEIGHT = 680;
-const MANAGER_BACKGROUND_COLOR = 0xffffff;
 
 const VIDEO_KEY = 'camVideo';
 const VIDEO_WIDTH = 660;
@@ -67,7 +66,7 @@ class ShopManagerScene extends Phaser.Scene {
   create() {
     this._registerShutdownEventHandler();
 
-    const background = this._createBackground();
+    const layoutZone = this._createLayoutZone();
 
     const video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
     video.play(true);
@@ -87,19 +86,20 @@ class ShopManagerScene extends Phaser.Scene {
       STUFF_LIST_BOX_STUFFS,
     );
 
-    Phaser.Display.Align.In.TopLeft(video, background);
-    Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, background);
-    Phaser.Display.Align.In.RightCenter(stuffList, background);
+    Phaser.Display.Align.In.TopLeft(video, layoutZone);
+    Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, layoutZone);
+    Phaser.Display.Align.In.RightCenter(stuffList, layoutZone);
   }
 
-  _createBackground() {
+  _createLayoutZone() {
     const leftMargin =
       this.cameras.main.width > MANAGER_WIDTH ? (this.cameras.main.width - MANAGER_WIDTH) / 2 : 0;
     const topMargin = this.cameras.main.height > MANAGER_HEIGHT ? 20 : 0;
 
     const background = this.add
-      .rectangle(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT, MANAGER_BACKGROUND_COLOR)
+      .zone(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT)
       .setOrigin(0);
+
     return background;
   }
 
