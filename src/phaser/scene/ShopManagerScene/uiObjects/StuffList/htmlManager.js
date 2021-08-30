@@ -1,10 +1,10 @@
-export const createStuffListHtml = stuffList => {
+export const createStuffListHtml = (width, height, stuffs) => {
   return `<div class="stuff-list__main">
-      ${stuffList
+      ${stuffs
         .map(stuff => {
           return `<div class="stuff-list__stuff">
             <div class="stuff-list__stuff-img">
-            <img src="${stuff.getThumbNail()}" />
+              <img src="${stuff.getThumbNail()}" />
             </div>
             <div class="stuff-list__stuff-info">
               <div class="stuff-list__stuff-name">${stuff.getName()}</div>
@@ -16,8 +16,9 @@ export const createStuffListHtml = stuffList => {
     </div>
     <style type="text/css">
       .stuff-list__main {
-        width: 990px;
-        height: 680px;
+        width: ${width}px;
+        height: ${height}px;
+        background: white;
         display: flex;
         flex-wrap: wrap;
         overflow-y: scroll;
@@ -30,15 +31,15 @@ export const createStuffListHtml = stuffList => {
 
       .stuff-list__stuff-img {
         width: 100%;
-        height: 300px;
+        height: 88%;
         padding-top: 10px;
         padding-bottom: 10px;
         text-align: center;
       }
       
       .stuff-list__stuff-img > img {
-        width: 450px;
-        height: 300px;
+        width: 100%;
+        height: 100%;
       }
 
       .stuff-list__stuff-info {
