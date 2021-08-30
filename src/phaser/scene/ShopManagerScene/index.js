@@ -1,5 +1,6 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
+import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
 import * as htmlHelper from './htmlHelper';
 
@@ -30,7 +31,10 @@ class ShopManagerScene extends Phaser.Scene {
     this._registerShutdownEventHandler();
 
     const background = this._createBackground();
-    const video = this._createVideo();
+
+    const video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
+    video.play(true);
+
     const shopInfoTextBox = this._createShopInfoTextBox();
     const stuffListDom = this._createStuffListDom();
 
@@ -56,15 +60,6 @@ class ShopManagerScene extends Phaser.Scene {
       .rectangle(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT, MANAGER_BACKGROUND_COLOR)
       .setOrigin(0);
     return background;
-  }
-
-  _createVideo() {
-    const vidoeSection = this.add.video(0, 0, VIDEO_KEY);
-    vidoeSection.setDisplaySize(VIDEO_WIDTH, VIDEO_HEIGHT).setOrigin(0);
-
-    vidoeSection.play(true);
-
-    return vidoeSection;
   }
 
   _createShopInfoTextBox() {
