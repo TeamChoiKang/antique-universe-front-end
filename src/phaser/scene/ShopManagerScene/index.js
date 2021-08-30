@@ -1,9 +1,8 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
+import StuffList from '@/phaser/scene/ShopManagerScene/uiObjects/StuffList';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
-
-import * as htmlHelper from './htmlHelper';
 
 const MANAGER_WIDTH = 1650;
 const MANAGER_HEIGHT = 680;
@@ -18,6 +17,41 @@ const TEXT_BOX_HEIGHT = 309;
 const TEXT_BOX_COLOR = 0x3498db;
 const TEXT_BOX_CONTENTS =
   '어서오세요 KangJi 상점입니다.\n\n택배, 직거래 가능합니다.\n\n직거래는 공릉역에서 가능합니다.';
+
+const STUFF_LIST_BOX_WIDTH = 990;
+const STUFF_LIST_BOX_HEIGHT = 680;
+const STUFF_LIST_BOX_STUFFS = [
+  new Stuff(
+    '닌텐도 스위치',
+    '200,000',
+    'https://user-images.githubusercontent.com/22635168/131383457-16e07863-6156-4b6b-ab9c-45a0795ccf37.jpg',
+  ),
+  new Stuff(
+    '스타십',
+    '700,000,000',
+    'https://user-images.githubusercontent.com/22635168/131383580-2df68cad-fdbb-42a3-ba79-d1e40a8ae883.jpg',
+  ),
+  new Stuff(
+    '사과폰',
+    '666,000',
+    'https://user-images.githubusercontent.com/22635168/131383661-fa82841f-f691-4f55-87f8-edbf993f01f4.jpg',
+  ),
+  new Stuff(
+    '큐브관',
+    '8,000,000,000',
+    'https://user-images.githubusercontent.com/22635168/131383705-ad0adec8-6f5b-4741-87df-431feac674c4.jpg',
+  ),
+  new Stuff(
+    'Oatly',
+    '4,700',
+    'https://user-images.githubusercontent.com/22635168/131383737-d6cbe8a8-05fb-4dc8-ada7-00aa81de0b97.jpg',
+  ),
+  new Stuff(
+    '머스크',
+    '200 DOGE',
+    'https://user-images.githubusercontent.com/22635168/131383768-2497dd04-fdea-4584-aef8-a95f712f2688.jpg',
+  ),
+];
 
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
@@ -46,11 +80,16 @@ class ShopManagerScene extends Phaser.Scene {
       TEXT_BOX_CONTENTS,
     );
 
-    const stuffListDom = this._createStuffListDom();
+    const stuffList = new StuffList(
+      this,
+      STUFF_LIST_BOX_WIDTH,
+      STUFF_LIST_BOX_HEIGHT,
+      STUFF_LIST_BOX_STUFFS,
+    );
 
     Phaser.Display.Align.In.TopLeft(video, background);
     Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, background);
-    Phaser.Display.Align.In.RightCenter(stuffListDom, background);
+    Phaser.Display.Align.In.RightCenter(stuffList, background);
   }
 
   _createBackground() {
@@ -62,45 +101,6 @@ class ShopManagerScene extends Phaser.Scene {
       .rectangle(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT, MANAGER_BACKGROUND_COLOR)
       .setOrigin(0);
     return background;
-  }
-
-  _createStuffListDom() {
-    const stuffList = [];
-
-    stuffList.push(
-      new Stuff(
-        '닌텐도 스위치',
-        '200,000',
-        'https://www.costco.co.kr/medias/sys_master/images/h34/h1c/26735613542430.jpg',
-      ),
-      new Stuff(
-        '스타십',
-        '700,000,000',
-        'https://img.hani.co.kr/imgdb/resize/2019/0112/00501076_20190112.JPG',
-      ),
-      new Stuff('사과폰', '666,000', 'https://newsimg.sedaily.com/2020/10/01/1Z8YNMADIC_1.jpg'),
-      new Stuff(
-        '큐브관',
-        '8,000,000,000',
-        'https://cdn.news.unn.net/news/photo/202012/501682_301771_4513.jpg',
-      ),
-      new Stuff(
-        'Oatly',
-        '4,700',
-        'https://dailytrend.storage.googleapis.com/wp-content/uploads/2021/07/22102048/OatlyOatMilk_Lead.jpg',
-      ),
-      new Stuff(
-        '머스크',
-        '200 DOGE',
-        'https://image.imnews.imbc.com/news/2021/world/article/__icsFiles/afieldfile/2021/05/17/p20210517_23.jpg',
-      ),
-    );
-
-    const html = htmlHelper.createStuffListHtml(stuffList);
-
-    const stuffListDom = this.add.dom().createFromHTML(html);
-
-    return stuffListDom;
   }
 
   _registerShutdownEventHandler() {
