@@ -1,5 +1,6 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import StuffList from '@/phaser/scene/ShopManagerScene/uiObjects/StuffList';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
@@ -54,7 +55,7 @@ const STUFF_LIST_BOX_STUFFS = [
 
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
-    super();
+    super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
     this.shopScene = shopScene;
   }
 
