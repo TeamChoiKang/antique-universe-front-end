@@ -1,10 +1,13 @@
+import Phaser from '@/package/phaser';
+
 import * as htmlHelper from './htmlManager';
 
-class StuffList {
+class StuffList extends Phaser.GameObjects.DOMElement {
   constructor(scene, width, height, stuffs) {
-    const stuffListHtml = htmlHelper.createStuffListHtml(width, height, stuffs);
-    const stuffListDom = scene.add.dom().createFromHTML(stuffListHtml);
-    return stuffListDom;
+    super(scene);
+    this.createFromHTML(htmlHelper.createStuffListHtml(width, height, stuffs));
+
+    scene.add.existing(this);
   }
 }
 
