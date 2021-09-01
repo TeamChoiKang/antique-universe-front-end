@@ -1,9 +1,24 @@
 class Stuff {
-  constructor(name, price, thumbNail, description) {
+  constructor(
+    stuffId = '',
+    name = '',
+    price = 0,
+    imageUrl = '',
+    description = '',
+    isSold = false,
+    onlyAdult = false,
+  ) {
+    this._stuffId = stuffId;
     this._name = name;
     this._price = price;
-    this._thumbNail = thumbNail;
+    this._imageUrl = imageUrl;
     this._description = description;
+    this._isSold = isSold;
+    this._onlyAdult = onlyAdult;
+  }
+
+  getStuffId() {
+    return this._stuffId;
   }
 
   getName() {
@@ -14,12 +29,20 @@ class Stuff {
     return this._price;
   }
 
-  getThumbNail() {
-    return this._thumbNail;
+  getImageUrl() {
+    return this._imageUrl;
   }
 
   getDescription() {
     return this._description;
+  }
+
+  getIsSold() {
+    return this._isSold;
+  }
+
+  getOnlyAdult() {
+    return this._onlyAdult;
   }
 }
 
