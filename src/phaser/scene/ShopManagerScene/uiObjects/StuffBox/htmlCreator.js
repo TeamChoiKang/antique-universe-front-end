@@ -5,10 +5,10 @@ export const createStuffListHtml = (width, height, stuffs) => {
           return `
           <div
             class="stuff-list__stuff"
-            onclick="(() => event.stuffKey='${stuff.getName()}')()"
+            onclick="(() => event.stuffKey=${stuff.getStuffId()})()"
           >
             <div class="stuff-list__stuff-img">
-              <img src="${stuff.getThumbNail()}" />
+              <img src="${stuff.getImageUrl()}" />
             </div>
             <div class="stuff-list__stuff-info">
               <div class="stuff-list__stuff-name">${stuff.getName()}</div>
