@@ -2,7 +2,11 @@ export const createStuffListHtml = (width, height, stuffs) => {
   return `<div class="stuff-list__main">
       ${stuffs
         .map(stuff => {
-          return `<div class="stuff-list__stuff">
+          return `
+          <div
+            class="stuff-list__stuff"
+            onclick="(() => event.stuffKey='${stuff.getName()}')()"
+          >
             <div class="stuff-list__stuff-img">
               <img src="${stuff.getThumbNail()}" />
             </div>
