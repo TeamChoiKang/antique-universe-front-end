@@ -1,7 +1,7 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
-import StuffList from '@/phaser/scene/ShopManagerScene/uiObjects/StuffList';
+import StuffBox from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
@@ -80,7 +80,7 @@ class ShopManagerScene extends Phaser.Scene {
       TEXT_BOX_CONTENTS,
     );
 
-    const stuffList = new StuffList(
+    const stuffBox = new StuffBox(
       this,
       STUFF_LIST_BOX_WIDTH,
       STUFF_LIST_BOX_HEIGHT,
@@ -89,7 +89,7 @@ class ShopManagerScene extends Phaser.Scene {
 
     Phaser.Display.Align.In.TopLeft(video, layoutZone);
     Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, layoutZone);
-    Phaser.Display.Align.In.RightCenter(stuffList, layoutZone);
+    Phaser.Display.Align.In.RightCenter(stuffBox, layoutZone);
   }
 
   _createLayoutZone() {
