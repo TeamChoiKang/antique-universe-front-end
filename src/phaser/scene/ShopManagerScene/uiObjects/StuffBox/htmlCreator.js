@@ -1,3 +1,5 @@
+import * as action from './action';
+
 export const createStuffListHtml = (width, height, stuffs) => {
   return `<div class="stuff-list__main">
       ${stuffs
@@ -6,7 +8,7 @@ export const createStuffListHtml = (width, height, stuffs) => {
           <div
             class="stuff-list__stuff"
             onclick="(() => {
-              event.action='showInfo';
+              event.action='${action.SHOW_STUFF_INFO}';
               event.stuffId=${stuff.getStuffId()};
             })()"
           >
