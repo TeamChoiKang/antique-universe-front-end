@@ -5,7 +5,10 @@ export const createStuffListHtml = (width, height, stuffs) => {
           return `
           <div
             class="stuff-list__stuff"
-            onclick="(() => event.stuffKey=${stuff.getStuffId()})()"
+            onclick="(() => {
+              event.action='showInfo';
+              event.stuffId=${stuff.getStuffId()};
+            })()"
           >
             <div class="stuff-list__stuff-img">
               <img src="${stuff.getImageUrl()}" />
@@ -60,4 +63,18 @@ export const createStuffListHtml = (width, height, stuffs) => {
         padding-right: 22px;
       }
     </style>`;
+};
+
+export const createStuffInfoHtml = (width, height, stuff) => {
+  return `<div class="stuff-info__main">
+    ${stuff.getName()}
+  </div>
+  <style type="text/css">
+    .stuff-info__main {
+      width: ${width}px;
+      height: ${height}px;
+      background: white;
+      overflow-y: scroll;
+    }
+  </style>`;
 };
