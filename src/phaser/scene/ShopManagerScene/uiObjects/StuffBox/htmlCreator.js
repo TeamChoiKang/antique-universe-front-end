@@ -68,15 +68,80 @@ export const createStuffListHtml = (width, height, stuffs) => {
 };
 
 export const createStuffInfoHtml = (width, height, stuff) => {
-  return `<div class="stuff-info__main">
-    ${stuff.getName()}
+  return `<div class="stuff-info">
+    <div class="stuff-info__head">
+      <div
+        class="stuff-info__back-btn"
+        onclick="(() => {
+          event.action='${action.BACK_TO_STUFF_LIST}';
+        })()"
+      >
+        목록으로 돌아가기
+      </div>
+    </div>
+    <div class="stuff-info__body">
+      <div class="stuff-info__stuff-img">
+        <img src="${stuff.getImageUrl()}" />
+      </div>
+      <div class="stuff-info__stuff-name">${stuff.getName()}</div>
+      <div class="stuff-info__stuff-price">${stuff.getPrice()}</div>
+      <div class="stuff-info__stuff-description">${stuff.getDescription()}</div>
+    </div>
   </div>
   <style type="text/css">
-    .stuff-info__main {
+    .stuff-info {
       width: ${width}px;
       height: ${height}px;
       background: white;
       overflow-y: scroll;
+    }
+    
+    .stuff-info__head {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .stuff-info__back-btn {
+      cursor: pointer
+    }
+    
+    .stuff-info__body {
+      width: 100%;
+    }
+    
+    .stuff-info__stuff-img {
+      width: 100%;
+      height: 500px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .stuff-info__stuff-img > img {
+      width: 70%;
+      max-height: 100%;
+    }
+    
+    .stuff-info__stuff-name {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .stuff-info__stuff-price {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .stuff-info__stuff-description {
+      padding-left: 10%;
+      padding-right: 10%;
+      margin-bottom: 20px;
     }
   </style>`;
 };
