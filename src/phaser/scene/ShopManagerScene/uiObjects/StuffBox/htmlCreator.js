@@ -36,6 +36,7 @@ export const createStuffListHtml = (width, height, stuffs) => {
       .stuff-list__stuff {
         width: 480px;
         height: 340px;
+        cursor: pointer;
       }
 
       .stuff-list__stuff-img {
@@ -107,7 +108,7 @@ export const createStuffInfoHtml = (width, height, stuff) => {
     .stuff-info__back-btn {
       cursor: pointer
     }
-    
+
     .stuff-info__body {
       width: 100%;
     }
