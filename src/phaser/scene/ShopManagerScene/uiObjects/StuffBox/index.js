@@ -36,6 +36,10 @@ class StuffBox extends Phaser.GameObjects.Container {
 
         this._stuffBoxDom.setHTML(stuffInfoHtml);
       }
+
+      if (event.action === action.BACK_TO_STUFF_LIST) {
+        this._stuffBoxDom.setHTML(this._stuffListHtml);
+      }
     });
   }
 }
