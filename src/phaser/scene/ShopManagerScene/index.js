@@ -1,6 +1,7 @@
 import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
+import LayoutBox from '@/phaser/scene/ShopManagerScene/uiObjects/LayoutBox';
 import StuffBox from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
@@ -80,7 +81,12 @@ const STUFF_LIST_BOX_STUFFS = [
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
-    this.shopScene = shopScene;
+
+    this._shopScene = shopScene;
+    this._layoutZone = undefined;
+    this._video = undefined;
+    this._shopInfoTextBox = undefined;
+    this._stuffBox = undefined;
   }
 
   preload() {
@@ -89,49 +95,42 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   create() {
+    this._initChildGameObject();
     this._registerShutdownEventHandler();
 
-    const layoutZone = this._createLayoutZone();
+    const leftMargin =
+      this.cameras.main.width > MANAGER_WIDTH ? (this.cameras.main.width - MANAGER_WIDTH) / 2 : 0;
+    const topMargin = this.cameras.main.height > MANAGER_HEIGHT ? 20 : 0;
+    this._layoutZone.setPosition(leftMargin, topMargin);
 
-    const video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
-    video.play(true);
+    this._video.play(true);
+    Phaser.Display.Align.In.TopLeft(this._video, this._layoutZone);
+    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutZone);
+    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutZone);
+  }
 
-    const shopInfoTextBox = new TextBox(
+  _registerShutdownEventHandler() {
+    this._shopScene.events.once('shutdown', () => {
+      this.scene.remove(this);
+    });
+  }
+
+  _initChildGameObject() {
+    this._layoutZone = new LayoutBox(this, 0, 0, MANAGER_WIDTH, MANAGER_HEIGHT);
+    this._video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
+    this._shopInfoTextBox = new TextBox(
       this,
       TEXT_BOX_WIDTH,
       TEXT_BOX_HEIGHT,
       TEXT_BOX_COLOR,
       TEXT_BOX_CONTENTS,
     );
-
-    const stuffBox = new StuffBox(
+    this._stuffBox = new StuffBox(
       this,
       STUFF_LIST_BOX_WIDTH,
       STUFF_LIST_BOX_HEIGHT,
       STUFF_LIST_BOX_STUFFS,
     );
-
-    Phaser.Display.Align.In.TopLeft(video, layoutZone);
-    Phaser.Display.Align.In.BottomLeft(shopInfoTextBox, layoutZone);
-    Phaser.Display.Align.In.RightCenter(stuffBox, layoutZone);
-  }
-
-  _createLayoutZone() {
-    const leftMargin =
-      this.cameras.main.width > MANAGER_WIDTH ? (this.cameras.main.width - MANAGER_WIDTH) / 2 : 0;
-    const topMargin = this.cameras.main.height > MANAGER_HEIGHT ? 20 : 0;
-
-    const background = this.add
-      .zone(leftMargin, topMargin, MANAGER_WIDTH, MANAGER_HEIGHT)
-      .setOrigin(0);
-
-    return background;
-  }
-
-  _registerShutdownEventHandler() {
-    this.shopScene.events.once('shutdown', () => {
-      this.scene.remove(this);
-    });
   }
 }
 
