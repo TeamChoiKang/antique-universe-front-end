@@ -44,12 +44,16 @@ export const createStuffListHtml = (width, height, stuffs) => {
         height: 88%;
         padding-top: 10px;
         padding-bottom: 10px;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .stuff-list__stuff-img > img {
-        width: 100%;
-        height: 100%;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
       }
 
       .stuff-list__stuff-info {
@@ -123,7 +127,9 @@ export const createStuffInfoHtml = (width, height, stuff) => {
     }
     
     .stuff-info__stuff-img > img {
-      width: 70%;
+      width: auto;
+      height: auto;
+      max-width: 70%;
       max-height: 100%;
     }
     
