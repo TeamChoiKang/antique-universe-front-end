@@ -97,20 +97,20 @@ class ShopManagerScene extends Phaser.Scene {
   create() {
     this._initChildGameObject();
     this._registerShutdownEventHandler();
-
-    const leftMargin =
-      this.cameras.main.width > MANAGER_WIDTH ? (this.cameras.main.width - MANAGER_WIDTH) / 2 : 0;
-    const topMargin = this.cameras.main.height > MANAGER_HEIGHT ? 20 : 0;
-    this._layoutZone.setPosition(leftMargin, topMargin);
+    this._setPosition(this.cameras.main.width, this.cameras.main.height);
 
     this._video.play(true);
-    Phaser.Display.Align.In.TopLeft(this._video, this._layoutZone);
-    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutZone);
-    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutZone);
   }
 
   _registerShutdownEventHandler() {
+    const resize = gameSize => {
+      this._setPosition(gameSize.width, gameSize.height);
+    };
+
+    this.scale.on('resize', resize);
+
     this._shopScene.events.once('shutdown', () => {
+      this.scale.off('resize', resize);
       this.scene.remove(this);
     });
   }
@@ -131,6 +131,16 @@ class ShopManagerScene extends Phaser.Scene {
       STUFF_LIST_BOX_HEIGHT,
       STUFF_LIST_BOX_STUFFS,
     );
+  }
+
+  _setPosition(width, height) {
+    const leftMargin = width > MANAGER_WIDTH ? (width - MANAGER_WIDTH) / 2 : 0;
+    const topMargin = height > MANAGER_HEIGHT ? 20 : 0;
+    this._layoutZone.setPosition(leftMargin, topMargin);
+
+    Phaser.Display.Align.In.TopLeft(this._video, this._layoutZone);
+    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutZone);
+    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutZone);
   }
 }
 
