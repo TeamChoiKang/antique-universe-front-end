@@ -269,6 +269,9 @@ export const createAddStuffHtml = (width, height) => {
     <div class="add-stuff__description-input add-stuff__input text-input">
       <textarea placeholder="물건 설명" name="stuffDescription"></textarea>
     </div>
+    <div class="add-stuff__add-stuff-btn add-stuff__input">
+      <input type="submit" value="물건 추가하기" name="addStuff" />
+    </div>
   </div>
   <style type="text/css">
     /* Remove number input arrow for Chrome, Safari, Edge, Opera */
