@@ -1,5 +1,3 @@
-import { Actions } from 'phaser';
-
 import Phaser from '@/package/phaser';
 
 import * as action from './action';
@@ -28,7 +26,7 @@ class StuffBox extends Phaser.GameObjects.Container {
     this._stuffBoxDom.addListener('click');
 
     this._stuffBoxDom.on('click', event => {
-      if (event.action === action.SHOW_STUFF_INFO) {
+      if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._stuffs.find(v => v.getStuffId() === event.stuffId);
         const stuffInfoHtml = htmlCreator.createStuffInfoHtml(
           this._width,
@@ -39,7 +37,7 @@ class StuffBox extends Phaser.GameObjects.Container {
         this._stuffBoxDom.setHTML(stuffInfoHtml);
       }
 
-      if (event.action === action.BACK_TO_STUFF_LIST) {
+      if (event.action === action.CHANGE_TO_STUFF_LIST_HTML) {
         this._stuffBoxDom.setHTML(this._stuffListHtml);
       }
 
