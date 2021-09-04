@@ -8,7 +8,7 @@ export const createStuffListHtml = (width, height, stuffs) => {
           <div
             class="stuff-list__stuff"
             onclick="(() => {
-              event.action='${action.SHOW_STUFF_INFO}';
+              event.action='${action.CHANGE_TO_STUFF_INFO_HTML}';
               event.stuffId=${stuff.getStuffId()};
             })()"
           >
@@ -80,7 +80,7 @@ export const createShopAdminStuffListHtml = (width, height, stuffs) => {
           <div
             class="stuff-list__stuff"
             onclick="(() => {
-              event.action='${action.SHOW_STUFF_INFO}';
+              event.action='${action.CHANGE_TO_STUFF_INFO_HTML}';
               event.stuffId=${stuff.getStuffId()};
             })()"
           >
@@ -165,7 +165,7 @@ export const createStuffInfoHtml = (width, height, stuff) => {
       <div
         class="stuff-info__back-btn"
         onclick="(() => {
-          event.action='${action.BACK_TO_STUFF_LIST}';
+          event.action='${action.CHANGE_TO_STUFF_LIST_HTML}';
         })()"
       >
         목록으로 돌아가기
