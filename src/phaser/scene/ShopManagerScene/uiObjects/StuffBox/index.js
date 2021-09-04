@@ -1,3 +1,5 @@
+import { Actions } from 'phaser';
+
 import Phaser from '@/package/phaser';
 
 import * as action from './action';
@@ -9,7 +11,7 @@ class StuffBox extends Phaser.GameObjects.Container {
     this._width = width;
     this._height = height;
     this._stuffs = stuffs;
-    this._stuffListHtml = htmlCreator.createStuffListHtml(width, height, stuffs);
+    this._stuffListHtml = htmlCreator.createShopAdminStuffListHtml(width, height, stuffs);
     this._stuffBoxDom = new Phaser.GameObjects.DOMElement(scene).createFromHTML(`<div></div>`);
 
     this._stuffBoxDom.setHTML(this._stuffListHtml);
@@ -39,6 +41,10 @@ class StuffBox extends Phaser.GameObjects.Container {
 
       if (event.action === action.BACK_TO_STUFF_LIST) {
         this._stuffBoxDom.setHTML(this._stuffListHtml);
+      }
+
+      if (event.action === action.CHANGE_TO_ADD_STUFF_HTML) {
+        // TODO
       }
     });
   }
