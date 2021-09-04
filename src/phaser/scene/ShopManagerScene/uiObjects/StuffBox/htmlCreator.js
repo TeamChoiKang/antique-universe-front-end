@@ -239,3 +239,89 @@ export const createStuffInfoHtml = (width, height, stuff) => {
     }
   </style>`;
 };
+
+export const createAddStuffHtml = (width, height) => {
+  return `<div class="add-stuff">
+    <div class="add-stuff__back-btn">
+      <div
+        onclick="(() => {
+          event.action='${action.CHANGE_TO_STUFF_LIST_HTML}';
+        })()"
+      >
+        목록으로 돌아가기
+      </div>
+    </div>
+    <div class="add-stuff__image-input add-stuff__input image-input">
+      <input type="file" accept="image/*" />
+    </div>
+    <div class="add-stuff__name-input add-stuff__input text-input">
+      <input type="text" placeholder="물건 이름" name="stuffName" />
+    </div>
+    <div class="add-stuff__price-input add-stuff__input text-input">
+      <input type="number" placeholder="물건 가격" name="stuffPrice" />
+    </div>
+    <div
+      class="add-stuff__only-adult-checkbox add-stuff__input checkbox-input"
+    >
+      <input type="checkbox" name="stuffOnlyAdult" />
+      <label>어른이랑 거래 할래요</label>
+    </div>
+    <div class="add-stuff__description-input add-stuff__input text-input">
+      <textarea placeholder="물건 설명" name="stuffDescription"></textarea>
+    </div>
+  </div>
+  <style type="text/css">
+    /* Remove number input arrow for Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    /* Remove number input arrow for Firefox */
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+    
+    .add-stuff {
+      width: ${width}px;
+      height: ${height}px;
+      background: white;
+      overflow-y: scroll;
+    }
+    
+    .add-stuff__back-btn {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-stuff__back-btn > div{
+      cursor: pointer
+    }
+
+    .add-stuff__input {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .add-stuff__name-input > input,
+    .add-stuff__price-input > input {
+      width: 30%;
+      text-align: center;
+    }
+    
+    .add-stuff__description-input {
+      height: 50%;
+    }
+    
+    .add-stuff__description-input > textarea {
+      resize: none;
+      width: 80%;
+      height: 100%;
+    }  
+  </style>`;
+};
