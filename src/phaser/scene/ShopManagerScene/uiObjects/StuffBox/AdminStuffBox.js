@@ -1,25 +1,14 @@
-import Phaser from '@/package/phaser';
+import StuffBox from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBox';
 
 import * as action from './action';
 import * as htmlCreator from './htmlCreator';
 
-class StuffBox extends Phaser.GameObjects.Container {
+class AdminStuffBox extends StuffBox {
   constructor(scene, width, height, stuffs) {
-    super(scene);
-    this._width = width;
-    this._height = height;
-    this._stuffs = stuffs;
-    this._stuffListHtml = htmlCreator.createShopAdminStuffListHtml(width, height, stuffs);
-    this._stuffBoxDom = new Phaser.GameObjects.DOMElement(scene).createFromHTML(`<div></div>`);
-
-    this._stuffBoxDom.setHTML(this._stuffListHtml);
-
-    this.add(this._stuffBoxDom);
-    this.setSize(width, height);
-
-    scene.add.existing(this);
-
-    this._registerEventHandler();
+    super(scene, width, height, stuffs);
+    this._setHTML(
+      htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
+    );
   }
 
   _registerEventHandler() {
@@ -38,7 +27,9 @@ class StuffBox extends Phaser.GameObjects.Container {
       }
 
       if (event.action === action.CHANGE_TO_STUFF_LIST_HTML) {
-        this._stuffBoxDom.setHTML(this._stuffListHtml);
+        this._setHTML(
+          htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
+        );
       }
 
       if (event.action === action.CHANGE_TO_ADD_STUFF_HTML) {
@@ -53,11 +44,13 @@ class StuffBox extends Phaser.GameObjects.Container {
         const stuffDescription = this._stuffBoxDom.getChildByName('stuffDescription').value;
 
         if (stuffImage && stuffName && stuffPrice && stuffDescription) {
-          this._stuffBoxDom.setHTML(this._stuffListHtml);
+          this._setHTML(
+            htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
+          );
         }
       }
     });
   }
 }
 
-export default StuffBox;
+export default AdminStuffBox;

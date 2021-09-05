@@ -2,7 +2,7 @@ import Stuff from '@/model/Stuff';
 import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import LayoutBox from '@/phaser/scene/ShopManagerScene/uiObjects/LayoutBox';
-import StuffBox from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox';
+import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
@@ -79,9 +79,9 @@ const STUFF_LIST_BOX_STUFFS = [
 ];
 
 class ShopManagerScene extends Phaser.Scene {
-  constructor(shopScene) {
+  constructor(shopScene, type) {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
-
+    this._type = type;
     this._shopScene = shopScene;
     this._layoutZone = undefined;
     this._video = undefined;
@@ -125,11 +125,11 @@ class ShopManagerScene extends Phaser.Scene {
       TEXT_BOX_COLOR,
       TEXT_BOX_CONTENTS,
     );
-    this._stuffBox = new StuffBox(
-      this,
+    this._stuffBox = new StuffBoxFactory(this).createStuffBox(
       STUFF_LIST_BOX_WIDTH,
       STUFF_LIST_BOX_HEIGHT,
       STUFF_LIST_BOX_STUFFS,
+      this._type,
     );
   }
 

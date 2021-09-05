@@ -56,7 +56,7 @@ class ShopScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    this.scene.add(sceneKeys.SHOP_MANAGER_SCENE_KEY, new ShopManagerScene(this), true);
+    this.scene.add(sceneKeys.SHOP_MANAGER_SCENE_KEY, new ShopManagerScene(this, 'admin'), true);
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
