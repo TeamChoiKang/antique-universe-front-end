@@ -1,6 +1,6 @@
 import * as action from './action';
 
-export const createStuffListHtml = (width, height, stuffs) => {
+export const createStuffListHtml = stuffs => {
   return `<div class="stuff-list__main">
       ${stuffs
         .map(stuff => {
@@ -25,12 +25,10 @@ export const createStuffListHtml = (width, height, stuffs) => {
     </div>
     <style type="text/css">
       .stuff-list__main {
-        width: ${width}px;
-        height: ${height}px;
-        background: white;
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-wrap: wrap;
-        overflow-y: scroll;
       }
       
       .stuff-list__stuff {
@@ -72,7 +70,7 @@ export const createStuffListHtml = (width, height, stuffs) => {
     </style>`;
 };
 
-export const createShopAdminStuffListHtml = (width, height, stuffs) => {
+export const createShopAdminStuffListHtml = stuffs => {
   return `<div class="stuff-list__main">
       ${stuffs
         .map(stuff => {
@@ -105,12 +103,10 @@ export const createShopAdminStuffListHtml = (width, height, stuffs) => {
     </div>
     <style type="text/css">
       .stuff-list__main {
-        width: ${width}px;
-        height: ${height}px;
-        background: white;
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-wrap: wrap;
-        overflow-y: scroll;
       }
       
       .stuff-list__stuff {
@@ -159,7 +155,7 @@ export const createShopAdminStuffListHtml = (width, height, stuffs) => {
     </style>`;
 };
 
-export const createStuffInfoHtml = (width, height, stuff) => {
+export const createStuffInfoHtml = stuff => {
   return `<div class="stuff-info">
     <div class="stuff-info__head">
       <div
@@ -182,9 +178,8 @@ export const createStuffInfoHtml = (width, height, stuff) => {
   </div>
   <style type="text/css">
     .stuff-info {
-      width: ${width}px;
-      height: ${height}px;
-      background: white;
+      width: 100%;
+      height: 100%;
       overflow-y: scroll;
     }
     
@@ -240,7 +235,7 @@ export const createStuffInfoHtml = (width, height, stuff) => {
   </style>`;
 };
 
-export const createAddStuffHtml = (width, height) => {
+export const createAddStuffHtml = () => {
   return `<div class="add-stuff">
     <div class="add-stuff__back-btn">
       <div
@@ -294,9 +289,8 @@ export const createAddStuffHtml = (width, height) => {
     }
     
     .add-stuff {
-      width: ${width}px;
-      height: ${height}px;
-      background: white;
+      width: 100%;
+      height: 100%;
       overflow-y: scroll;
     }
     

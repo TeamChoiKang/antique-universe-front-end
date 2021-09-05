@@ -6,9 +6,7 @@ import * as htmlCreator from './htmlCreator';
 class AdminStuffBox extends StuffBox {
   constructor(scene, width, height, stuffs) {
     super(scene, width, height, stuffs);
-    this._setHTML(
-      htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
-    );
+    this._setHTML(htmlCreator.createShopAdminStuffListHtml(this._stuffs));
   }
 
   _registerEventHandler() {
@@ -17,23 +15,16 @@ class AdminStuffBox extends StuffBox {
     this._stuffBoxDom.on('click', event => {
       if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._stuffs.find(v => v.getStuffId() === event.stuffId);
-        const stuffInfoHtml = htmlCreator.createStuffInfoHtml(
-          this._width,
-          this._height,
-          targetStuff,
-        );
 
-        this._stuffBoxDom.setHTML(stuffInfoHtml);
+        this._setHTML(htmlCreator.createStuffInfoHtml(targetStuff));
       }
 
       if (event.action === action.CHANGE_TO_STUFF_LIST_HTML) {
-        this._setHTML(
-          htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
-        );
+        this._setHTML(htmlCreator.createShopAdminStuffListHtml(this._stuffs));
       }
 
       if (event.action === action.CHANGE_TO_ADD_STUFF_HTML) {
-        this._stuffBoxDom.setHTML(htmlCreator.createAddStuffHtml(this._width, this._height));
+        this._setHTML(htmlCreator.createAddStuffHtml());
       }
 
       if (event.action === action.ADD_STUFF) {
@@ -44,9 +35,7 @@ class AdminStuffBox extends StuffBox {
         const stuffDescription = this._stuffBoxDom.getChildByName('stuffDescription').value;
 
         if (stuffImage && stuffName && stuffPrice && stuffDescription) {
-          this._setHTML(
-            htmlCreator.createShopAdminStuffListHtml(this._width, this._height, this._stuffs),
-          );
+          this._setHTML(htmlCreator.createShopAdminStuffListHtml(this._stuffs));
         }
       }
     });
