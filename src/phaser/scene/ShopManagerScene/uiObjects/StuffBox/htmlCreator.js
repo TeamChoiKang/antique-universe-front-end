@@ -252,7 +252,7 @@ export const createAddStuffHtml = (width, height) => {
       </div>
     </div>
     <div class="add-stuff__image-input add-stuff__input image-input">
-      <input type="file" accept="image/*" />
+      <input type="file" accept="image/*" name="stuffImage" />
     </div>
     <div class="add-stuff__name-input add-stuff__input text-input">
       <input type="text" placeholder="물건 이름" name="stuffName" />
@@ -270,7 +270,14 @@ export const createAddStuffHtml = (width, height) => {
       <textarea placeholder="물건 설명" name="stuffDescription"></textarea>
     </div>
     <div class="add-stuff__add-stuff-btn add-stuff__input">
-      <input type="submit" value="물건 추가하기" name="addStuff" />
+      <input
+        type="submit"
+        value="물건 추가하기"
+        name="addStuff"
+        onclick="(() => {
+          event.action='${action.ADD_STUFF}';
+        })()"
+      />
     </div>
   </div>
   <style type="text/css">

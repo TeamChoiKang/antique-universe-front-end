@@ -42,7 +42,19 @@ class StuffBox extends Phaser.GameObjects.Container {
       }
 
       if (event.action === action.CHANGE_TO_ADD_STUFF_HTML) {
-        // TODO
+        this._stuffBoxDom.setHTML(htmlCreator.createAddStuffHtml(this._width, this._height));
+      }
+
+      if (event.action === action.ADD_STUFF) {
+        const stuffImage = this._stuffBoxDom.getChildByName('stuffImage').files[0];
+        const stuffName = this._stuffBoxDom.getChildByName('stuffName').value;
+        const stuffPrice = this._stuffBoxDom.getChildByName('stuffPrice').value;
+        const stuffOnlyAdult = this._stuffBoxDom.getChildByName('stuffOnlyAdult').checked;
+        const stuffDescription = this._stuffBoxDom.getChildByName('stuffDescription').value;
+
+        if (stuffImage && stuffName && stuffPrice && stuffDescription) {
+          this._stuffBoxDom.setHTML(this._stuffListHtml);
+        }
       }
     });
   }
