@@ -32,7 +32,7 @@ export const createStuffListHtml = stuffs => {
       }
       
       .stuff-list__stuff {
-        width: 480px;
+        width: 100%;
         height: 340px;
         cursor: pointer;
       }
@@ -110,7 +110,7 @@ export const createShopAdminStuffListHtml = stuffs => {
       }
       
       .stuff-list__stuff {
-        width: 480px;
+        width: 50%;
         height: 340px;
         cursor: pointer;
       }

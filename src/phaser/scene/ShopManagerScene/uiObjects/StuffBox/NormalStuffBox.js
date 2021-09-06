@@ -4,15 +4,15 @@ import * as action from './action';
 import * as htmlCreator from './htmlCreator';
 
 class NormalStuffBox extends StuffBox {
-  constructor(scene, width, height, stuffs) {
-    super(scene, width, height, stuffs);
+  constructor(scene, stuffs, width = 0, height = 0) {
+    super(scene, stuffs, width, height);
     this._setHTML(htmlCreator.createStuffListHtml(this._stuffs));
   }
 
   _registerEventHandler() {
-    this._stuffBoxDom.addListener('click');
+    this.addListener('click');
 
-    this._stuffBoxDom.on('click', event => {
+    this.on('click', event => {
       if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._stuffs.find(v => v.getStuffId() === event.stuffId);
         const stuffInfoHtml = htmlCreator.createStuffInfoHtml(targetStuff);
