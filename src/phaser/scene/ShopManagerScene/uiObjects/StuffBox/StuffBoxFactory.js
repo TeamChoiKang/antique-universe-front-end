@@ -10,9 +10,9 @@ class StuffBoxFactory {
     this._phaserScene = newPhaserScene;
   }
 
-  createStuffBox(width, height, stuffs, type) {
-    if (type === 'normal') return new NormalStuffBox(this._phaserScene, width, height, stuffs);
-    if (type === 'admin') return new AdminStuffBox(this._phaserScene, width, height, stuffs);
+  createStuffBox(stuffs, type, width = 0, height = 0) {
+    if (type === 'normal') return new NormalStuffBox(this._phaserScene, stuffs, width, height);
+    if (type === 'admin') return new AdminStuffBox(this._phaserScene, stuffs, width, height);
     return new Error('Please input stuffbox type');
   }
 }

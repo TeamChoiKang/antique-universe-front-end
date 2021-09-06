@@ -4,15 +4,15 @@ import * as action from './action';
 import * as htmlCreator from './htmlCreator';
 
 class AdminStuffBox extends StuffBox {
-  constructor(scene, width, height, stuffs) {
-    super(scene, width, height, stuffs);
+  constructor(scene, stuffs, width = 0, height = 0) {
+    super(scene, stuffs, width, height);
     this._setHTML(htmlCreator.createShopAdminStuffListHtml(this._stuffs));
   }
 
   _registerEventHandler() {
-    this._stuffBoxDom.addListener('click');
+    this.addListener('click');
 
-    this._stuffBoxDom.on('click', event => {
+    this.on('click', event => {
       if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._stuffs.find(v => v.getStuffId() === event.stuffId);
 
@@ -28,11 +28,11 @@ class AdminStuffBox extends StuffBox {
       }
 
       if (event.action === action.ADD_STUFF) {
-        const stuffImage = this._stuffBoxDom.getChildByName('stuffImage').files[0];
-        const stuffName = this._stuffBoxDom.getChildByName('stuffName').value;
-        const stuffPrice = this._stuffBoxDom.getChildByName('stuffPrice').value;
-        const stuffOnlyAdult = this._stuffBoxDom.getChildByName('stuffOnlyAdult').checked;
-        const stuffDescription = this._stuffBoxDom.getChildByName('stuffDescription').value;
+        const stuffImage = this.getChildByName('stuffImage').files[0];
+        const stuffName = this.getChildByName('stuffName').value;
+        const stuffPrice = this.getChildByName('stuffPrice').value;
+        const stuffOnlyAdult = this.getChildByName('stuffOnlyAdult').checked;
+        const stuffDescription = this.getChildByName('stuffDescription').value;
 
         if (stuffImage && stuffName && stuffPrice && stuffDescription) {
           this._setHTML(htmlCreator.createShopAdminStuffListHtml(this._stuffs));

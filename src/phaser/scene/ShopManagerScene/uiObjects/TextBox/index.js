@@ -1,24 +1,61 @@
 import Phaser from '@/package/phaser';
 
-class TextBox extends Phaser.GameObjects.Container {
-  constructor(scene, width, height, color, contents) {
-    super(scene, 0, 0);
+class TextBox extends Phaser.GameObjects.DOMElement {
+  constructor(scene, contents, color = 0xffffff, width = 0, height = 0) {
+    super(scene).createFromHTML(
+      `<div
+        id="text-box-dom-wrapper"
+        style="width: ${width}px; height: ${height}px;"
+      ></div>
+      <style type="text/css">
+        #text-box-dom-wrapper::-webkit-scrollbar {
+          display: none;
+        }
 
-    this._textBoxBackground = scene.add.rectangle(0, 0, width, height, color);
-    this._contents = scene.add.text(0, 0, contents);
+        #text-box-dom-wrapper {
+          overflow-y: scroll;
+          background: #${color.toString(16)};
+        }
+      </style>`,
+    );
 
-    Phaser.Display.Align.In.Center(this._contents, this._textBoxBackground);
-
-    this.add(this._textBoxBackground);
-    this.add(this._contents);
-    this.setSize(width, height);
+    this._contents = contents;
 
     scene.add.existing(this);
+
+    this.setContents(contents);
   }
 
-  setText(newContents) {
-    this._contents.setText(newContents);
-    Phaser.Display.Align.In.Center(this._contents, this._textBoxBackground);
+  _clearHTML() {
+    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
+    while (textBoxDomWrapper.firstChild) textBoxDomWrapper.removeChild(textBoxDomWrapper.lastChild);
+  }
+
+  setContents(contents) {
+    this._clearHTML();
+    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
+    const html = `
+      <div class="text-box">
+        ${contents}
+      </div>
+      <style>
+        .text-box {
+            text-align: center;
+            font-size: 1.5rem;
+            color: white;
+            line-height: 2;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+      </style>
+    `;
+    textBoxDomWrapper.insertAdjacentHTML('beforeend', html);
+  }
+
+  setSize(width, height) {
+    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
+    textBoxDomWrapper.style.width = `${width}px`;
+    textBoxDomWrapper.style.height = `${height}px`;
   }
 }
 

@@ -6,21 +6,27 @@ import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
 
-const MANAGER_WIDTH = 1650;
-const MANAGER_HEIGHT = 680;
+const TOP_MARGIN = 10;
+const MANAGER_MIN_WIDTH = 1100;
+const MANAGER_MAX_WIDTH = 2200;
+const MANAGER_RATIO = 0.39;
 
 const VIDEO_KEY = 'camVideo';
-const VIDEO_WIDTH = 660;
-const VIDEO_HEIGHT = 371;
+const VIDEO_MIN_WIDTH = 430;
+const VIDEO_MAX_WIDTH = 860;
+const VIDEO_RATIO = 0.558;
 
-const TEXT_BOX_WIDTH = 660;
-const TEXT_BOX_HEIGHT = 309;
 const TEXT_BOX_COLOR = 0x3498db;
 const TEXT_BOX_CONTENTS =
   '어서오세요 KangJi 상점입니다.\n\n택배, 직거래 가능합니다.\n\n직거래는 공릉역에서 가능합니다.';
+const TEXT_BOX_MIN_WIDTH = 430;
+const TEXT_BOX_MAX_WIDTH = 860;
+const TEXT_BOX_RATIO = 0.418;
 
-const STUFF_LIST_BOX_WIDTH = 990;
-const STUFF_LIST_BOX_HEIGHT = 680;
+const STUFF_LIST_BOX_MIN_WIDTH = 650;
+const STUFF_LIST_BOX_MAX_WIDTH = 1300;
+const STUFF_LIST_BOX_RATIO = 0.661;
+
 const STUFF_LIST_BOX_STUFFS = [
   new Stuff(
     0,
@@ -96,16 +102,13 @@ class ShopManagerScene extends Phaser.Scene {
 
   create() {
     this._initChildGameObject();
-    this._registerShutdownEventHandler();
-    this._setPosition(this.cameras.main.width, this.cameras.main.height);
-
+    this._registerEventHandler();
+    this._setSizeAndPosition(this.cameras.main.width, this.cameras.main.height);
     this._video.play(true);
   }
 
-  _registerShutdownEventHandler() {
-    const resize = gameSize => {
-      this._setPosition(gameSize.width, gameSize.height);
-    };
+  _registerEventHandler() {
+    const resize = gameSize => this._setSizeAndPosition(gameSize.width, gameSize.height);
 
     this.scale.on('resize', resize);
 
@@ -116,31 +119,58 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _initChildGameObject() {
-    this._layoutBox = new LayoutBox(this, 0, 0, MANAGER_WIDTH, MANAGER_HEIGHT);
-    this._video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
-    this._shopInfoTextBox = new TextBox(
-      this,
-      TEXT_BOX_WIDTH,
-      TEXT_BOX_HEIGHT,
-      TEXT_BOX_COLOR,
-      TEXT_BOX_CONTENTS,
-    );
-    this._stuffBox = new StuffBoxFactory(this).createStuffBox(
-      STUFF_LIST_BOX_WIDTH,
-      STUFF_LIST_BOX_HEIGHT,
-      STUFF_LIST_BOX_STUFFS,
-      this._type,
-    );
+    this._layoutBox = new LayoutBox(this);
+    this._video = new Video(this, VIDEO_KEY);
+    this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
+    this._stuffBox = new StuffBoxFactory(this).createStuffBox(STUFF_LIST_BOX_STUFFS, this._type);
   }
 
-  _setPosition(width, height) {
-    const leftMargin = width > MANAGER_WIDTH ? (width - MANAGER_WIDTH) / 2 : 0;
-    const topMargin = height > MANAGER_HEIGHT ? 20 : 0;
-    this._layoutBox.setPosition(leftMargin, topMargin);
+  _setSizeAndPosition(width, height) {
+    let realManagerWidth = Number.parseInt((width * 85.93) / 100, 10);
+    if (MANAGER_MAX_WIDTH < realManagerWidth) realManagerWidth = MANAGER_MAX_WIDTH;
+    if (realManagerWidth < MANAGER_MIN_WIDTH) realManagerWidth = MANAGER_MIN_WIDTH;
+    const realManagerHeight = Number.parseInt(realManagerWidth * MANAGER_RATIO, 10);
 
-    Phaser.Display.Align.In.TopLeft(this._video, this._layoutBox);
-    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutBox);
-    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutBox);
+    let realVideoWidth = Number.parseInt((realManagerWidth * 39.09) / 100, 10);
+    if (VIDEO_MAX_WIDTH < realVideoWidth) realVideoWidth = VIDEO_MAX_WIDTH;
+    if (realVideoWidth < VIDEO_MIN_WIDTH) realVideoWidth = VIDEO_MIN_WIDTH;
+    const realVideoHeight = Number.parseInt(realVideoWidth * VIDEO_RATIO, 10);
+
+    let realTextBoxWidth = Number.parseInt((realManagerWidth * 39.09) / 100, 10);
+    if (TEXT_BOX_MAX_WIDTH < realTextBoxWidth) realTextBoxWidth = TEXT_BOX_MAX_WIDTH;
+    if (realTextBoxWidth < TEXT_BOX_MIN_WIDTH) realTextBoxWidth = TEXT_BOX_MIN_WIDTH;
+    const realTextBoxHeight = Number.parseInt(realTextBoxWidth * TEXT_BOX_RATIO, 10);
+
+    let realStuffListBoxWidth = Number.parseInt((realManagerWidth * 59.09) / 100, 10);
+    if (STUFF_LIST_BOX_MAX_WIDTH < realStuffListBoxWidth)
+      realStuffListBoxWidth = STUFF_LIST_BOX_MAX_WIDTH;
+    if (realStuffListBoxWidth < STUFF_LIST_BOX_MIN_WIDTH)
+      realStuffListBoxWidth = STUFF_LIST_BOX_MIN_WIDTH;
+    const realStuffBoxListHeight = Number.parseInt(
+      realStuffListBoxWidth * STUFF_LIST_BOX_RATIO,
+      10,
+    );
+
+    this._layoutBox.setSize(realManagerWidth, realManagerHeight);
+    this._layoutBox.setPosition(width / 2 - realManagerWidth / 2, TOP_MARGIN);
+
+    this._video.setDisplaySize(realVideoWidth, realVideoHeight);
+    this._video.setPosition(
+      width / 2 - realManagerWidth / 2 + realVideoWidth / 2,
+      TOP_MARGIN + realVideoHeight / 2,
+    );
+
+    this._shopInfoTextBox.setSize(realTextBoxWidth, realTextBoxHeight);
+    this._shopInfoTextBox.setPosition(
+      width / 2 - realManagerWidth / 2,
+      TOP_MARGIN + realManagerHeight - realTextBoxHeight,
+    );
+
+    this._stuffBox.setSize(realStuffListBoxWidth, realStuffBoxListHeight);
+    this._stuffBox.setPosition(
+      width / 2 + realManagerWidth / 2 - realStuffListBoxWidth,
+      TOP_MARGIN,
+    );
   }
 }
 

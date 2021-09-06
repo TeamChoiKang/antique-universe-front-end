@@ -1,11 +1,8 @@
 import Phaser from '@/package/phaser';
 
-class LayoutBox extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, width, height) {
-    super(scene, x, y);
-
-    super.setSize(width, height);
-
+class LayoutBox extends Phaser.GameObjects.Rectangle {
+  constructor(scene, x = 0, y = 0, width = 0, height = 0) {
+    super(scene, x, y, width, height);
     scene.add.existing(this);
   }
 }
