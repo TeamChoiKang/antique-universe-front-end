@@ -83,7 +83,7 @@ class ShopManagerScene extends Phaser.Scene {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
     this._type = type;
     this._shopScene = shopScene;
-    this._layoutZone = undefined;
+    this._layoutBox = undefined;
     this._video = undefined;
     this._shopInfoTextBox = undefined;
     this._stuffBox = undefined;
@@ -116,7 +116,7 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _initChildGameObject() {
-    this._layoutZone = new LayoutBox(this, 0, 0, MANAGER_WIDTH, MANAGER_HEIGHT);
+    this._layoutBox = new LayoutBox(this, 0, 0, MANAGER_WIDTH, MANAGER_HEIGHT);
     this._video = new Video(this, VIDEO_KEY, VIDEO_WIDTH, VIDEO_HEIGHT);
     this._shopInfoTextBox = new TextBox(
       this,
@@ -136,11 +136,11 @@ class ShopManagerScene extends Phaser.Scene {
   _setPosition(width, height) {
     const leftMargin = width > MANAGER_WIDTH ? (width - MANAGER_WIDTH) / 2 : 0;
     const topMargin = height > MANAGER_HEIGHT ? 20 : 0;
-    this._layoutZone.setPosition(leftMargin, topMargin);
+    this._layoutBox.setPosition(leftMargin, topMargin);
 
-    Phaser.Display.Align.In.TopLeft(this._video, this._layoutZone);
-    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutZone);
-    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutZone);
+    Phaser.Display.Align.In.TopLeft(this._video, this._layoutBox);
+    Phaser.Display.Align.In.BottomLeft(this._shopInfoTextBox, this._layoutBox);
+    Phaser.Display.Align.In.RightCenter(this._stuffBox, this._layoutBox);
   }
 }
 
