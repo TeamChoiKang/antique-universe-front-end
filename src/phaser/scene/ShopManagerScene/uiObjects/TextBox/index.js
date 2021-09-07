@@ -19,6 +19,7 @@ class TextBox extends Phaser.GameObjects.DOMElement {
       </style>`,
     );
 
+    this._domWrapper = this.getChildByID(`text-box-dom-wrapper`);
     this._contents = contents;
 
     scene.add.existing(this);
@@ -27,13 +28,11 @@ class TextBox extends Phaser.GameObjects.DOMElement {
   }
 
   _clearHTML() {
-    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
-    while (textBoxDomWrapper.firstChild) textBoxDomWrapper.removeChild(textBoxDomWrapper.lastChild);
+    while (this._domWrapper.firstChild) this._domWrapper.removeChild(this._domWrapper.lastChild);
   }
 
   setContents(contents) {
     this._clearHTML();
-    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
     const html = `
       <div class="text-box">
         ${contents}
@@ -49,13 +48,12 @@ class TextBox extends Phaser.GameObjects.DOMElement {
         }
       </style>
     `;
-    textBoxDomWrapper.insertAdjacentHTML('beforeend', html);
+    this._domWrapper.insertAdjacentHTML('beforeend', html);
   }
 
   setSize(width, height) {
-    const textBoxDomWrapper = this.getChildByID(`text-box-dom-wrapper`);
-    textBoxDomWrapper.style.width = `${width}px`;
-    textBoxDomWrapper.style.height = `${height}px`;
+    this._domWrapper.style.width = `${width}px`;
+    this._domWrapper.style.height = `${height}px`;
   }
 }
 

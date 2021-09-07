@@ -15,6 +15,7 @@ class StuffBox extends Phaser.GameObjects.DOMElement {
       </style>`,
     );
 
+    this._domWrapper = this.getChildByID(`stuff-dom-wrapper`);
     this._stuffs = stuffs;
 
     scene.add.existing(this);
@@ -27,20 +28,17 @@ class StuffBox extends Phaser.GameObjects.DOMElement {
   }
 
   _clearHTML() {
-    const stuffDomWrapper = this.getChildByID(`stuff-dom-wrapper`);
-    while (stuffDomWrapper.firstChild) stuffDomWrapper.removeChild(stuffDomWrapper.lastChild);
+    while (this._domWrapper.firstChild) this._domWrapper.removeChild(this._domWrapper.lastChild);
   }
 
   _setHTML(html) {
     this._clearHTML();
-    const stuffDomWrapper = this.getChildByID(`stuff-dom-wrapper`);
-    stuffDomWrapper.insertAdjacentHTML('beforeend', html);
+    this._domWrapper.insertAdjacentHTML('beforeend', html);
   }
 
   setSize(width, height) {
-    const stuffDomWrapper = this.getChildByID(`stuff-dom-wrapper`);
-    stuffDomWrapper.style.width = `${width}px`;
-    stuffDomWrapper.style.height = `${height}px`;
+    this._domWrapper.style.width = `${width}px`;
+    this._domWrapper.style.height = `${height}px`;
   }
 }
 
