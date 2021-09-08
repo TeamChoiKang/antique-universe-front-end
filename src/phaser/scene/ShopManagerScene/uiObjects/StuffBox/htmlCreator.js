@@ -32,7 +32,7 @@ export const createStuffListHtml = stuffs => {
       }
       
       .stuff-list__stuff {
-        width: 100%;
+        width: 50%;
         height: 340px;
         cursor: pointer;
       }
