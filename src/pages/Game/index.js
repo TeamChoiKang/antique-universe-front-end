@@ -10,7 +10,7 @@ const Game = () => {
   const { state } = useContext(UserContext);
 
   useEffect(() => {
-    Socket.initInstance(state.user.userId);
+    Socket.connect(state.user.userId);
   }, [state]);
 
   return (
