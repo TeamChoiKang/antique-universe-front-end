@@ -1,3 +1,5 @@
+import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
+
 import AdminStuffBox from './AdminStuffBox';
 import NormalStuffBox from './NormalStuffBox';
 
@@ -11,9 +13,16 @@ class StuffBoxFactory {
   }
 
   createStuffBox(stuffs, type, width = 0, height = 0) {
-    if (type === 'normal') return new NormalStuffBox(this._phaserScene, stuffs, width, height);
-    if (type === 'admin') return new AdminStuffBox(this._phaserScene, stuffs, width, height);
-    return new Error('Please input stuffbox type');
+    switch (type) {
+      case stuffBoxType.NORMAL_STUFF_BOX:
+        return new NormalStuffBox(this._phaserScene, stuffs, width, height);
+
+      case stuffBoxType.ADMIN_STUFF_BOX:
+        return new AdminStuffBox(this._phaserScene, stuffs, width, height);
+
+      default:
+        return new Error('Please input stuffbox type');
+    }
   }
 }
 

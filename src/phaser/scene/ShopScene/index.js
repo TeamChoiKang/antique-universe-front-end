@@ -8,6 +8,7 @@ import CharacterGroup from '@/phaser/character/CharacterGroup';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
+import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import Socket from '@/utils/socket';
 
 const BACKGROUND_KEY = 'shopSceneBackground';
@@ -56,7 +57,11 @@ class ShopScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    this.scene.add(sceneKeys.SHOP_MANAGER_SCENE_KEY, new ShopManagerScene(this, 'admin'), true);
+    this.scene.add(
+      sceneKeys.SHOP_MANAGER_SCENE_KEY,
+      new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
+      true,
+    );
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
