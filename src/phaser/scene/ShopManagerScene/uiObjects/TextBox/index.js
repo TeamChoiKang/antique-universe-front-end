@@ -1,38 +1,14 @@
-import Phaser from '@/package/phaser';
+import DomBox from '@/phaser/scene/ShopManagerScene/uiObjects/DomBox';
 
-class TextBox extends Phaser.GameObjects.DOMElement {
+class TextBox extends DomBox {
   constructor(scene, contents, color = 0xffffff, width = 0, height = 0) {
-    super(scene).createFromHTML(
-      `<div
-        id="text-box-dom-wrapper"
-        style="width: ${width}px; height: ${height}px;"
-      ></div>
-      <style type="text/css">
-        #text-box-dom-wrapper::-webkit-scrollbar {
-          display: none;
-        }
-
-        #text-box-dom-wrapper {
-          overflow-y: scroll;
-          background: #${color.toString(16)};
-        }
-      </style>`,
-    );
-
-    this._domWrapper = this.getChildByID(`text-box-dom-wrapper`);
-    this._contents = contents;
-
-    scene.add.existing(this);
-
+    super(scene, `text-box-dom-wrapper`, width, height);
+    this._setColor(color);
     this.setContents(contents);
-  }
-
-  _clearHTML() {
-    while (this._domWrapper.firstChild) this._domWrapper.removeChild(this._domWrapper.lastChild);
+    scene.add.existing(this);
   }
 
   setContents(contents) {
-    this._clearHTML();
     const html = `
       <div class="text-box">
         ${contents}
@@ -48,12 +24,8 @@ class TextBox extends Phaser.GameObjects.DOMElement {
         }
       </style>
     `;
+    this._clearHTML();
     this._domWrapper.insertAdjacentHTML('beforeend', html);
-  }
-
-  setSize(width, height) {
-    this._domWrapper.style.width = `${width}px`;
-    this._domWrapper.style.height = `${height}px`;
   }
 }
 

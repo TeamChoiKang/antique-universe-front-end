@@ -1,44 +1,16 @@
-import Phaser from '@/package/phaser';
+import DomBox from '@/phaser/scene/ShopManagerScene/uiObjects/DomBox';
 
-class StuffBox extends Phaser.GameObjects.DOMElement {
+class StuffBox extends DomBox {
   constructor(scene, stuffs, width = 0, height = 0) {
-    super(scene).createFromHTML(
-      `<div
-        id="stuff-dom-wrapper"
-        style="width: ${width}px; height: ${height}px;"
-      ></div>
-      <style type="text/css">
-        #stuff-dom-wrapper {
-          overflow-y: scroll;
-          background: white;
-        }
-      </style>`,
-    );
-
-    this._domWrapper = this.getChildByID(`stuff-dom-wrapper`);
+    super(scene, `stuff-dom-wrapper`, width, height);
     this._stuffs = stuffs;
-
+    this._setColor(0xffffff);
     scene.add.existing(this);
-
     this._registerEventHandler();
   }
 
   _registerEventHandler() {
     throw new Error('Implements _registerEventHandler method');
-  }
-
-  _clearHTML() {
-    while (this._domWrapper.firstChild) this._domWrapper.removeChild(this._domWrapper.lastChild);
-  }
-
-  _setHTML(html) {
-    this._clearHTML();
-    this._domWrapper.insertAdjacentHTML('beforeend', html);
-  }
-
-  setSize(width, height) {
-    this._domWrapper.style.width = `${width}px`;
-    this._domWrapper.style.height = `${height}px`;
   }
 }
 
