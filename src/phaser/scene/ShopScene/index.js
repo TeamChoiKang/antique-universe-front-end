@@ -59,7 +59,7 @@ class ShopScene extends Phaser.Scene {
 
     this.scene.add(
       sceneKeys.SHOP_MANAGER_SCENE_KEY,
-      new ShopManagerScene(this, stuffBoxType.NORMAL_STUFF_BOX),
+      new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
       true,
     );
 
