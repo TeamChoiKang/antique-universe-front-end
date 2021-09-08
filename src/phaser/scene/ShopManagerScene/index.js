@@ -70,26 +70,28 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _setSizeAndPosition(width, height) {
-    let realManagerWidth = Number.parseInt((width * 85.93) / 100, 10);
-    if (MANAGER_MAX_WIDTH < realManagerWidth) realManagerWidth = MANAGER_MAX_WIDTH;
-    if (realManagerWidth < MANAGER_MIN_WIDTH) realManagerWidth = MANAGER_MIN_WIDTH;
+    const realManagerWidth = Math.min(
+      Math.max(Number.parseInt((width * 85.93) / 100, 10), MANAGER_MIN_WIDTH),
+      MANAGER_MAX_WIDTH,
+    );
     const realManagerHeight = Number.parseInt(realManagerWidth * MANAGER_RATIO, 10);
 
-    let realVideoWidth = Number.parseInt((realManagerWidth * 39.09) / 100, 10);
-    if (VIDEO_MAX_WIDTH < realVideoWidth) realVideoWidth = VIDEO_MAX_WIDTH;
-    if (realVideoWidth < VIDEO_MIN_WIDTH) realVideoWidth = VIDEO_MIN_WIDTH;
+    const realVideoWidth = Math.min(
+      Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), VIDEO_MIN_WIDTH),
+      VIDEO_MAX_WIDTH,
+    );
     const realVideoHeight = Number.parseInt(realVideoWidth * VIDEO_RATIO, 10);
 
-    let realTextBoxWidth = Number.parseInt((realManagerWidth * 39.09) / 100, 10);
-    if (TEXT_BOX_MAX_WIDTH < realTextBoxWidth) realTextBoxWidth = TEXT_BOX_MAX_WIDTH;
-    if (realTextBoxWidth < TEXT_BOX_MIN_WIDTH) realTextBoxWidth = TEXT_BOX_MIN_WIDTH;
+    const realTextBoxWidth = Math.min(
+      Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), TEXT_BOX_MIN_WIDTH),
+      TEXT_BOX_MAX_WIDTH,
+    );
     const realTextBoxHeight = Number.parseInt(realTextBoxWidth * TEXT_BOX_RATIO, 10);
 
-    let realStuffListBoxWidth = Number.parseInt((realManagerWidth * 59.09) / 100, 10);
-    if (STUFF_LIST_BOX_MAX_WIDTH < realStuffListBoxWidth)
-      realStuffListBoxWidth = STUFF_LIST_BOX_MAX_WIDTH;
-    if (realStuffListBoxWidth < STUFF_LIST_BOX_MIN_WIDTH)
-      realStuffListBoxWidth = STUFF_LIST_BOX_MIN_WIDTH;
+    const realStuffListBoxWidth = Math.min(
+      Math.max(Number.parseInt((realManagerWidth * 59.09) / 100, 10), STUFF_LIST_BOX_MIN_WIDTH),
+      STUFF_LIST_BOX_MAX_WIDTH,
+    );
     const realStuffBoxListHeight = Number.parseInt(
       realStuffListBoxWidth * STUFF_LIST_BOX_RATIO,
       10,
