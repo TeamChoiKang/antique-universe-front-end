@@ -1,19 +1,32 @@
 import { LOCAL_SERVER } from '@/constants';
 import io from '@/package/socket';
 
-const Socket = {
-  socketInstance: undefined,
-  initInstance(userId) {
-    this.socketInstance = io(LOCAL_SERVER, {
-      query: {
-        userId,
-      },
-    });
-  },
+class Socket {
+  static socketInstance;
 
-  getInstance() {
-    return this.socketInstance; // initInstance가 수행되지 않으면 undefined가 반환된다
-  },
-};
+  static isConnected = false;
+
+  static getInstance() {
+    if (!Socket.socketInstance) {
+      Socket.socketInstance = io(LOCAL_SERVER, {
+        autoConnect: false,
+      });
+    }
+    return Socket.socketInstance;
+  }
+
+  static connect(userId) {
+    if (!userId || Socket.isConnected) {
+      return;
+    }
+    const socketInstance = Socket.getInstance();
+    socketInstance.io.opts.query = { userId };
+    socketInstance.connect();
+    Socket.isConnected = true;
+    socketInstance.on('connect_error', () => {
+      Socket.isConnected = false;
+    });
+  }
+}
 
 export default Socket;
