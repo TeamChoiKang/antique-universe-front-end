@@ -13,6 +13,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 10px;
+  overflow: auto;
 }
 
 .chat__chat-form {
@@ -28,4 +30,12 @@
 
 .chat__chat-form-btn {
   width: 100px;
+}
+
+.chat__chat-item + .chat__chat-item {
+  margin-top: 10px;
+}
+
+.chat__chat-item-author {
+  margin-right: 10px;
 }
