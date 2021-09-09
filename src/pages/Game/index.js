@@ -11,7 +11,7 @@ const Game = () => {
   const { state } = useContext(UserContext);
 
   useEffect(() => {
-    Socket.connect(state.user.userId);
+    Socket.connect(state.user);
   }, [state]);
 
   return (
