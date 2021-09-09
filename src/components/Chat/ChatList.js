@@ -7,11 +7,13 @@ import ChatItem from './ChatItem';
 const ChatList = () => {
   const [chatList, setChatList] = useState([]);
   const socketInstance = useRef(Socket.getInstance());
+  const chatListDom = useRef();
 
   useEffect(() => {
     const registerChatEventHandler = () => {
       socketInstance.current.on('chat:getNewChat', newChat => {
         setChatList(draft => draft.concat([newChat]));
+        chatListDom.current.scrollTop = chatListDom.current.scrollHeight;
       });
     };
 
@@ -26,7 +28,7 @@ const ChatList = () => {
   }, []);
 
   return (
-    <div className="chat__chat-list">
+    <div className="chat__chat-list" ref={chatListDom}>
       {chatList.map((chat, idx) => (
         // eslint-disable-next-line react/no-array-index-key
         <ChatItem key={idx} chat={chat} />
