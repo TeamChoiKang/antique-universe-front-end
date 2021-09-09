@@ -4,21 +4,7 @@ import Socket from '@/utils/socket';
 
 import ChatItem from './ChatItem';
 
-const ChatList = () => {
-  const [chatList, setChatList] = useState([]);
-
-  useEffect(() => {
-    registerChatListEvent();
-  }, []);
-
-  const registerChatListEvent = () => {
-    const socketInstance = Socket.getInstance();
-    socketInstance.on('chat:getNewChat', newChat => {
-      const newChatList = chatList.concat([newChat]);
-      setChatList(newChatList);
-    });
-  };
-
+const ChatList = ({ chatList }) => {
   return (
     <div className="chat__chat-list">
       {chatList.map((chat, idx) => (

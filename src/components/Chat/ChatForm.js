@@ -4,7 +4,7 @@ import Socket from '@/utils/socket';
 
 const INIT_MESSAGE = '';
 
-const ChatForm = () => {
+const ChatForm = ({ setChatList }) => {
   const [chatForm, setChatForm] = useState(INIT_MESSAGE);
 
   const onChange = e => {
@@ -15,6 +15,7 @@ const ChatForm = () => {
     const socketInstance = Socket.getInstance();
     socketInstance.emit('chat:createNewChat', chatForm);
     setChatForm(INIT_MESSAGE);
+    setChatList(draft => draft.concat([chatForm]));
   };
 
   return (
