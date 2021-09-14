@@ -19,6 +19,8 @@ class TextBox extends Phaser.GameObjects.DOMElement {
     );
 
     this._domWrapper = this.getChildByID(`${domWrapperId}`);
+    this.width = width;
+    this.height = height;
 
     scene.add.existing(this);
   }
@@ -37,6 +39,9 @@ class TextBox extends Phaser.GameObjects.DOMElement {
   }
 
   setSize(width, height) {
+    this.width = width;
+    this.height = height;
+
     this._domWrapper.style.width = `${width}px`;
     this._domWrapper.style.height = `${height}px`;
   }

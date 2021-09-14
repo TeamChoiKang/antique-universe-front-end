@@ -1,7 +1,6 @@
 import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import * as mock from '@/phaser/scene/ShopManagerScene/mock';
-import LayoutBox from '@/phaser/scene/ShopManagerScene/uiObjects/LayoutBox';
 import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
 import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
@@ -14,17 +13,14 @@ const MANAGER_RATIO = 0.39;
 const VIDEO_KEY = 'camVideo';
 const VIDEO_MIN_WIDTH = 430;
 const VIDEO_MAX_WIDTH = 860;
-const VIDEO_RATIO = 0.558;
 
 const TEXT_BOX_COLOR = 0x3498db;
 const { TEXT_BOX_CONTENTS } = mock;
 const TEXT_BOX_MIN_WIDTH = 430;
 const TEXT_BOX_MAX_WIDTH = 860;
-const TEXT_BOX_RATIO = 0.418;
 
 const STUFF_LIST_BOX_MIN_WIDTH = 650;
 const STUFF_LIST_BOX_MAX_WIDTH = 1300;
-const STUFF_LIST_BOX_RATIO = 0.661;
 
 const { STUFF_LIST_BOX_STUFFS } = mock;
 
@@ -33,7 +29,6 @@ class ShopManagerScene extends Phaser.Scene {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
     this._type = type;
     this._shopScene = shopScene;
-    this._layoutBox = undefined;
     this._video = undefined;
     this._shopInfoTextBox = undefined;
     this._stuffBox = undefined;
@@ -63,13 +58,12 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _initChildGameObject() {
-    this._layoutBox = new LayoutBox(this);
     this._video = new Video(this, VIDEO_KEY);
     this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
     this._stuffBox = new StuffBoxFactory(this).createStuffBox(STUFF_LIST_BOX_STUFFS, this._type);
   }
 
-  _setSizeAndPosition(width, height) {
+  _setSizeAndPosition(width) {
     const realManagerWidth = Math.min(
       Math.max(Number.parseInt((width * 85.93) / 100, 10), MANAGER_MIN_WIDTH),
       MANAGER_MAX_WIDTH,
@@ -80,42 +74,30 @@ class ShopManagerScene extends Phaser.Scene {
       Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), VIDEO_MIN_WIDTH),
       VIDEO_MAX_WIDTH,
     );
-    const realVideoHeight = Number.parseInt(realVideoWidth * VIDEO_RATIO, 10);
+    this._video.setSizeWithFixedRatio(realVideoWidth);
+    this._video.setPosition(
+      width / 2 - realManagerWidth / 2 + realVideoWidth / 2,
+      TOP_MARGIN + this._video.displayHeight / 2,
+    );
 
     const realTextBoxWidth = Math.min(
       Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), TEXT_BOX_MIN_WIDTH),
       TEXT_BOX_MAX_WIDTH,
     );
-    const realTextBoxHeight = Number.parseInt(realTextBoxWidth * TEXT_BOX_RATIO, 10);
+    this._shopInfoTextBox.setSizeWithFixedRatio(realTextBoxWidth);
+    this._shopInfoTextBox.setPosition(
+      width / 2 - realManagerWidth / 2 + realTextBoxWidth / 2,
+      TOP_MARGIN + realManagerHeight - this._shopInfoTextBox.height / 2,
+    );
 
     const realStuffListBoxWidth = Math.min(
       Math.max(Number.parseInt((realManagerWidth * 59.09) / 100, 10), STUFF_LIST_BOX_MIN_WIDTH),
       STUFF_LIST_BOX_MAX_WIDTH,
     );
-    const realStuffBoxListHeight = Number.parseInt(
-      realStuffListBoxWidth * STUFF_LIST_BOX_RATIO,
-      10,
-    );
-
-    this._layoutBox.setSize(realManagerWidth, realManagerHeight);
-    this._layoutBox.setPosition(width / 2 - realManagerWidth / 2, TOP_MARGIN);
-
-    this._video.setDisplaySize(realVideoWidth, realVideoHeight);
-    this._video.setPosition(
-      width / 2 - realManagerWidth / 2 + realVideoWidth / 2,
-      TOP_MARGIN + realVideoHeight / 2,
-    );
-
-    this._shopInfoTextBox.setSize(realTextBoxWidth, realTextBoxHeight);
-    this._shopInfoTextBox.setPosition(
-      width / 2 - realManagerWidth / 2,
-      TOP_MARGIN + realManagerHeight - realTextBoxHeight,
-    );
-
-    this._stuffBox.setSize(realStuffListBoxWidth, realStuffBoxListHeight);
+    this._stuffBox.setSizeWithFixedRatio(realStuffListBoxWidth);
     this._stuffBox.setPosition(
-      width / 2 + realManagerWidth / 2 - realStuffListBoxWidth,
-      TOP_MARGIN,
+      width / 2 + realManagerWidth / 2 - this._stuffBox.width / 2,
+      TOP_MARGIN + this._stuffBox.height / 2,
     );
   }
 }
