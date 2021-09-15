@@ -1,15 +1,17 @@
 import dude from '@/assets/dude.png';
-import sky from '@/assets/real-sky.png';
 import TileSet from '@/assets/tile-set.png';
+import ShopBackground from '@/assets/tileMap/shop/shop-background.png';
 import ShopTileMap from '@/assets/tileMap/shop/shop-tile-map.json';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
+import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
+import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import Socket from '@/utils/socket';
 
-const BACKGROUND_KEY = 'backgroud';
+const BACKGROUND_KEY = 'shopSceneBackground';
 const SHOP_TILE_MAP_KEY = 'shopTileMap';
 const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
@@ -22,7 +24,7 @@ class ShopScene extends Phaser.Scene {
   preload() {
     this.load.image(TILE_SET_KEY, TileSet);
     this.load.tilemapTiledJSON(SHOP_TILE_MAP_KEY, ShopTileMap);
-    this.load.image(BACKGROUND_KEY, sky);
+    this.load.image(BACKGROUND_KEY, ShopBackground);
     this.load.spritesheet(SPRITE_SHEET_KEY, dude, {
       frameWidth: 32,
       frameHeight: 48,
@@ -54,6 +56,12 @@ class ShopScene extends Phaser.Scene {
 
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
+
+    this.scene.add(
+      sceneKeys.SHOP_MANAGER_SCENE_KEY,
+      new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
+      true,
+    );
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {

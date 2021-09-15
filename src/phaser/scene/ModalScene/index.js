@@ -1,5 +1,6 @@
 import closeIcon from '@/assets/icon/close-icon.png';
 import Phaser from '@/package/phaser';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 
 import SceneManager from '../SceneManager';
 
@@ -10,6 +11,10 @@ const BACKGROUND_OPACITY = 0.7;
 const MODAL_COLOR = 0xffffff;
 
 class ModalScene extends Phaser.Scene {
+  constructor() {
+    super(sceneKeys.MODAL_SCENE);
+  }
+
   preload() {
     this.load.image(CLOSE_ICON_KEY, closeIcon);
   }

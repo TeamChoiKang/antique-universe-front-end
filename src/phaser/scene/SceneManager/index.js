@@ -1,4 +1,5 @@
 import ModalScene from '@/phaser/scene/ModalScene';
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 
 class SceneManager {
   static setTileMap(scene, backgroundKey, jsonTileMapKey, tileSetKey) {
@@ -23,7 +24,7 @@ class SceneManager {
 
   static createModalScene(scene) {
     const modalSceneInstance = new ModalScene();
-    scene.scene.add('MODAL_SCENE_KEY', modalSceneInstance, true);
+    scene.scene.add(sceneKeys.MODAL_SCENE, modalSceneInstance, true);
     return modalSceneInstance;
   }
 
