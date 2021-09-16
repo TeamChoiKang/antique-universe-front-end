@@ -11,14 +11,15 @@ const ChatForm = () => {
     setChatForm(e.target.value);
   };
 
-  const onSubmit = () => {
+  const onSubmit = e => {
+    e.preventDefault();
     const socketInstance = Socket.getInstance();
     socketInstance.emit('chat:createNewChat', chatForm);
     setChatForm(INIT_MESSAGE);
   };
 
   return (
-    <div className="chat__chat-form">
+    <form className="chat__chat-form">
       <input
         className="chat__chat-form-input"
         type="text"
@@ -30,7 +31,7 @@ const ChatForm = () => {
       <button className="chat__chat-form-btn" type="submit" onClick={onSubmit}>
         전송
       </button>
-    </div>
+    </form>
   );
 };
 
