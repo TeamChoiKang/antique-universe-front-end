@@ -7,7 +7,6 @@ class StuffBox extends DomBox {
     super(scene, `stuff-dom-wrapper`, width, height);
     this._stuffs = stuffs;
     this._setColor(0xffffff);
-    scene.add.existing(this);
     this._registerEventHandler();
   }
 

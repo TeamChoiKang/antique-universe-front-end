@@ -7,7 +7,6 @@ class TextBox extends DomBox {
     super(scene, `text-box-dom-wrapper`, width, height);
     this._setColor(color);
     this.setContents(contents);
-    scene.add.existing(this);
   }
 
   setContents(contents) {
