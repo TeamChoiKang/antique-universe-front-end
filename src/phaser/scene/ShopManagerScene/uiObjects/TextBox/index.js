@@ -25,8 +25,7 @@ class TextBox extends DomBox {
         }
       </style>
     `;
-    this._clearHTML();
-    this._domWrapper.insertAdjacentHTML('beforeend', html);
+    this._setHTML(html);
   }
 
   setSizeWithFixedRatio(width) {
