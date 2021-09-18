@@ -34,8 +34,8 @@ class TextBox extends Phaser.GameObjects.DOMElement {
     this._domWrapper.insertAdjacentHTML('beforeend', html);
   }
 
-  _setColor(color) {
-    this._domWrapper.style.background = `#${color.toString(16)}`;
+  setBackgroundColor(hexColorString) {
+    this._domWrapper.style.background = `#${hexColorString}`;
   }
 
   setSize(width, height) {

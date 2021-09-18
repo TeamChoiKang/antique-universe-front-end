@@ -6,7 +6,7 @@ class StuffBox extends DomBox {
   constructor(scene, stuffs, width = 0, height = 0) {
     super(scene, `stuff-dom-wrapper`, width, height);
     this._stuffs = stuffs;
-    this._setColor(0xffffff);
+    this.setBackgroundColor(`ffffff`);
     this._registerEventHandler();
   }
 

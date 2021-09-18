@@ -7,7 +7,7 @@ class WebCamPlayer extends DomBox {
   constructor(scene, width = 0, height = 0) {
     super(scene, `${WEB_CAM_PLAYER_ID}-dom-wrapper`, width, height);
     this.setVideo();
-    this._setColor(0xffffff);
+    this.setBackgroundColor(`000000`);
     this._video = this.getChildByID(WEB_CAM_PLAYER_ID);
 
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
