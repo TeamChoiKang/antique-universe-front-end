@@ -7,7 +7,7 @@ import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
-import Socket from '@/utils/socket';
+import SocketManager from '@/utils/socket/SocketManager';
 
 const BACKGROUND_KEY = 'backgroud';
 const VILLAGE_TILE_MAP_KEY = 'villageTileMap';
@@ -30,7 +30,7 @@ class VillageScene extends Phaser.Scene {
   }
 
   create() {
-    const socket = Socket.getInstance();
+    const socket = new SocketManager();
     const sceneWithTileMap = SceneManager.setTileMap(
       this,
       BACKGROUND_KEY,

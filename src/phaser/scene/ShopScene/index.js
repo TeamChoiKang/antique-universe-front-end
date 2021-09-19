@@ -9,7 +9,7 @@ import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
 import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
-import Socket from '@/utils/socket';
+import SocketManager from '@/utils/socket/SocketManager';
 
 const BACKGROUND_KEY = 'shopSceneBackground';
 const SHOP_TILE_MAP_KEY = 'shopTileMap';
@@ -32,7 +32,7 @@ class ShopScene extends Phaser.Scene {
   }
 
   create() {
-    const socket = Socket.getInstance();
+    const socket = new SocketManager();
     const sceneWithTileMap = SceneManager.setTileMap(
       this,
       BACKGROUND_KEY,
