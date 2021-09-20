@@ -17,12 +17,17 @@ class WebCamPlayer extends DomBox {
     this.setBackgroundColor(`000000`);
     this._video = this.getChildByID(WEB_CAM_PLAYER_ID);
 
-    navigator.mediaDevices.getUserMedia(CONSTRAINTS).then(stream => {
-      this._video.srcObject = stream;
-      this._video.addEventListener('loadedmetadata', () => {
-        this._video.play();
+    navigator.mediaDevices
+      .getUserMedia(CONSTRAINTS)
+      .then(stream => {
+        this._video.srcObject = stream;
+        this._video.addEventListener('loadedmetadata', () => {
+          this._video.play();
+        });
+      })
+      .catch(() => {
+        this.setErrorMsg();
       });
-    });
   }
 
   setVideo() {
@@ -35,6 +40,12 @@ class WebCamPlayer extends DomBox {
         }
       </style>
     `;
+    this._setHTML(html);
+  }
+
+  setErrorMsg() {
+    this.setBackgroundColor(`FFFFFF`);
+    const html = `<div>카메라를 지원하지 않는 것 같습니다.</div>`;
     this._setHTML(html);
   }
 
