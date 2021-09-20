@@ -2,6 +2,13 @@ import DomBox from '@/phaser/scene/ShopManagerScene/uiObjects/DomBox';
 
 const WEB_CAM_PLAYER_RATIO = 0.558;
 const WEB_CAM_PLAYER_ID = 'web-cam-player';
+const CONSTRAINTS = {
+  video: {
+    width: { ideal: 1280, max: 1920 },
+    height: { ideal: 720, max: 1080 },
+  },
+  audio: true,
+};
 
 class WebCamPlayer extends DomBox {
   constructor(scene, width = 0, height = 0) {
@@ -10,7 +17,7 @@ class WebCamPlayer extends DomBox {
     this.setBackgroundColor(`000000`);
     this._video = this.getChildByID(WEB_CAM_PLAYER_ID);
 
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    navigator.mediaDevices.getUserMedia(CONSTRAINTS).then(stream => {
       this._video.srcObject = stream;
       this._video.addEventListener('loadedmetadata', () => {
         this._video.play();
