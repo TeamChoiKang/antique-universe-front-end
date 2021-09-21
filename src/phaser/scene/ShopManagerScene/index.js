@@ -3,18 +3,17 @@ import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import * as mock from '@/phaser/scene/ShopManagerScene/mock';
 import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
-import Video from '@/phaser/scene/ShopManagerScene/uiObjects/Video';
+import WebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer';
 
 const TOP_MARGIN = 10;
 const MANAGER_MIN_WIDTH = 1100;
 const MANAGER_MAX_WIDTH = 2200;
 const MANAGER_RATIO = 0.39;
 
-const VIDEO_KEY = 'camVideo';
-const VIDEO_MIN_WIDTH = 430;
-const VIDEO_MAX_WIDTH = 860;
+const WEB_CAM_PLAYER_MIN_WIDTH = 430;
+const WEB_CAM_PLAYER_MAX_WIDTH = 860;
 
-const TEXT_BOX_COLOR = 0x3498db;
+const TEXT_BOX_COLOR = `3498db`;
 const { TEXT_BOX_CONTENTS } = mock;
 const TEXT_BOX_MIN_WIDTH = 430;
 const TEXT_BOX_MAX_WIDTH = 860;
@@ -29,21 +28,19 @@ class ShopManagerScene extends Phaser.Scene {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
     this._type = type;
     this._shopScene = shopScene;
-    this._video = undefined;
+    this._webCamPlayer = undefined;
     this._shopInfoTextBox = undefined;
     this._stuffBox = undefined;
   }
 
   preload() {
     this.load.setCORS('*');
-    this.load.video(VIDEO_KEY, 'https://labs.phaser.io/assets/video/wormhole.mp4');
   }
 
   create() {
     this._initChildGameObject();
     this._registerEventHandler();
     this._setSizeAndPosition(this.cameras.main.width, this.cameras.main.height);
-    this._video.play(true);
   }
 
   _registerEventHandler() {
@@ -58,7 +55,7 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   _initChildGameObject() {
-    this._video = new Video(this, VIDEO_KEY);
+    this._webCamPlayer = new WebCamPlayer(this);
     this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
     this._stuffBox = new StuffBoxFactory(this).createStuffBox(STUFF_LIST_BOX_STUFFS, this._type);
   }
@@ -70,14 +67,14 @@ class ShopManagerScene extends Phaser.Scene {
     );
     const realManagerHeight = Number.parseInt(realManagerWidth * MANAGER_RATIO, 10);
 
-    const realVideoWidth = Math.min(
-      Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), VIDEO_MIN_WIDTH),
-      VIDEO_MAX_WIDTH,
+    const realWebCamPlayerWidth = Math.min(
+      Math.max(Number.parseInt((realManagerWidth * 39.09) / 100, 10), WEB_CAM_PLAYER_MIN_WIDTH),
+      WEB_CAM_PLAYER_MAX_WIDTH,
     );
-    this._video.setSizeWithFixedRatio(realVideoWidth);
-    this._video.setPosition(
-      width / 2 - realManagerWidth / 2 + realVideoWidth / 2,
-      TOP_MARGIN + this._video.displayHeight / 2,
+    this._webCamPlayer.setSizeWithFixedRatio(realWebCamPlayerWidth);
+    this._webCamPlayer.setPosition(
+      width / 2 - realManagerWidth / 2 + realWebCamPlayerWidth / 2,
+      TOP_MARGIN + this._webCamPlayer.height / 2,
     );
 
     const realTextBoxWidth = Math.min(
