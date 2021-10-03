@@ -125,8 +125,18 @@ const VILLAGE_TILE_MAP_KEY = 'villageTileMap';
 const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
 
-const GOOGLE_STUN_SERVER_URL = 'stun:stun.l.google.com:19302';
-const CONFIGURATION = { iceServers: [{ urls: [GOOGLE_STUN_SERVER_URL] }] };
+// const GOOGLE_STUN_SERVER_URL = 'stun:stun.l.google.com:19302';
+const CONFIGURATION = {
+  iceServers: [
+    {
+      urls: [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+      ],
+    },
+  ],
+};
 
 class VillageScene extends Phaser.Scene {
   constructor() {
@@ -221,6 +231,8 @@ class VillageScene extends Phaser.Scene {
 
     // testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
 
+    const receiverPeerConnectionMap = new Map();
+
     const createSenderPeerConnection = stream => {
       const senderPeerConnection = new RTCPeerConnection(CONFIGURATION);
 
@@ -237,7 +249,10 @@ class VillageScene extends Phaser.Scene {
     };
 
     const createSenderOffer = async senderPeerConnection => {
-      const offer = await senderPeerConnection.createOffer();
+      const offer = await senderPeerConnection.createOffer({
+        offerToReceiveAudio: false,
+        offerToReceiveVideo: false,
+      });
       await senderPeerConnection.setLocalDescription(offer);
       return offer;
     };
@@ -247,6 +262,50 @@ class VillageScene extends Phaser.Scene {
       audio.srcObject = stream;
       audio.play();
       document.body.appendChild(audio);
+    };
+
+    const createReceiverPeerConnection = socketId => {
+      const receiverPeerConnection = new RTCPeerConnection(CONFIGURATION);
+
+      receiverPeerConnection.onicecandidate = ({ candidate }) => {
+        if (!candidate) return;
+        socket.emit('webRtcAudio:receiverIceCandidate', { candidate, socketId });
+      };
+
+      receiverPeerConnection.ontrack = ({ streams }) => {
+        console.log('ontrack success');
+        appendAudio(streams[0]);
+      };
+
+      return receiverPeerConnection;
+    };
+
+    const createReceiverOffer = async receiverPeerConnection => {
+      const offer = await receiverPeerConnection.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true,
+      });
+      await receiverPeerConnection.setLocalDescription(offer);
+      return offer;
+    };
+
+    socket.on('webRtcAudio:receiverAnswer', async ({ answer, socketId }) => {
+      const audioReceiverPeerConnection = receiverPeerConnectionMap.get(socketId);
+      await audioReceiverPeerConnection.setRemoteDescription(answer);
+    });
+
+    socket.on('webRtcAudio:receiverIceCandidate', async ({ iceCandidate, socketId }) => {
+      const audioReceiverPeerConnection = receiverPeerConnectionMap.get(socketId);
+      await audioReceiverPeerConnection.addIceCandidate(iceCandidate);
+    });
+
+    const connectReceiverPeer = async socketId => {
+      const audioReceiverPeerConnection = createReceiverPeerConnection(socketId);
+
+      receiverPeerConnectionMap.set(socketId, audioReceiverPeerConnection);
+
+      const offer = await createReceiverOffer(audioReceiverPeerConnection);
+      socket.emit('webRtcAudio:receiverOffer', { offer, socketId });
     };
 
     const webRtcStart = async () => {
@@ -260,50 +319,17 @@ class VillageScene extends Phaser.Scene {
         await audioSenderPeerConnection.addIceCandidate(iceCandidate);
       });
 
-      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      socket.on('webRtcAudio:currentSender', socketIdList => {
+        socketIdList.forEach(socketId => connectReceiverPeer(socketId));
+      });
 
+      socket.on('webRtcAudio:newSender', socketId => connectReceiverPeer(socketId));
+
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioSenderPeerConnection = createSenderPeerConnection(audioStream);
       const offer = await createSenderOffer(audioSenderPeerConnection);
       socket.emit('webRtcAudio:senderOffer', offer);
     };
-
-    const createReceiverPeerConnection = () => {
-      const receiverPeerConnection = new RTCPeerConnection(CONFIGURATION);
-
-      receiverPeerConnection.onicecandidate = ({ candidate }) => {
-        if (!candidate) return;
-        socket.emit('webRtcAudio:receiverIceCandidate', candidate);
-      };
-
-      receiverPeerConnection.ontrack = ({ streams }) => {
-        console.log('ontrack success');
-        appendAudio(streams[0]);
-      };
-
-      return receiverPeerConnection;
-    };
-
-    const createReceiverOffer = async receiverPeerConnection => {
-      const offer = await receiverPeerConnection.createOffer();
-      await receiverPeerConnection.setLocalDescription(offer);
-      return offer;
-    };
-
-    let audioReceiverPeerConnection;
-
-    socket.on('webRtcAudio:connectionCreated', async () => {
-      audioReceiverPeerConnection = createReceiverPeerConnection();
-      const offer = await createReceiverOffer(audioReceiverPeerConnection);
-      socket.emit('webRtcAudio:receiverOffer', offer);
-    });
-
-    socket.on('webRtcAudio:receiverAnswer', async offer => {
-      await audioReceiverPeerConnection.setRemoteDescription(offer);
-    });
-
-    socket.on('webRtcAudio:receiverIceCandidate', async iceCandidate => {
-      await audioReceiverPeerConnection.addIceCandidate(iceCandidate);
-    });
 
     webRtcStart();
   }
