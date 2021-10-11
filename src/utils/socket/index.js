@@ -1,4 +1,4 @@
-import { LOCAL_SERVER } from '@/constants';
+import { SOCKET_SERVER_URL } from '@/constants';
 import io from '@/package/socket';
 
 class Socket {
@@ -8,7 +8,7 @@ class Socket {
 
   static getInstance() {
     if (!Socket.socketInstance) {
-      Socket.socketInstance = io(LOCAL_SERVER, {
+      Socket.socketInstance = io(SOCKET_SERVER_URL, {
         autoConnect: false,
       });
     }

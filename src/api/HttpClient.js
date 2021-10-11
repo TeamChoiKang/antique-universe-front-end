@@ -1,4 +1,4 @@
-import { LOCAL_SERVER } from '@/constants';
+import { API_SERVER_URL } from '@/constants';
 import http from '@/package/http';
 
 const getHeader = newHeader => {
@@ -22,7 +22,7 @@ const getUrl = url => {
   if (url.startsWith('http')) {
     return url;
   }
-  return LOCAL_SERVER.concat(url);
+  return API_SERVER_URL.concat(url);
 };
 
 class HttpClient {
