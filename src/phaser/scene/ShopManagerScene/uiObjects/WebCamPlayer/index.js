@@ -1,4 +1,6 @@
+import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import DomBox from '@/phaser/scene/ShopManagerScene/uiObjects/DomBox';
+import SocketManager from '@/utils/socket/SocketManager';
 
 const WEB_CAM_PLAYER_RATIO = 0.558;
 const WEB_CAM_PLAYER_ID = 'web-cam-player';
@@ -7,7 +9,6 @@ const CONSTRAINTS = {
     width: { ideal: 1280, max: 1920 },
     height: { ideal: 720, max: 1080 },
   },
-  audio: true,
 };
 
 class WebCamPlayer extends DomBox {
@@ -17,17 +18,19 @@ class WebCamPlayer extends DomBox {
     this.setBackgroundColor(`000000`);
     this._video = this.getChildByID(WEB_CAM_PLAYER_ID);
 
-    navigator.mediaDevices
-      .getUserMedia(CONSTRAINTS)
-      .then(stream => {
-        this._video.srcObject = stream;
+    const socket = new SocketManager();
+
+    socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
+
+    socket.on('map:getShopOwner', async ({ owner }) => {
+      if (owner === socket.id) {
+        const videoStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
+        this._video.srcObject = videoStream;
         this._video.addEventListener('loadedmetadata', () => {
           this._video.play();
         });
-      })
-      .catch(() => {
-        this.setErrorMsg();
-      });
+      }
+    });
   }
 
   setVideo() {

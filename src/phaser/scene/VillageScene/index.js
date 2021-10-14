@@ -66,10 +66,10 @@ class VillageScene extends Phaser.Scene {
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
-      socket.emit('map:hasShopOwner', sceneKeys.SHOP_SCENE_KEY);
+      socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
     });
 
-    socket.on('map:hasShopOwner', ({ owner }) => {
+    socket.on('map:getShopOwner', ({ owner }) => {
       if (owner) {
         changeScene(sceneKeys.SHOP_SCENE_KEY);
         return;
@@ -109,7 +109,7 @@ class VillageScene extends Phaser.Scene {
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
-    socket.once('character:currentCharacter', ({ currentCharacter }) => {
+    socket.once('character:currentCharacter', currentCharacter => {
       Object.keys(currentCharacter).forEach(index => {
         createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });

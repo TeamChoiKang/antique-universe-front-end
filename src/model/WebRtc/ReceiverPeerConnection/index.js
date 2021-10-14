@@ -27,7 +27,6 @@ class ReceiverPeerConnection extends PeerConnection {
 
     const offer = await this._receiverPeerConnection.createOffer({
       offerToReceiveAudio: true,
-      offerToReceiveVideo: true,
     });
 
     await this._receiverPeerConnection.setLocalDescription(offer);
