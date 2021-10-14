@@ -38,6 +38,10 @@ class SenderPeerConnection extends PeerConnection {
 
     this._socket.emit('webRtcAudio:senderOffer', offer);
   }
+
+  close() {
+    this._senderPeerConnection.close();
+  }
 }
 
 export default SenderPeerConnection;

@@ -44,8 +44,10 @@ class PeerConnectionManager {
   }
 
   closeAllPeerConnection() {
-    this._senderPeerConnection.close();
-    this._senderPeerConnection = undefined;
+    if (this._senderPeerConnection) {
+      this._senderPeerConnection.close();
+      this._senderPeerConnection = undefined;
+    }
 
     this._receiverPeerConnectionMap.forEach(peerConnection => peerConnection.close());
     this._receiverPeerConnectionMap.clear();

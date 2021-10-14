@@ -17,6 +17,10 @@ class PeerConnection {
   connect() {
     throw new Error('Implements PeerConnection connect method');
   }
+
+  close() {
+    throw new Error('Implements PeerConnection close method');
+  }
 }
 
 export default PeerConnection;
