@@ -17,6 +17,19 @@ const SPRITE_SHEET_KEY = 'dude';
 const CONFIRM_MSG = '상점의 주인이 없습니다. 상점의 주인이 돼서 물건을 거래하시겠습니까?';
 const ALERT_MSG = '주인이 없는 상점에는 들어갈 수 없습니다.';
 
+// const GOOGLE_STUN_SERVER_URL = 'stun:stun.l.google.com:19302';
+const CONFIGURATION = {
+  iceServers: [
+    {
+      urls: [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+      ],
+    },
+  ],
+};
+
 class VillageScene extends Phaser.Scene {
   constructor() {
     super(sceneKeys.VILLAGE_SCENE_KEY);
@@ -143,6 +156,110 @@ class VillageScene extends Phaser.Scene {
       characterGroup.remove(socketId);
       peerConnectionManager.closeReceiverPeerConnection(socketId);
     });
+
+    // testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+
+    const receiverPeerConnectionMap = new Map();
+
+    const createSenderPeerConnection = stream => {
+      const senderPeerConnection = new RTCPeerConnection(CONFIGURATION);
+
+      senderPeerConnection.onicecandidate = ({ candidate }) => {
+        if (!candidate) return;
+        socket.emit('webRtcAudio:senderIceCandidate', candidate);
+      };
+
+      stream.getTracks().forEach(track => {
+        senderPeerConnection.addTrack(track, stream);
+      });
+
+      return senderPeerConnection;
+    };
+
+    const createSenderOffer = async senderPeerConnection => {
+      const offer = await senderPeerConnection.createOffer({
+        offerToReceiveAudio: false,
+        offerToReceiveVideo: false,
+      });
+      await senderPeerConnection.setLocalDescription(offer);
+      return offer;
+    };
+
+    const appendAudio = stream => {
+      const audio = document.createElement('audio');
+      audio.srcObject = stream;
+      audio.play();
+      document.body.appendChild(audio);
+    };
+
+    const createReceiverPeerConnection = socketId => {
+      const receiverPeerConnection = new RTCPeerConnection(CONFIGURATION);
+
+      receiverPeerConnection.onicecandidate = ({ candidate }) => {
+        if (!candidate) return;
+        socket.emit('webRtcAudio:receiverIceCandidate', { candidate, socketId });
+      };
+
+      receiverPeerConnection.ontrack = ({ streams }) => {
+        console.log('ontrack success');
+        appendAudio(streams[0]);
+      };
+
+      return receiverPeerConnection;
+    };
+
+    const createReceiverOffer = async receiverPeerConnection => {
+      const offer = await receiverPeerConnection.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true,
+      });
+      await receiverPeerConnection.setLocalDescription(offer);
+      return offer;
+    };
+
+    socket.on('webRtcAudio:receiverAnswer', async ({ answer, socketId }) => {
+      const audioReceiverPeerConnection = receiverPeerConnectionMap.get(socketId);
+      await audioReceiverPeerConnection.setRemoteDescription(answer);
+    });
+
+    socket.on('webRtcAudio:receiverIceCandidate', async ({ iceCandidate, socketId }) => {
+      const audioReceiverPeerConnection = receiverPeerConnectionMap.get(socketId);
+      await audioReceiverPeerConnection.addIceCandidate(iceCandidate);
+    });
+
+    const connectReceiverPeer = async socketId => {
+      const audioReceiverPeerConnection = createReceiverPeerConnection(socketId);
+
+      receiverPeerConnectionMap.set(socketId, audioReceiverPeerConnection);
+
+      const offer = await createReceiverOffer(audioReceiverPeerConnection);
+      socket.emit('webRtcAudio:receiverOffer', { offer, socketId });
+    };
+
+    const webRtcStart = async () => {
+      let audioSenderPeerConnection;
+
+      socket.on('webRtcAudio:senderAnswer', async answer => {
+        await audioSenderPeerConnection.setRemoteDescription(answer);
+      });
+
+      socket.on('webRtcAudio:senderIceCandidate', async iceCandidate => {
+        await audioSenderPeerConnection.addIceCandidate(iceCandidate);
+      });
+
+      socket.on('webRtcAudio:currentSender', socketIdList => {
+        socketIdList.forEach(socketId => connectReceiverPeer(socketId));
+      });
+
+      socket.on('webRtcAudio:newSender', socketId => connectReceiverPeer(socketId));
+
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioSenderPeerConnection = createSenderPeerConnection(audioStream);
+      const offer = await createSenderOffer(audioSenderPeerConnection);
+      socket.emit('webRtcAudio:senderOffer', offer);
+    };
+
+    webRtcStart();
   }
 }
 
