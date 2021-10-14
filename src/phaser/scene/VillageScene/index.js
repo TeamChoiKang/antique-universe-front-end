@@ -66,7 +66,7 @@ class VillageScene extends Phaser.Scene {
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
-      socket.emit('map:hasShopOwner', 'shop');
+      socket.emit('map:hasShopOwner', sceneKeys.SHOP_SCENE_KEY);
     });
 
     socket.on('map:hasShopOwner', ({ owner }) => {
@@ -78,7 +78,7 @@ class VillageScene extends Phaser.Scene {
       if (window.confirm(CONFIRM_MSG)) {
         socket.emit('map:registerShopOwner', {
           socketId: socket.id,
-          sceneName: 'shop',
+          sceneKey: sceneKeys.SHOP_SCENE_KEY,
         });
         changeScene(sceneKeys.SHOP_SCENE_KEY);
       } else {
@@ -86,7 +86,7 @@ class VillageScene extends Phaser.Scene {
       }
     });
 
-    socket.emit('map:join', 'village');
+    socket.emit('map:join', sceneKeys.VILLAGE_SCENE_KEY);
 
     socket.emit('character:start', 'start');
 

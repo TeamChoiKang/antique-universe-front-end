@@ -69,7 +69,7 @@ class ShopScene extends Phaser.Scene {
       SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
     });
 
-    socket.emit('map:join', 'shop');
+    socket.emit('map:join', sceneKeys.SHOP_SCENE_KEY);
 
     socket.emit('character:start', 'start');
 
