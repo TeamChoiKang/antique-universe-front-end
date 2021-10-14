@@ -32,6 +32,10 @@ class SocketManager {
       this._events.clear();
     }
   }
+
+  get id() {
+    return this._socketInstance.id;
+  }
 }
 
 export default SocketManager;

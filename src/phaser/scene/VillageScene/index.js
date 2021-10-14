@@ -14,6 +14,8 @@ const BACKGROUND_KEY = 'backgroud';
 const VILLAGE_TILE_MAP_KEY = 'villageTileMap';
 const TILE_SET_KEY = 'tileSet';
 const SPRITE_SHEET_KEY = 'dude';
+const CONFIRM_MSG = '상점의 주인이 없습니다. 상점의 주인이 돼서 물건을 거래하시겠습니까?';
+const ALERT_MSG = '주인이 없는 상점에는 들어갈 수 없습니다.';
 
 class VillageScene extends Phaser.Scene {
   constructor() {
@@ -53,14 +55,35 @@ class VillageScene extends Phaser.Scene {
     };
     const peerConnectionManager = new PeerConnectionManager(socket);
 
+    const changeScene = sceneKey => {
+      socket.removeAllListeners();
+      peerConnectionManager.closeAllPeerConnection();
+      SceneManager.changeScene(this, sceneKey);
+    };
+
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
-      socket.removeAllListeners();
-      peerConnectionManager.closeAllPeerConnection();
-      SceneManager.changeScene(this, sceneKeys.SHOP_SCENE_KEY);
+      socket.emit('map:hasShopOwner', 'shop');
+    });
+
+    socket.on('map:hasShopOwner', ({ owner }) => {
+      if (owner) {
+        changeScene(sceneKeys.SHOP_SCENE_KEY);
+        return;
+      }
+
+      if (window.confirm(CONFIRM_MSG)) {
+        socket.emit('map:registerShopOwner', {
+          socketId: socket.id,
+          sceneName: 'shop',
+        });
+        changeScene(sceneKeys.SHOP_SCENE_KEY);
+      } else {
+        window.alert(ALERT_MSG);
+      }
     });
 
     socket.emit('map:join', 'village');
@@ -86,9 +109,9 @@ class VillageScene extends Phaser.Scene {
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
-    socket.once('character:currentCharacter', characters => {
-      Object.keys(characters).forEach(index => {
-        createAnotherCharacterAndAppendToCharacterGroup(characters[index]);
+    socket.once('character:currentCharacter', ({ currentCharacter }) => {
+      Object.keys(currentCharacter).forEach(index => {
+        createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });
     });
 

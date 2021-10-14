@@ -92,10 +92,12 @@ class ShopScene extends Phaser.Scene {
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
     });
 
-    socket.once('character:currentCharacter', characters => {
-      Object.keys(characters).forEach(index => {
-        createAnotherCharacterAndAppendToCharacterGroup(characters[index]);
+    socket.once('character:currentCharacter', ({ currentCharacter, owner }) => {
+      Object.keys(currentCharacter).forEach(index => {
+        createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });
+
+      // connect todo
     });
 
     socket.on('character:newCharacter', characterInfo => {
