@@ -2,6 +2,7 @@ import dude from '@/assets/dude.png';
 import TileSet from '@/assets/tile-set.png';
 import ShopBackground from '@/assets/tileMap/shop/shop-background.png';
 import ShopTileMap from '@/assets/tileMap/shop/shop-tile-map.json';
+import PeerConnectionManager from '@/model/WebRtc/PeerConnectionManager';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
@@ -53,19 +54,15 @@ class ShopScene extends Phaser.Scene {
 
       characterGroup.add(anotherCharacter);
     };
+    const peerConnectionManager = new PeerConnectionManager(socket);
 
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    this.scene.add(
-      sceneKeys.SHOP_MANAGER_SCENE_KEY,
-      new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
-      true,
-    );
-
     const sceneChangeKey = this.input.keyboard.addKey('c');
     sceneChangeKey.on('down', () => {
       socket.removeAllListeners();
+      peerConnectionManager.closeAllPeerConnection();
       SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
     });
 
@@ -97,7 +94,11 @@ class ShopScene extends Phaser.Scene {
         createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });
 
-      // connect todo
+      this.scene.add(
+        sceneKeys.SHOP_MANAGER_SCENE_KEY,
+        new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
+        true,
+      );
     });
 
     socket.on('character:newCharacter', characterInfo => {
@@ -114,6 +115,23 @@ class ShopScene extends Phaser.Scene {
 
     socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);
+    });
+
+    peerConnectionManager.createSenderPeerConnection();
+
+    socket.on('webRtcAudio:currentSender', socketIdList => {
+      socketIdList.forEach(socketId =>
+        peerConnectionManager.createReceiverPeerConnection(socketId),
+      );
+    });
+
+    socket.on('webRtcAudio:newSender', socketId =>
+      peerConnectionManager.createReceiverPeerConnection(socketId),
+    );
+
+    socket.on('character:disconnection', socketId => {
+      characterGroup.remove(socketId);
+      peerConnectionManager.closeReceiverPeerConnection(socketId);
     });
   }
 }
