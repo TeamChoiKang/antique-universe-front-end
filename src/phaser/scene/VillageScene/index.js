@@ -114,13 +114,14 @@ class VillageScene extends Phaser.Scene {
       movedCharacter.anims.play(characterInfo.animation, true);
     });
 
+    const receiverPeerConnectionMap = new Map();
+
     socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);
+      receiverPeerConnectionMap.get(socketId).close();
     });
 
     // testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
-
-    const receiverPeerConnectionMap = new Map();
 
     const createSenderPeerConnection = stream => {
       const senderPeerConnection = new RTCPeerConnection(CONFIGURATION);
