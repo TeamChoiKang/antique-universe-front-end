@@ -19,17 +19,19 @@ class WebCamPlayer extends DomBox {
     this._video = this.getChildByID(WEB_CAM_PLAYER_ID);
 
     const socket = new SocketManager();
-
     socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
 
     socket.on('map:getShopOwner', async ({ owner }) => {
-      if (owner === socket.id) {
-        const videoStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-        this._video.srcObject = videoStream;
-        this._video.addEventListener('loadedmetadata', () => {
-          this._video.play();
-        });
-      }
+      // if (owner === socket.id) {
+      // TODO
+      // }
+    });
+
+    navigator.mediaDevices.getUserMedia(CONSTRAINTS).then(stream => {
+      this._video.srcObject = stream;
+      this._video.addEventListener('loadedmetadata', () => {
+        this._video.play();
+      });
     });
   }
 

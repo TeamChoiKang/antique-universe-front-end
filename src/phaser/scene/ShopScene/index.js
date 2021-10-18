@@ -70,6 +70,8 @@ class ShopScene extends Phaser.Scene {
 
     socket.emit('character:start', 'start');
 
+    peerConnectionManager.createSenderPeerConnection();
+
     socket.once('character:myCharacter', myCharacterInfo => {
       const myCharacter = characterFactory.getMyCharacter(
         myCharacterInfo.x,
@@ -112,22 +114,6 @@ class ShopScene extends Phaser.Scene {
       movedCharacter.setPosition(characterInfo.x, characterInfo.y);
       movedCharacter.anims.play(characterInfo.animation, true);
     });
-
-    socket.on('character:disconnection', socketId => {
-      characterGroup.remove(socketId);
-    });
-
-    peerConnectionManager.createSenderPeerConnection();
-
-    socket.on('webRtcAudio:currentSender', socketIdList => {
-      socketIdList.forEach(socketId =>
-        peerConnectionManager.createReceiverPeerConnection(socketId),
-      );
-    });
-
-    socket.on('webRtcAudio:newSender', socketId =>
-      peerConnectionManager.createReceiverPeerConnection(socketId),
-    );
 
     socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);

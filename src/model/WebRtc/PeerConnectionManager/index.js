@@ -7,12 +7,18 @@ class PeerConnectionManager {
     this._senderPeerConnection = undefined;
     this._receiverPeerConnectionMap = new Map();
 
-    this._socket.on('webRtcAudio:receiverAnswer', async ({ answer, socketId }) => {
-      await this._receiverPeerConnectionMap.get(socketId).setRemoteDescription(answer);
+    socket.on('webRtc:currentSender', socketIdList => {
+      socketIdList.forEach(socketId => this.createReceiverPeerConnection(socketId));
     });
 
-    this._socket.on('webRtcAudio:receiverIceCandidate', async ({ iceCandidate, socketId }) => {
-      await this._receiverPeerConnectionMap.get(socketId).addIceCandidate(iceCandidate);
+    socket.on('webRtc:newSender', socketId => this.createReceiverPeerConnection(socketId));
+
+    this._socket.on('webRtc:receiverAnswer', ({ answer, socketId }) => {
+      this._receiverPeerConnectionMap.get(socketId).setRemoteDescription(answer);
+    });
+
+    this._socket.on('webRtc:receiverIceCandidate', ({ iceCandidate, socketId }) => {
+      this._receiverPeerConnectionMap.get(socketId).addIceCandidate(iceCandidate);
     });
   }
 

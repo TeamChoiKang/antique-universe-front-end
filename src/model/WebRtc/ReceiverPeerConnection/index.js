@@ -12,7 +12,7 @@ class ReceiverPeerConnection extends PeerConnection {
 
     this._receiverPeerConnection.onicecandidate = ({ candidate }) => {
       if (!candidate) return;
-      this._socket.emit('webRtcAudio:receiverIceCandidate', {
+      this._socket.emit('webRtc:receiverIceCandidate', {
         candidate,
         socketId: this._socketId,
       });
@@ -31,7 +31,7 @@ class ReceiverPeerConnection extends PeerConnection {
 
     await this._receiverPeerConnection.setLocalDescription(offer);
 
-    this._socket.emit('webRtcAudio:receiverOffer', { offer, socketId: this._socketId });
+    this._socket.emit('webRtc:receiverOffer', { offer, socketId: this._socketId });
   }
 
   close() {
