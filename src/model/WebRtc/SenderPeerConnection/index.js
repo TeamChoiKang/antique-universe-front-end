@@ -12,12 +12,12 @@ class SenderPeerConnection extends PeerConnection {
   }
 
   async connect() {
-    this._socket.on('webRtc:senderAnswer', async answer => {
-      await this._senderPeerConnection.setRemoteDescription(answer);
+    this._socket.on('webRtc:senderAnswer', answer => {
+      this._senderPeerConnection.setRemoteDescription(answer);
     });
 
-    this._socket.on('webRtc:senderIceCandidate', async iceCandidate => {
-      await this._senderPeerConnection.addIceCandidate(iceCandidate);
+    this._socket.on('webRtc:senderIceCandidate', iceCandidate => {
+      this._senderPeerConnection.addIceCandidate(iceCandidate);
     });
 
     this._stream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);

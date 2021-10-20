@@ -2,8 +2,11 @@ import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import * as mock from '@/phaser/scene/ShopManagerScene/mock';
 import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
+import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
-import WebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer';
+import OwnerWebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer/OwnerWebCamPlayer';
+import VisitorWebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer/VisitorWebCamPlayer';
+import SocketManager from '@/utils/socket/SocketManager';
 
 const TOP_MARGIN = 10;
 const MANAGER_MIN_WIDTH = 1100;
@@ -24,10 +27,10 @@ const STUFF_LIST_BOX_MAX_WIDTH = 1300;
 const { STUFF_LIST_BOX_STUFFS } = mock;
 
 class ShopManagerScene extends Phaser.Scene {
-  constructor(shopScene, type) {
+  constructor(shopScene) {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
-    this._type = type;
     this._shopScene = shopScene;
+    this._socket = new SocketManager();
     this._webCamPlayer = undefined;
     this._shopInfoTextBox = undefined;
     this._stuffBox = undefined;
@@ -38,29 +41,40 @@ class ShopManagerScene extends Phaser.Scene {
   }
 
   create() {
-    this._initChildGameObject();
     this._registerEventHandler();
-    this._setSizeAndPosition(this.cameras.main.width, this.cameras.main.height);
+
+    this._socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
+
+    this._socket.on('map:getShopOwner', async ({ owner }) => {
+      if (owner === this._socket.id) this._webCamPlayer = new OwnerWebCamPlayer(this);
+      else this._webCamPlayer = new VisitorWebCamPlayer(this, owner);
+
+      this._stuffBox = new StuffBoxFactory(this).createStuffBox(
+        STUFF_LIST_BOX_STUFFS,
+        owner === this._socket.id ? stuffBoxType.ADMIN_STUFF_BOX : stuffBoxType.NORMAL_STUFF_BOX,
+      );
+      this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
+      this._setSizeAndPosition(this.cameras.main.width);
+    });
   }
 
   _registerEventHandler() {
-    const resize = gameSize => this._setSizeAndPosition(gameSize.width, gameSize.height);
+    const resize = gameSize => this._setSizeAndPosition(gameSize.width);
 
     this.scale.on('resize', resize);
 
     this._shopScene.events.once('shutdown', () => {
       this.scale.off('resize', resize);
+      this._socket.removeAllListeners();
       this.scene.remove(this);
     });
   }
 
-  _initChildGameObject() {
-    this._webCamPlayer = new WebCamPlayer(this);
-    this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
-    this._stuffBox = new StuffBoxFactory(this).createStuffBox(STUFF_LIST_BOX_STUFFS, this._type);
-  }
-
   _setSizeAndPosition(width) {
+    if (!this._webCamPlayer) return;
+    if (!this._shopInfoTextBox) return;
+    if (!this._stuffBox) return;
+
     const realManagerWidth = Math.min(
       Math.max(Number.parseInt((width * 85.93) / 100, 10), MANAGER_MIN_WIDTH),
       MANAGER_MAX_WIDTH,

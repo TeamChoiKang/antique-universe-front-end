@@ -9,7 +9,6 @@ import CharacterGroup from '@/phaser/character/CharacterGroup';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
-import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import SocketManager from '@/utils/socket/SocketManager';
 
 const BACKGROUND_KEY = 'shopSceneBackground';
@@ -71,6 +70,7 @@ class ShopScene extends Phaser.Scene {
     socket.emit('character:start', 'start');
 
     peerConnectionManager.createSenderPeerConnection();
+    this.scene.add(sceneKeys.SHOP_MANAGER_SCENE_KEY, new ShopManagerScene(this), true);
 
     socket.once('character:myCharacter', myCharacterInfo => {
       const myCharacter = characterFactory.getMyCharacter(
@@ -95,12 +95,6 @@ class ShopScene extends Phaser.Scene {
       Object.keys(currentCharacter).forEach(index => {
         createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });
-
-      this.scene.add(
-        sceneKeys.SHOP_MANAGER_SCENE_KEY,
-        new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
-        true,
-      );
     });
 
     socket.on('character:newCharacter', characterInfo => {
