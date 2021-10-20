@@ -4,8 +4,8 @@ import * as action from './action';
 import * as htmlCreator from './htmlCreator';
 
 class NormalStuffBox extends StuffBox {
-  constructor(scene, stuffs, width = 0, height = 0) {
-    super(scene, stuffs, width, height);
+  constructor(scene, width = 0, height = 0) {
+    super(scene, width, height);
     this._setHTML(htmlCreator.createStuffListHtml(this._stuffs));
   }
 

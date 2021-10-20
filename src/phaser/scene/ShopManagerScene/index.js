@@ -1,6 +1,5 @@
 import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
-import * as mock from '@/phaser/scene/ShopManagerScene/mock';
 import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
 import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
@@ -17,14 +16,11 @@ const WEB_CAM_PLAYER_MIN_WIDTH = 430;
 const WEB_CAM_PLAYER_MAX_WIDTH = 860;
 
 const TEXT_BOX_COLOR = `3498db`;
-const { TEXT_BOX_CONTENTS } = mock;
 const TEXT_BOX_MIN_WIDTH = 430;
 const TEXT_BOX_MAX_WIDTH = 860;
 
 const STUFF_LIST_BOX_MIN_WIDTH = 650;
 const STUFF_LIST_BOX_MAX_WIDTH = 1300;
-
-const { STUFF_LIST_BOX_STUFFS } = mock;
 
 class ShopManagerScene extends Phaser.Scene {
   constructor(shopScene) {
@@ -34,10 +30,6 @@ class ShopManagerScene extends Phaser.Scene {
     this._webCamPlayer = undefined;
     this._shopInfoTextBox = undefined;
     this._stuffBox = undefined;
-  }
-
-  preload() {
-    this.load.setCORS('*');
   }
 
   create() {
@@ -50,10 +42,9 @@ class ShopManagerScene extends Phaser.Scene {
       else this._webCamPlayer = new VisitorWebCamPlayer(this, owner);
 
       this._stuffBox = new StuffBoxFactory(this).createStuffBox(
-        STUFF_LIST_BOX_STUFFS,
         owner === this._socket.id ? stuffBoxType.ADMIN_STUFF_BOX : stuffBoxType.NORMAL_STUFF_BOX,
       );
-      this._shopInfoTextBox = new TextBox(this, TEXT_BOX_CONTENTS, TEXT_BOX_COLOR);
+      this._shopInfoTextBox = new TextBox(this, TEXT_BOX_COLOR);
       this._setSizeAndPosition(this.cameras.main.width);
     });
   }

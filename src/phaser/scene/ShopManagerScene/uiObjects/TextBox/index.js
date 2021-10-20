@@ -1,12 +1,14 @@
+import * as mock from '@/phaser/scene/ShopManagerScene/mock';
 import DomBox from '@/phaser/scene/ShopManagerScene/uiObjects/DomBox';
 
 const TEXT_BOX_RATIO = 0.418;
+const { TEXT_BOX_CONTENTS } = mock;
 
 class TextBox extends DomBox {
-  constructor(scene, contents, color = `ffffff`, width = 0, height = 0) {
+  constructor(scene, color = `ffffff`, width = 0, height = 0) {
     super(scene, `text-box-dom-wrapper`, width, height);
     this.setBackgroundColor(color);
-    this.setContents(contents);
+    this.setContents(TEXT_BOX_CONTENTS);
   }
 
   setContents(contents) {
