@@ -22,6 +22,8 @@ class TextBox extends Phaser.GameObjects.DOMElement {
     this.width = width;
     this.height = height;
 
+    this._domWrapper.addEventListener('keydown', event => event.stopImmediatePropagation());
+
     scene.add.existing(this);
   }
 
