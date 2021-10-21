@@ -43,13 +43,11 @@ class NormalStuffBox extends StuffBox {
     this.on('click', event => {
       if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._findStuff(event.stuffId);
-        const stuffInfoHtml = htmlCreator.createStuffInfoHtml(targetStuff);
-
-        this._setHTML(stuffInfoHtml);
+        this._setHTML(htmlCreator.createStuffInfoHtml(targetStuff));
       }
 
       if (event.action === action.CHANGE_TO_STUFF_LIST_HTML) {
-        this._setHTML(htmlCreator.createStuffListHtml(this._stuffs));
+        this._socket.emit('shopStuff:getStuffs');
       }
     });
   }
