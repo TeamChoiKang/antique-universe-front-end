@@ -368,6 +368,7 @@ export const createShopAdminStuffInfoHtml = stuff => {
             name="removeStuff"
             onclick="(() => {
               event.action='${action.REMOVE_STUFF}';
+              event.stuffId='${stuff.getStuffId()}';
             })()"
           />
         </div>

@@ -60,6 +60,10 @@ class AdminStuffBox extends StuffBox {
         this._setHTML(htmlCreator.createAddStuffHtml());
       }
 
+      if (event.action === action.REMOVE_STUFF) {
+        this._socket.emit('shopStuff:removeStuff', event.stuffId);
+      }
+
       if (event.action === action.ADD_STUFF) {
         const stuffImage = this.getChildByName('stuffImage').files[0];
         const stuffName = this.getChildByName('stuffName').value;
