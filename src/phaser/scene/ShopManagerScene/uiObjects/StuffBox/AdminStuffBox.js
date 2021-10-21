@@ -49,7 +49,7 @@ class AdminStuffBox extends StuffBox {
     this.on('click', event => {
       if (event.action === action.CHANGE_TO_STUFF_INFO_HTML) {
         const targetStuff = this._findStuff(event.stuffId);
-        this._setHTML(htmlCreator.createStuffInfoHtml(targetStuff));
+        this._setHTML(htmlCreator.createShopAdminStuffInfoHtml(targetStuff));
       }
 
       if (event.action === action.CHANGE_TO_STUFF_LIST_HTML) {
