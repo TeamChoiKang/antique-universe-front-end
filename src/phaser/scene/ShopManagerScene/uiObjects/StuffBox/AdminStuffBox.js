@@ -60,6 +60,11 @@ class AdminStuffBox extends StuffBox {
         this._setHTML(htmlCreator.createAddStuffHtml());
       }
 
+      if (event.action === action.CHANGE_TO_UPDATE_STUFF_HTML) {
+        const targetStuff = this._findStuff(event.stuffId);
+        this._setHTML(htmlCreator.createUpdateStuffHtml(targetStuff));
+      }
+
       if (event.action === action.REMOVE_STUFF) {
         this._socket.emit('shopStuff:removeStuff', event.stuffId);
       }
@@ -73,6 +78,26 @@ class AdminStuffBox extends StuffBox {
 
         if (stuffName && stuffPrice && stuffDescription) {
           this._socket.emit('shopStuff:appendStuff', {
+            name: stuffName,
+            price: stuffPrice,
+            description: stuffDescription,
+            imageUrl: stuffImage,
+            soldState: false,
+            onlyAdult: stuffOnlyAdult,
+          });
+        }
+      }
+
+      if (event.action === action.UPDATE_STUFF) {
+        const stuffImage = this.getChildByName('stuffImage').files[0];
+        const stuffName = this.getChildByName('stuffName').value;
+        const stuffPrice = this.getChildByName('stuffPrice').value;
+        const stuffOnlyAdult = this.getChildByName('stuffOnlyAdult').checked;
+        const stuffDescription = this.getChildByName('stuffDescription').value;
+
+        if (stuffName && stuffPrice && stuffDescription) {
+          this._socket.emit('shopStuff:updateStuff', {
+            stuffId: event.stuffId,
             name: stuffName,
             price: stuffPrice,
             description: stuffDescription,
