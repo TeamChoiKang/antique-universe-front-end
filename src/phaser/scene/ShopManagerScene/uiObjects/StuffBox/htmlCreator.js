@@ -9,7 +9,7 @@ export const createStuffListHtml = stuffs => {
             class="stuff-list__stuff"
             onclick="(() => {
               event.action='${action.CHANGE_TO_STUFF_INFO_HTML}';
-              event.stuffId=${stuff.getStuffId()};
+              event.stuffId='${stuff.getStuffId()}';
             })()"
           >
             <div class="stuff-list__stuff-img">
@@ -254,7 +254,7 @@ export const createShopAdminStuffListHtml = stuffs => {
             class="stuff-list__stuff"
             onclick="(() => {
               event.action='${action.CHANGE_TO_STUFF_INFO_HTML}';
-              event.stuffId=${stuff.getStuffId()};
+              event.stuffId='${stuff.getStuffId()}';
             })()"
           >
             <div class="stuff-list__stuff-img">
