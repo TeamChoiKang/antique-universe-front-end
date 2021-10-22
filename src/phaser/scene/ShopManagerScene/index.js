@@ -23,9 +23,10 @@ const STUFF_LIST_BOX_MIN_WIDTH = 650;
 const STUFF_LIST_BOX_MAX_WIDTH = 1300;
 
 class ShopManagerScene extends Phaser.Scene {
-  constructor(shopScene) {
+  constructor(shopScene, shopName) {
     super(sceneKeys.SHOP_MANAGER_SCENE_KEY);
     this._shopScene = shopScene;
+    this._shopName = shopName;
     this._socket = new SocketManager();
     this._webCamPlayer = undefined;
     this._shopInfoTextBox = undefined;
@@ -35,7 +36,7 @@ class ShopManagerScene extends Phaser.Scene {
   create() {
     this._registerEventHandler();
 
-    this._socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
+    this._socket.emit('map:getShopOwner', this._shopName);
 
     this._socket.on('map:getShopOwner', async ({ owner }) => {
       if (owner === this._socket.id) this._webCamPlayer = new OwnerWebCamPlayer(this);

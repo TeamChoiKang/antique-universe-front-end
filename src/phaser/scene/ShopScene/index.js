@@ -20,6 +20,7 @@ const SPRITE_SHEET_KEY = 'dude';
 class ShopScene extends Phaser.Scene {
   constructor() {
     super(sceneKeys.SHOP_SCENE_KEY);
+    this._sceneName = undefined;
   }
 
   preload() {
@@ -30,6 +31,10 @@ class ShopScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48,
     });
+  }
+
+  init(sceneName) {
+    this._sceneName = sceneName;
   }
 
   create() {
@@ -59,12 +64,16 @@ class ShopScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    socket.emit('map:join', sceneKeys.SHOP_SCENE_KEY);
+    socket.emit('map:join', this._sceneName);
 
     socket.emit('character:start', 'start');
 
     peerConnectionManager.createSenderPeerConnection();
-    this.scene.add(sceneKeys.SHOP_MANAGER_SCENE_KEY, new ShopManagerScene(this), true);
+    this.scene.add(
+      sceneKeys.SHOP_MANAGER_SCENE_KEY,
+      new ShopManagerScene(this, this._sceneName),
+      true,
+    );
 
     socket.once('character:myCharacter', myCharacterInfo => {
       const myCharacter = characterFactory.getMyCharacter(
@@ -88,7 +97,7 @@ class ShopScene extends Phaser.Scene {
 
       const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
 
-      portalZoneManager.createPortalZone(sceneKeys.SHOP_SCENE_KEY, 928, 935, () => {
+      portalZoneManager.createPortalZone(sceneKeys.VILLAGE_SCENE_KEY, 928, 935, () => {
         socket.removeAllListeners();
         peerConnectionManager.closeAllPeerConnection();
         SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);

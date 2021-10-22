@@ -18,8 +18,8 @@ class SceneManager {
     return sceneWithTileMap;
   }
 
-  static changeScene(scene, sceneKey) {
-    scene.scene.start(sceneKey);
+  static changeScene(scene, sceneKey, data) {
+    scene.scene.start(sceneKey, data);
   }
 
   static createModalScene(scene) {

@@ -9,6 +9,7 @@ import CharacterGroup from '@/phaser/character/CharacterGroup';
 import PortalZoneManager from '@/phaser/portalZone/PortalZoneManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
+import * as shopNames from '@/phaser/scene/shopNames';
 import SocketManager from '@/utils/socket/SocketManager';
 
 const BACKGROUND_KEY = 'backgroud';
@@ -56,27 +57,27 @@ class VillageScene extends Phaser.Scene {
     };
     const peerConnectionManager = new PeerConnectionManager(socket);
 
-    const changeScene = sceneKey => {
+    const changeScene = (sceneKey, sceneName) => {
       socket.removeAllListeners();
       peerConnectionManager.closeAllPeerConnection();
-      SceneManager.changeScene(this, sceneKey);
+      SceneManager.changeScene(this, sceneKey, sceneName);
     };
 
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    socket.on('map:getShopOwner', ({ owner }) => {
+    socket.on('map:getShopOwner', ({ owner, shopName }) => {
       if (owner) {
-        changeScene(sceneKeys.SHOP_SCENE_KEY);
+        changeScene(sceneKeys.SHOP_SCENE_KEY, shopName);
         return;
       }
 
       if (window.confirm(CONFIRM_MSG)) {
         socket.emit('map:registerShopOwner', {
           socketId: socket.id,
-          sceneKey: sceneKeys.SHOP_SCENE_KEY,
+          shopName,
         });
-        changeScene(sceneKeys.SHOP_SCENE_KEY);
+        changeScene(sceneKeys.SHOP_SCENE_KEY, shopName);
       } else {
         window.alert(ALERT_MSG);
       }
@@ -110,8 +111,12 @@ class VillageScene extends Phaser.Scene {
 
       const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
 
-      portalZoneManager.createPortalZone(sceneKeys.SHOP_SCENE_KEY, 353, 740, () => {
-        socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
+      portalZoneManager.createPortalZone(shopNames.SHOP_1, 353, 740, () => {
+        socket.emit('map:getShopOwner', shopNames.SHOP_1);
+      });
+
+      portalZoneManager.createPortalZone(shopNames.SHOP_1, 453, 740, () => {
+        socket.emit('map:getShopOwner', shopNames.SHOP_2);
       });
     });
 
