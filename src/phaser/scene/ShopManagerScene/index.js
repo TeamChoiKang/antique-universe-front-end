@@ -2,7 +2,8 @@ import Phaser from '@/package/phaser';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import StuffBoxFactory from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/StuffBoxFactory';
 import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
-import TextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox';
+import OwnerTextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox/OwnerTextBox';
+import VisitorTextBox from '@/phaser/scene/ShopManagerScene/uiObjects/TextBox/VisitorTextBox';
 import OwnerWebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer/OwnerWebCamPlayer';
 import VisitorWebCamPlayer from '@/phaser/scene/ShopManagerScene/uiObjects/WebCamPlayer/VisitorWebCamPlayer';
 import SocketManager from '@/utils/socket/SocketManager';
@@ -39,13 +40,16 @@ class ShopManagerScene extends Phaser.Scene {
     this._socket.emit('map:getShopOwner', this._shopName);
 
     this._socket.on('map:getShopOwner', async ({ owner }) => {
-      if (owner === this._socket.id) this._webCamPlayer = new OwnerWebCamPlayer(this);
-      else this._webCamPlayer = new VisitorWebCamPlayer(this, owner);
+      if (owner === this._socket.id) {
+        this._webCamPlayer = new OwnerWebCamPlayer(this);
+        this._shopInfoTextBox = new OwnerTextBox(this, TEXT_BOX_COLOR);
+        this._stuffBox = new StuffBoxFactory(this).createStuffBox(stuffBoxType.ADMIN_STUFF_BOX);
+      } else {
+        this._webCamPlayer = new VisitorWebCamPlayer(this, owner);
+        this._shopInfoTextBox = new VisitorTextBox(this, TEXT_BOX_COLOR);
+        this._stuffBox = new StuffBoxFactory(this).createStuffBox(stuffBoxType.NORMAL_STUFF_BOX);
+      }
 
-      this._stuffBox = new StuffBoxFactory(this).createStuffBox(
-        owner === this._socket.id ? stuffBoxType.ADMIN_STUFF_BOX : stuffBoxType.NORMAL_STUFF_BOX,
-      );
-      this._shopInfoTextBox = new TextBox(this, TEXT_BOX_COLOR);
       this._setSizeAndPosition(this.cameras.main.width);
     });
   }
