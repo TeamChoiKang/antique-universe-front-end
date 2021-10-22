@@ -111,12 +111,10 @@ class VillageScene extends Phaser.Scene {
 
       const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
 
-      portalZoneManager.createPortalZone(shopNames.SHOP_1, 353, 740, () => {
-        socket.emit('map:getShopOwner', shopNames.SHOP_1);
-      });
-
-      portalZoneManager.createPortalZone(shopNames.SHOP_1, 453, 740, () => {
-        socket.emit('map:getShopOwner', shopNames.SHOP_2);
+      shopNames.SHOP_NAMES.forEach(shopInfo => {
+        portalZoneManager.createPortalZone(shopInfo.name, shopInfo.x, shopInfo.y, () => {
+          socket.emit('map:getShopOwner', shopInfo.name);
+        });
       });
     });
 
