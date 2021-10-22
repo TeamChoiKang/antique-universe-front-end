@@ -6,6 +6,7 @@ import PeerConnectionManager from '@/model/WebRtc/PeerConnectionManager';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
+import PortalZoneManager from '@/phaser/portalZone/PortalZoneManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
@@ -58,13 +59,6 @@ class ShopScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    const sceneChangeKey = this.input.keyboard.addKey('c');
-    sceneChangeKey.on('down', () => {
-      socket.removeAllListeners();
-      peerConnectionManager.closeAllPeerConnection();
-      SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
-    });
-
     socket.emit('map:join', sceneKeys.SHOP_SCENE_KEY);
 
     socket.emit('character:start', 'start');
@@ -89,6 +83,16 @@ class ShopScene extends Phaser.Scene {
 
       this.physics.add.collider(myCharacter, sceneWithTileMap);
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
+
+      const enterKey = this.input.keyboard.addKey('space');
+
+      const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
+
+      portalZoneManager.createPortalZone(sceneKeys.SHOP_SCENE_KEY, 928, 935, () => {
+        socket.removeAllListeners();
+        peerConnectionManager.closeAllPeerConnection();
+        SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
+      });
     });
 
     socket.once('character:currentCharacter', currentCharacter => {
