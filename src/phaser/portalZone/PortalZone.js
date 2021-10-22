@@ -1,7 +1,7 @@
 import Phaser from '@/package/phaser';
 
 class PortalZone extends Phaser.GameObjects.Zone {
-  constructor(scene, x, y, width, height, character, enterKey, enterKeyDownAction) {
+  constructor(scene, x, y, character, enterKey, enterKeyDownAction, width = 50, height = 50) {
     super(scene, x, y, width, height);
     this._overlapState = false;
 

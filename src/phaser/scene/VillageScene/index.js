@@ -6,7 +6,7 @@ import PeerConnectionManager from '@/model/WebRtc/PeerConnectionManager';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
-import PortalZone from '@/phaser/portalZone';
+import PortalZoneManager from '@/phaser/portalZone/PortalZoneManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import SocketManager from '@/utils/socket/SocketManager';
@@ -108,7 +108,9 @@ class VillageScene extends Phaser.Scene {
 
       const enterKey = this.input.keyboard.addKey('space');
 
-      const portalZone = new PortalZone(this, 353, 740, 50, 50, myCharacter, enterKey, () => {
+      const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
+
+      portalZoneManager.createPortalZone(sceneKeys.SHOP_SCENE_KEY, 353, 740, () => {
         socket.emit('map:getShopOwner', sceneKeys.SHOP_SCENE_KEY);
       });
     });
