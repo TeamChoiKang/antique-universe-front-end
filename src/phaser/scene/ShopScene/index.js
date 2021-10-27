@@ -2,13 +2,14 @@ import dude from '@/assets/dude.png';
 import TileSet from '@/assets/tile-set.png';
 import ShopBackground from '@/assets/tileMap/shop/shop-background.png';
 import ShopTileMap from '@/assets/tileMap/shop/shop-tile-map.json';
+import PeerConnectionManager from '@/model/WebRtc/PeerConnectionManager';
 import Phaser from '@/package/phaser';
 import CharacterFactory from '@/phaser/character/CharacterFactory';
 import CharacterGroup from '@/phaser/character/CharacterGroup';
+import PortalZoneManager from '@/phaser/portalZone/PortalZoneManager';
 import * as sceneKeys from '@/phaser/scene/sceneKeys';
 import SceneManager from '@/phaser/scene/SceneManager';
 import ShopManagerScene from '@/phaser/scene/ShopManagerScene';
-import * as stuffBoxType from '@/phaser/scene/ShopManagerScene/uiObjects/StuffBox/stuffBoxType';
 import SocketManager from '@/utils/socket/SocketManager';
 
 const BACKGROUND_KEY = 'shopSceneBackground';
@@ -19,6 +20,7 @@ const SPRITE_SHEET_KEY = 'dude';
 class ShopScene extends Phaser.Scene {
   constructor() {
     super(sceneKeys.SHOP_SCENE_KEY);
+    this._sceneName = undefined;
   }
 
   preload() {
@@ -29,6 +31,10 @@ class ShopScene extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48,
     });
+  }
+
+  init(sceneName) {
+    this._sceneName = sceneName;
   }
 
   create() {
@@ -53,25 +59,21 @@ class ShopScene extends Phaser.Scene {
 
       characterGroup.add(anotherCharacter);
     };
+    const peerConnectionManager = new PeerConnectionManager(socket);
 
     this.cameras.main.setBounds(0, 0, sceneWithTileMap.width, sceneWithTileMap.height);
     this.cameras.main.setZoom(1.5);
 
-    this.scene.add(
-      sceneKeys.SHOP_MANAGER_SCENE_KEY,
-      new ShopManagerScene(this, stuffBoxType.ADMIN_STUFF_BOX),
-      true,
-    );
-
-    const sceneChangeKey = this.input.keyboard.addKey('c');
-    sceneChangeKey.on('down', () => {
-      socket.removeAllListeners();
-      SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
-    });
-
-    socket.emit('map:join', 'shop');
+    socket.emit('map:join', this._sceneName);
 
     socket.emit('character:start', 'start');
+
+    peerConnectionManager.createSenderPeerConnection();
+    this.scene.add(
+      sceneKeys.SHOP_MANAGER_SCENE_KEY,
+      new ShopManagerScene(this, this._sceneName),
+      true,
+    );
 
     socket.once('character:myCharacter', myCharacterInfo => {
       const myCharacter = characterFactory.getMyCharacter(
@@ -90,11 +92,21 @@ class ShopScene extends Phaser.Scene {
 
       this.physics.add.collider(myCharacter, sceneWithTileMap);
       this.cameras.main.startFollow(myCharacter, true, 0.5, 0.5);
+
+      const enterKey = this.input.keyboard.addKey('space');
+
+      const portalZoneManager = new PortalZoneManager(this, enterKey, myCharacter);
+
+      portalZoneManager.createPortalZone(sceneKeys.VILLAGE_SCENE_KEY, 928, 935, () => {
+        socket.removeAllListeners();
+        peerConnectionManager.closeAllPeerConnection();
+        SceneManager.changeScene(this, sceneKeys.VILLAGE_SCENE_KEY);
+      });
     });
 
-    socket.once('character:currentCharacter', characters => {
-      Object.keys(characters).forEach(index => {
-        createAnotherCharacterAndAppendToCharacterGroup(characters[index]);
+    socket.once('character:currentCharacter', currentCharacter => {
+      Object.keys(currentCharacter).forEach(index => {
+        createAnotherCharacterAndAppendToCharacterGroup(currentCharacter[index]);
       });
     });
 
@@ -112,6 +124,7 @@ class ShopScene extends Phaser.Scene {
 
     socket.on('character:disconnection', socketId => {
       characterGroup.remove(socketId);
+      peerConnectionManager.closeReceiverPeerConnection(socketId);
     });
   }
 }

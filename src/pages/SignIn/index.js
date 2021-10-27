@@ -64,7 +64,7 @@ const SignIn = () => {
     <div className="signin">
       <div className="signin__main-component">
         <div className="signin__logo">
-          <img src={antiqueUniverseLogo} alt="antique-universe-logo" />
+          <div>Antique universe</div>
         </div>
         <div className="signin__signin-btn kakao-signin-btn">
           <Button
