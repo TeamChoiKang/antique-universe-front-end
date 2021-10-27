@@ -12,6 +12,10 @@
 
 .signin__logo {
   width: 100%;
+  font-size: 2.5rem;
+  font-weight: 100;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .signin__logo > img {
