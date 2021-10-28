@@ -15,12 +15,12 @@ class Socket {
     return Socket.socketInstance;
   }
 
-  static connect(userId) {
-    if (!userId || Socket.isConnected) {
+  static connect(user) {
+    if (!user || Socket.isConnected) {
       return;
     }
     const socketInstance = Socket.getInstance();
-    socketInstance.io.opts.query = { userId };
+    socketInstance.io.opts.query = user;
     socketInstance.connect();
     Socket.isConnected = true;
     socketInstance.on('connect_error', () => {
