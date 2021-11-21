@@ -1,0 +1,16 @@
+export const SHOP_NAMES = [
+  { name: 'shop1', x: 353, y: 740 },
+  { name: 'shop2', x: 1246, y: 552 },
+  { name: 'shop3', x: 2008, y: 616 },
+  { name: 'shop4', x: 2404, y: 360 },
+  { name: 'shop5', x: 3559, y: 552 },
+  { name: 'shop6', x: 3035, y: 1064 },
+  { name: 'shop7', x: 2008, y: 1320 },
+  { name: 'shop8', x: 1122, y: 1320 },
+  { name: 'shop9', x: 214, y: 1256 },
+  { name: 'shop10', x: 3287, y: 1512 },
+  { name: 'shop11', x: 2470, y: 1576 },
+  { name: 'shop12', x: 2972, y: 2024 },
+  { name: 'shop13', x: 1432, y: 2024 },
+  { name: 'shop14', x: 475, y: 1832 },
+];
