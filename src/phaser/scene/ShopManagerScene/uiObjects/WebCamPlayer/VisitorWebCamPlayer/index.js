@@ -26,6 +26,7 @@ class VisitorWebCamPlayer extends WebCamPlayer {
       this._receiverPeerConnection = new RTCPeerConnection(CONFIG);
 
       this._receiverPeerConnection.onicecandidate = ({ candidate }) => {
+        console.log(candidate);
         if (!candidate) return;
         socket.emit('webRtcVideo:receiverIceCandidate', candidate);
       };

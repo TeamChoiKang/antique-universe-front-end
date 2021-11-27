@@ -32,6 +32,7 @@ class OwnerWebCamPlayer extends WebCamPlayer {
       this._senderPeerConnection = new RTCPeerConnection(CONFIG);
 
       this._senderPeerConnection.onicecandidate = ({ candidate }) => {
+        console.log(candidate);
         if (!candidate) return;
         socket.emit('webRtcVideo:senderIceCandidate', candidate);
       };

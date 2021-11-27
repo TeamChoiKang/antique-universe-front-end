@@ -11,6 +11,7 @@ class ReceiverPeerConnection extends PeerConnection {
     this._receiverPeerConnection = new RTCPeerConnection(this._configuration);
 
     this._receiverPeerConnection.onicecandidate = ({ candidate }) => {
+      console.log(candidate);
       if (!candidate) return;
       this._socket.emit('webRtc:receiverIceCandidate', {
         candidate,
