@@ -4,7 +4,12 @@ import SocketManager from '@/utils/socket/SocketManager';
 const CONFIG = {
   iceServers: [
     {
-      urls: ['turn:turn.antique-universe.asuscomm.com:5349'],
+      urls: 'turn:turn.antique-universe.asuscomm.com:5349?transport=udp',
+      credential: 'jin!@12young',
+      username: 'user1',
+    },
+    {
+      urls: 'turn:turn.antique-universe.asuscomm.com:5349?transport=tcp',
       credential: 'jin!@12young',
       username: 'user1',
     },
