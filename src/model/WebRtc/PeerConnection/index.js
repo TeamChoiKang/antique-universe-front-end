@@ -4,11 +4,9 @@ class PeerConnection {
     this._configuration = {
       iceServers: [
         {
-          urls: [
-            'stun:stun.l.google.com:19302',
-            'stun:stun1.l.google.com:19302',
-            'stun:stun2.l.google.com:19302',
-          ],
+          urls: ['turn:turn.antique-universe.asuscomm.com:5349'],
+          credential: 'jin!@12young',
+          username: 'user1',
         },
       ],
     };
